@@ -11,20 +11,20 @@ def get_emote_url(emote_id):
 
 # TODO fix this hellish formatting
 def get_route_embed(route, ending):
-    return discord.Embed(title=f'Next: {route["name"]}, {ending}',
+    return discord.Embed(title=f'Next: {route["name"]}, {ending} Ending',
                          color=color_hex_to_int(route["color"]),
-                         description=f"{route['description']} ending") \
+                         description=f"{route['description']} ") \
         .set_thumbnail(url=get_emote_url(route['emoteId'])) \
         .add_field(name="Age", value=route["age"], inline=True) \
         .add_field(name="Birthday", value=route["birthday"], inline=True) \
         .add_field(name="Animal Motif", value=route["animal"], inline=True) \
-        .set_footer(text=f"Play {route['name']}'s next. All bois are best bois.")
+        .set_footer(text=f"Play {route['name']}'s route next. All bois are best bois.")
 
 
 class Route(commands.Cog):
     def __init__(self):
         self.routes = json.load(open('assets/routes.json'))
-        self.endings = ['perfect', 'good', 'bad', 'worst']
+        self.endings = ['Perfect', 'Good', 'Bad', 'Worst']
 
     @commands.command()
     async def route(self, ctx: commands.Context):
