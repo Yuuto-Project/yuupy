@@ -75,3 +75,7 @@ def search_user(ctx: commands.Context, query: str) -> typing.List[discord.Member
 
 def get_emote_url(emote_id: str, format: str) -> str:
     return f'https://cdn.discordapp.com/emojis/{emote_id}.{format}?v=1'
+
+
+def get_first_name(full_name: str) -> str:
+    return full_name.split(' ')[0]

@@ -6,7 +6,7 @@ from discord.ext import commands
 EXTENSIONS = [
     'cogs.utility',
     'cogs.info',
-    #'cogs.fun'
+    'cogs.fun'
 ]
 
 dotenv.load_dotenv()
