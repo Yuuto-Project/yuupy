@@ -4,3 +4,4 @@ pyvenv.cfg
 .env
 .idea/
 cogs/__pycache__
+utils/__pycache__

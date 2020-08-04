@@ -1,6 +1,8 @@
 from discord.ext import commands
+from utils.utils import search_user
 import discord
 import re
+import typing
 
 
 EMOTE_REGEX = r'(<a?:\w+:\d+>)'
@@ -21,6 +23,7 @@ class Utility(commands.Cog):
         result = self.emote_regex.search(args)
         if result is None:
             await ctx.send('Sorry, but you need to provide me an emote to use this command~!')
+            return
         split = args.split(' ')
         emote_links = []
         for item in split:
@@ -33,16 +36,22 @@ class Utility(commands.Cog):
                         suffix = '.png'
                     emote_id = self.emote_id_regex.search(single.group())
                     emote_links.append(EMOTE_BASE_LINK + str(emote_id.group()) + suffix)
+        await ctx.send('{}, here you go~!'.format(ctx.author.mention))
         for link in emote_links:
             await ctx.send(link)
 
     @commands.command()
-    async def avatar(self, ctx: commands.Context, mention: discord.User):
-        await ctx.send(mention.avatar_url)
-
-    @commands.command()
-    async def avatar(self, ctx: commands.Context):
-        await ctx.send(ctx.author.avatar_url)
+    async def avatar(self, ctx: commands.Context, user: typing.Optional[str] = ''):
+        if user is None or len(user) == 0:
+            await ctx.send('{}, Here ya go~!'.format(ctx.author.mention))
+            await ctx.send(ctx.author.avatar_url)
+            return
+        member = search_user(ctx, user)
+        if len(member) == 0:
+            await ctx.send('{} Sorry, but I can\'t find that user'.format(ctx.author.mention))
+            return
+        await ctx.send('{}, Here ya go~!'.format(ctx.author.mention))
+        await ctx.send(member[0].avatar_url)
 
 
 def setup(bot: commands.Bot):

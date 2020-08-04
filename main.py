@@ -5,7 +5,7 @@ from discord.ext import commands
 
 EXTENSIONS = [
     'cogs.utility',
-    #'cogs.info',
+    'cogs.info',
     #'cogs.fun'
 ]
 
