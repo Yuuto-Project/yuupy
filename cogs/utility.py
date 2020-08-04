@@ -1,4 +1,5 @@
 from discord.ext import commands
+import discord
 import re
 
 
@@ -34,6 +35,14 @@ class Utility(commands.Cog):
                     emote_links.append(EMOTE_BASE_LINK + str(emote_id.group()) + suffix)
         for link in emote_links:
             await ctx.send(link)
+
+    @commands.command()
+    async def avatar(self, ctx: commands.Context, mention: discord.User):
+        await ctx.send(mention.avatar_url)
+
+    @commands.command()
+    async def avatar(self, ctx: commands.Context):
+        await ctx.send(ctx.author.avatar_url)
 
 
 def setup(bot: commands.Bot):
