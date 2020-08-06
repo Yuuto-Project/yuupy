@@ -5,3 +5,7 @@ pyvenv.cfg
 .idea/
 cogs/__pycache__
 utils/__pycache__
+bin/
+lib/
+lib64/
+lib64
