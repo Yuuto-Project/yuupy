@@ -22,7 +22,7 @@ class Info(commands.Cog):
         with open('assets/routes.json', 'r', encoding='utf-8') as raw_routes:
             self.routes = json.load(raw_routes)
 
-    @commands.command()
+    @commands.command(description='Get current latency and API ping.', help='Send a ping to the bot and get latency information.', aliases=['pong'])
     async def ping(self, ctx: commands.Context):
         curr = time.time()
         latency: float = round(ctx.bot.latency * 1000.0, 2)
@@ -30,7 +30,7 @@ class Info(commands.Cog):
         await msg.edit(
             content=f'🏓 {random.choice(self.pings)}! Latency is {round((time.time() - curr) * 1000.0, 2)}ms. API latency is {latency}ms.')
 
-    @commands.command()
+    @commands.command(description='Tells you what route to play next.', help='This command will let Yuuto decide which route you should play next.', aliases=['r'])
     async def route(self, ctx: commands.Context):
         author: discord.Member = ctx.author
         route = random.choice(self.routes)
@@ -46,14 +46,16 @@ class Info(commands.Cog):
             .set_footer(text=f"Play {get_first_name(route['name'])}'s route next. All bois are best bois.")
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(description='Get a random quote from famous people, fictional or non-fictional.', help='This command will get you a random quote from both fictional and non-fictional characters. Feel like some inspiration for today?', aliases=['quotation', 'saying'])
     async def quote(self, ctx: commands.Context):
         res = requests.get(url=self.quote_url, headers=self.rapidapi_headers)
         data = json.loads(res.text)
 
-        embed = discord.Embed(title=data['content'], description=data['originator']['name'], color=discord.Color.gold())\
-            .set_author(name='Click here for source', url=data['url'])\
-            .set_footer(text='Tags: ' + ', '.join(data['tags']) + ' | Powered by RapidAPI')
+        embed = discord.Embed(title=data['originator']['name'], description='*{}*'.format(data['content']), color=discord.Color.gold())\
+            .set_author(name='Click here for source', url=data['url'])
+
+        if len(data['tags']) > 0:
+            embed.set_footer(text='Tags: ' + ', '.join(data['tags']) + ' | Powered by RapidAPI')
 
         await ctx.send(embed=embed)
 

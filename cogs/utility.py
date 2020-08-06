@@ -1,6 +1,5 @@
 from discord.ext import commands
 from utils.utils import search_user
-import discord
 import re
 import typing
 
@@ -18,7 +17,9 @@ class Utility(commands.Cog):
         self.emote_id_regex = re.compile(EMOTE_ID_REGEX)
         self.emote_is_animated_regex = re.compile(EMOTE_IS_ANIMATED_REGEX)
 
-    @commands.command()
+    @commands.command(description='Returns an enlarged emote.',
+                      help='Get the permanent link of one or multiple emotes to see them in larger sizes.',
+                      aliases=['emoji'])
     async def enlarge(self, ctx: commands.Context, *, args: str):
         result = self.emote_regex.search(args)
         if result is None:
@@ -40,7 +41,9 @@ class Utility(commands.Cog):
         for link in emote_links:
             await ctx.send(link)
 
-    @commands.command()
+    @commands.command(description='Gets your own or someone\'s avatar.',
+                      help='This command will get the permanent link of your own avatar, or someone else\'s avatar.',
+                      aliases=['pfp'])
     async def avatar(self, ctx: commands.Context, user: typing.Optional[str] = ''):
         if user is None or len(user) == 0:
             await ctx.send('{}, Here ya go~!'.format(ctx.author.mention))
