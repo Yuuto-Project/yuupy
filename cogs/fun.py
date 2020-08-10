@@ -8,6 +8,7 @@ class Fun(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    # TODO: ship command
     @commands.command(description='Calculate if you and your crush will work out.',
                       help='Yuuto mastered the art of shipping users and can now calculate if you and your crush will work out.',
                       aliases=['love', 'ratecouple'])
