@@ -1,7 +1,6 @@
 from discord.ext import commands
 from io import BytesIO
 from owoify.owoify import owoify
-from PIL import Image
 from typing import Optional, List, Tuple
 from utils.utils import search_user
 import discord
