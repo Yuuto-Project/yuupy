@@ -16,7 +16,7 @@ class Fun(commands.Cog):
 
     @commands.command(description='Owoify your text.',
                       help='Turn your sentences and texts to nonsensical babyspeaks (a.k.a. owoify). Using `y!owoify <text>` will make use of the default owoify level (owo), which is the most vanilla one. Using `y!owoify [level] <text>` will explicitly set the owoify level. Currently, 3 levels are supported (from the lowest to the highest): **soft**, **medium**, **hard**')
-    async def owoify(self, ctx: commands.Context, level: Optional[str], *, text: str):
+    async def owoify(self, ctx: commands.Context, level: Optional[str], *, text: Optional[str] = ''):
         result_text = ''
         if len(level) > 0 and level != '':
             level = level.lower()
