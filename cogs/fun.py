@@ -42,7 +42,6 @@ class Fun(commands.Cog):
         with open('assets/shipMessages.json') as fs:
             self.ship_messages = json.loads(fs.read())
 
-    # TODO: ship command
     @commands.command(description='Calculate if you and your crush will work out.',
                       help='Yuuto mastered the art of shipping users and can now calculate if you and your crush will work out.',
                       aliases=['love', 'ratecouple'])
