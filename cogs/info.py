@@ -59,6 +59,17 @@ class Info(commands.Cog):
 
         await ctx.send(embed=embed)
 
+    @commands.command(description='Shows the Buddy Laws by Yuri.', help='Every camper should know this!')
+    async def law(self, ctx: commands.Context):
+        title = "The Buddy Law"
+        desc = "1) A buddy should be kind, helpful, and trustworthy to each other!\n" \
+               "2) A buddy must be always ready for anything!\n" \
+               "3) A buddy must always show a bright smile on his face!\n" \
+               "||4) We leave no buddy behind!||"
+        embed = discord.Embed(title=title, description=desc, color=discord.Colour(0xFF93CE))
+
+        await ctx.send(embed=embed)
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(Info(bot))
