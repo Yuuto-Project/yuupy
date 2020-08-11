@@ -11,7 +11,8 @@ EXTENSIONS = [
 ]
 
 dotenv.load_dotenv()
-bot = commands.Bot(command_prefix='y!')
+prefix = os.getenv('PREFIX') or 'y!'
+bot = commands.Bot(command_prefix=prefix)
 
 
 @bot.event
