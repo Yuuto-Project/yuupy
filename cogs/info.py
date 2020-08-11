@@ -66,7 +66,7 @@ class Info(commands.Cog):
                "2) A buddy must be always ready for anything!\n" \
                "3) A buddy must always show a bright smile on his face!\n" \
                "||4) We leave no buddy behind!||"
-        embed = discord.Embed(title=title, description=desc, color=discord.Colour(0xFF93CE))
+        embed = discord.Embed(title=title, description=desc, color=discord.Colour(0xFDBBE4))
 
         await ctx.send(embed=embed)
 
