@@ -62,6 +62,45 @@ def cvt_units(unit1: str, unit2: str, value: float):
                 unit_target = '\u2109'
             else:
                 error = True
+    elif unit1 == 'g':
+        unit_source = unit1
+        if unit1 == unit2:
+            output = value
+            unit_target = unit_source
+        elif unit2 == 'kg':
+            output = value * 0.001
+            unit_target = 'kg'
+        elif unit2 == 'lbs' or unit2 == 'lb':
+            output = value * 0.0022
+            unit_target = 'lbs'
+        else:
+            error = True
+    elif unit1 == 'kg':
+        unit_source = unit1
+        if unit1 == unit2:
+            output = value
+            unit_target = unit_source
+        elif unit2 == 'g':
+            output = value * 1000
+            unit_target = 'g'
+        elif unit2 == 'lbs' or unit2 == 'lb':
+            output = value * 2.2
+            unit_target = 'lbs'
+        else:
+            error = True
+    elif unit1 == 'lbs' or unit1 == 'lb':
+        unit_source = 'lbs'
+        if unit1 == unit2:
+            output = value
+            unit_target = unit_source
+        elif unit2 == 'kg':
+            output = value / 2.2
+            unit_target = 'kg'
+        elif unit2 == 'g':
+            output = (value / 2.2) * 1000
+            unit_target = 'g'
+        else:
+            error = True
     else:
         cvt_factor = convert_table['length'].get(unit2)
         if cvt_factor == None:
