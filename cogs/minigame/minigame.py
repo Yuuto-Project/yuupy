@@ -1,7 +1,7 @@
 from cogs.minigame.question import Question
 from discord.ext import commands
 from enum import Enum
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 import asyncio
 import discord
 import marshmallow_dataclass
