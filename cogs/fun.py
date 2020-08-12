@@ -34,7 +34,7 @@ def calculate_score(first: discord.Member, second: discord.Member, ship_messages
     if first_id == second_id:
         return 100, 'You\'re a perfect match... for yourself!'
     else:
-        score = ((first_id + second_id) / 7) % 100
+        score = ((first_id + second_id) // 7) % 100
         return score, find_message(score, ship_messages)
 
 
@@ -71,9 +71,9 @@ class Fun(commands.Cog):
             return
         message = message.replace('{name}', user_1.display_name).replace('{name2}', user_2.display_name)
         embed = discord.Embed(title='{} and {}'.format(user_1.display_name, user_2.display_name))
-        embed = embed.add_field(name=f'Your love score is {int(score)}', value=message, inline=False)
-        await ctx.send(embed=embed)
-        await ctx.send(file=discord.File(fp=BytesIO(response.content), filename='result.png'))
+        embed = embed.add_field(name=f'Your love score is {int(score)}', value=message, inline=False).set_image(url='attachment://result.png')
+        # await ctx.send(embed=embed)
+        await ctx.send(embed=embed, file=discord.File(fp=BytesIO(response.content), filename='result.png'))
 
     @commands.command(description='Owoify your text.',
                       help='Turn your sentences and texts to nonsensical babyspeaks (a.k.a. owoify). Using `y!owoify <text>` will make use of the default owoify level (owo), which is the most vanilla one. Using `y!owoify [level] <text>` will explicitly set the owoify level. Currently, 3 levels are supported (from the lowest to the highest): **soft**, **medium**, **hard**')
