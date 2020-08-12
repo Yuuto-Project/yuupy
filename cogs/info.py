@@ -1,11 +1,13 @@
 from discord.ext import commands
-from utils.utils import color_hex_to_int, get_emote_url, get_first_name
+from utils.utils import color_hex_to_int, get_emote_url, get_first_name, render_dialog
 import discord
 import json
 import random
 import time
 import os
 import requests
+import glob
+import pathlib
 
 
 class Info(commands.Cog):
@@ -19,10 +21,21 @@ class Info(commands.Cog):
         }
         self.quote_url = "https://quotes15.p.rapidapi.com/quotes/random/"
 
+        self.dialog.backgrounds = [os.path.splitext(os.path.basename(x))[0]
+                                   for x in glob.glob('./assets/images/dialog/backgrounds/*.png')]
+        self.dialog.characters = [os.path.splitext(os.path.basename(x))[0]
+                                  for x in glob.glob('./assets/images/dialog/characters/*.png')]
+
+        self.dialog.backgrounds.sort()
+        self.dialog.characters.sort()
+
+        print(self.dialog.backgrounds)
+
         with open('assets/routes.json', 'r', encoding='utf-8') as raw_routes:
             self.routes = json.load(raw_routes)
 
-    @commands.command(description='Get current latency and API ping.', help='Send a ping to the bot and get latency information.', aliases=['pong'])
+    @commands.command(description='Get current latency and API ping.',
+                      help='Send a ping to the bot and get latency information.', aliases=['pong'])
     async def ping(self, ctx: commands.Context):
         curr = time.time()
         latency: float = round(ctx.bot.latency * 1000.0, 2)
@@ -30,7 +43,8 @@ class Info(commands.Cog):
         await msg.edit(
             content=f'🏓 {random.choice(self.pings)}! Latency is {round((time.time() - curr) * 1000.0, 2)}ms. API latency is {latency}ms.')
 
-    @commands.command(description='Tells you what route to play next.', help='This command will let Yuuto decide which route you should play next.', aliases=['r'])
+    @commands.command(description='Tells you what route to play next.',
+                      help='This command will let Yuuto decide which route you should play next.', aliases=['r'])
     async def route(self, ctx: commands.Context):
         author: discord.Member = ctx.author
         route = random.choice(self.routes)
@@ -46,12 +60,15 @@ class Info(commands.Cog):
             .set_footer(text=f"Play {get_first_name(route['name'])}'s route next. All bois are best bois.")
         await ctx.send(embed=embed)
 
-    @commands.command(description='Get a random quote from famous people, fictional or non-fictional.', help='This command will get you a random quote from both fictional and non-fictional characters. Feel like some inspiration for today?', aliases=['quotation', 'saying'])
+    @commands.command(description='Get a random quote from famous people, fictional or non-fictional.',
+                      help='This command will get you a random quote from both fictional and non-fictional characters. Feel like some inspiration for today?',
+                      aliases=['quotation', 'saying'])
     async def quote(self, ctx: commands.Context):
         res = requests.get(url=self.quote_url, headers=self.rapidapi_headers)
         data = json.loads(res.text)
 
-        embed = discord.Embed(title=data['originator']['name'], description='*{}*'.format(data['content']), color=discord.Color.gold())\
+        embed = discord.Embed(title=data['originator']['name'], description='*{}*'.format(data['content']),
+                              color=discord.Color.gold()) \
             .set_author(name='Click here for source', url=data['url'])
 
         if len(data['tags']) > 0:
@@ -69,6 +86,28 @@ class Info(commands.Cog):
         embed = discord.Embed(title=title, description=desc, color=discord.Colour(0xFDBBE4))
 
         await ctx.send(embed=embed)
+
+    @commands.command(description='do the dialog')
+    async def dialog(self, ctx: commands.Context, *, args: str):
+        splitted = args.split(' ')
+        character = splitted[0].lower()
+        background = 'camp'
+        text = " ".join(splitted[1:])
+
+        # todo im not happy with how this looks
+        # todo refactor this >:(
+        if splitted[0].lower() in self.dialog.backgrounds:
+            background = splitted[0].lower()
+            character = splitted[1].lower()
+            text = " ".join(splitted[2:])
+
+        output = render_dialog(text, character, background)
+
+        file = discord.File(filename="res.png", fp=output)
+
+        await ctx.send(f"character = {character}, background = {background}, text = {text}", file=file)
+
+
 
 
 def setup(bot: commands.Bot):
