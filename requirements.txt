@@ -3,3 +3,4 @@ owoify-py>=1.0.31
 python-dotenv~=0.14.0
 requests~=2.24.0
 Pillow>=7.2.0
+marshmallow-dataclass>=8.0.0
