@@ -46,7 +46,8 @@ class Fun(commands.Cog):
         self.games: Dict[int, Minigame] = dict()
 
     @commands.command(description='Calculate if you and your crush will work out.',
-                      help='Yuuto mastered the art of shipping users and can now calculate if you and your crush will work out.',
+                      help='Yuuto mastered the art of shipping users and can now calculate if you and your crush will '
+                           'work out.',
                       aliases=['love', 'ratecouple'])
     async def ship(self, ctx: commands.Context, username_1: str, username_2: str):
         search_result = search_user(ctx, username_1.lower())
@@ -76,7 +77,10 @@ class Fun(commands.Cog):
         await ctx.send(embed=embed, file=discord.File(fp=BytesIO(response.content), filename='result.png'))
 
     @commands.command(description='Owoify your text.',
-                      help='Turn your sentences and texts to nonsensical babyspeaks (a.k.a. owoify). Using `y!owoify <text>` will make use of the default owoify level (owo), which is the most vanilla one. Using `y!owoify [level] <text>` will explicitly set the owoify level. Currently, 3 levels are supported (from the lowest to the highest): **soft**, **medium**, **hard**')
+                      help='Turn your sentences and texts to nonsensical babyspeaks (a.k.a. owoify). Using `y!owoify '
+                           '<text>` will make use of the default owoify level (owo), which is the most vanilla one. '
+                           'Using `y!owoify [level] <text>` will explicitly set the owoify level. Currently, '
+                           '3 levels are supported (from the lowest to the highest): **soft**, **medium**, **hard**')
     async def owoify(self, ctx: commands.Context, level: Optional[str], *, text: Optional[str] = ''):
         result_text = ''
         if len(level) > 0 and level != '':
