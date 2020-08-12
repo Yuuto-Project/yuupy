@@ -2,11 +2,16 @@ from discord.ext import commands
 import discord
 import typing
 import re
+from PIL import ImageFont, ImageDraw, Image
+from io import BytesIO
+import textwrap
 
 USER_MENTION_REGEX = re.compile(r'<@!?(\d{17,20})>')
 USER_TAG = re.compile(r'(\S.{0,30}\S)\s*#(\d{4})')
 DISCORD_ID = re.compile(r'\d{17,20}')
-
+font = ImageFont.truetype('./assets/fonts/halogen.ttf', 56)
+flag = Image.open('./assets/images/dialog/flag_overlay.png')
+textbox = Image.open('./assets/images/dialog/text_box.png')
 
 def color_hex_to_0x(hex_str):
     return '0x' + hex_str.replace('#', '')
@@ -60,11 +65,14 @@ def search_user(ctx: commands.Context, query: str) -> typing.List[discord.Member
             lower_nick = _member.nick.lower()
         if (_member.nick is not None and _member.nick == query) or _member.name == query:
             exact_match.append(_member)
-        elif (ignore_case(_member.name, query) or (_member.nick is not None and ignore_case(_member.nick, query))) and len(exact_match) <= 0:
+        elif (ignore_case(_member.name, query) or (
+                _member.nick is not None and ignore_case(_member.nick, query))) and len(exact_match) <= 0:
             wrong_case.append(_member)
-        elif (_member.name.lower().startswith(lower_query) or (_member.nick is not None and _member.nick.lower().startswith(lower_query))) and len(wrong_case) <= 0:
+        elif (_member.name.lower().startswith(lower_query) or (
+                _member.nick is not None and _member.nick.lower().startswith(lower_query))) and len(wrong_case) <= 0:
             starts_with.append(_member)
-        elif (lower_query in _member.name.lower() or (_member.nick is not None and lower_query in _member.nick.lower())) and len(starts_with) <= 0:
+        elif (lower_query in _member.name.lower() or (
+                _member.nick is not None and lower_query in _member.nick.lower())) and len(starts_with) <= 0:
             contains.append(_member)
 
     exact_match += wrong_case
@@ -79,3 +87,39 @@ def get_emote_url(emote_id: str, format: str) -> str:
 
 def get_first_name(full_name: str) -> str:
     return full_name.split(' ')[0]
+
+
+def render_dialog(text: str, character: str, background: str = 'camp') -> BytesIO:
+    background = Image.open('./assets/images/dialog/backgrounds/' + background + '.png')
+    ribbon = Image.open('./assets/images/dialog/ribbons/' + character + '.png')
+    character = Image.open('./assets/images/dialog/characters/' + character + '.png')
+
+    background.paste(character, (0, 0), character)
+
+    # todo move resizing part so it doesn't get executed every iteration
+    # although we might also no need to change it since it might be vary between images?
+    # idk
+
+    new_width = background.size[0]
+    new_height = int(new_width * textbox.size[1] / textbox.size[0])
+    resized = textbox.resize((new_width, new_height), Image.NEAREST)
+
+    background.paste(resized, (0, background.size[1] - resized.size[1]), resized)
+
+    new_width = int(ribbon.size[0] * 0.8)
+    new_height = int(new_width * ribbon.size[1] / ribbon.size[0])
+    ribbonresized = ribbon.resize((new_width, new_height), Image.NEAREST)
+
+    background.paste(ribbonresized, (0, 653), ribbonresized)
+    background.paste(flag, (background.size[0] - flag.size[0], 10), flag)
+
+    draw = ImageDraw.Draw(background)
+    text = "\n".join(textwrap.wrap(text, width=26))
+
+    draw.multiline_text((80, 750),text, font=font, fill="#FFF")
+
+    result = BytesIO()
+    background.save(result, "png")
+    result.seek(0)
+
+    return result
