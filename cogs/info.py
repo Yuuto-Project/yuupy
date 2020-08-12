@@ -2,12 +2,11 @@ from discord.ext import commands
 from utils.utils import color_hex_to_int, get_emote_url, get_first_name, render_dialog
 import discord
 import json
-import random
 import time
 import os
 import requests
 import glob
-import pathlib
+import random
 
 
 class Info(commands.Cog):
@@ -29,7 +28,8 @@ class Info(commands.Cog):
         self.dialog.backgrounds.sort()
         self.dialog.characters.sort()
 
-        print(self.dialog.backgrounds)
+        self.dialog.backgrounds_string = f"`{'`, `'.join(self.dialog.backgrounds)}`"
+        self.dialog.characters_string = f"`{'`, `'.join(self.dialog.characters)}`"
 
         with open('assets/routes.json', 'r', encoding='utf-8') as raw_routes:
             self.routes = json.load(raw_routes)
@@ -90,24 +90,35 @@ class Info(commands.Cog):
     @commands.command(description='do the dialog')
     async def dialog(self, ctx: commands.Context, *, args: str):
         splitted = args.split(' ')
-        character = splitted[0].lower()
-        background = 'camp'
-        text = " ".join(splitted[1:])
+        character = splitted.pop(0).lower()
 
-        # todo im not happy with how this looks
-        # todo refactor this >:(
-        if splitted[0].lower() in self.dialog.backgrounds:
-            background = splitted[0].lower()
-            character = splitted[1].lower()
-            text = " ".join(splitted[2:])
+        await ctx.trigger_typing()
+
+        if character in self.dialog.characters:
+            background = random.choice(self.dialog.backgrounds)
+        else:
+            background = character
+            character = splitted.pop(0).lower()
+
+        if background not in self.dialog.backgrounds:
+            await ctx.send(f"Sorry, but I couldn't find {background} as a location\nAvailable backgrounds are: {self.dialog.backgrounds_string}")
+            return
+
+        if character not in self.dialog.characters:
+            await ctx.send(f"Sorry, but I couldn't find {character} as a location\nAvailable characters are: {self.dialog.characters_string}")
+            return
+
+        text = " ".join(splitted[0:])
+
+        if len(text) > 140:
+            await ctx.send('Sorry, but the message limit is 140 characters :hiroJey:')
+            return
 
         output = render_dialog(text, character, background)
 
         file = discord.File(filename="res.png", fp=output)
 
-        await ctx.send(f"character = {character}, background = {background}, text = {text}", file=file)
-
-
+        await ctx.send(f"{ctx.author.mention}, Here you go!", file=file)
 
 
 def setup(bot: commands.Bot):

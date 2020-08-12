@@ -114,12 +114,9 @@ def render_dialog(text: str, character: str, background: str = 'camp') -> BytesI
     background.paste(flag, (background.size[0] - flag.size[0], 10), flag)
 
     draw = ImageDraw.Draw(background)
-    offset = 750
-    for line in textwrap.wrap(
-            text,
-            width=26):
-        draw.text((80, offset), line, font=font, fill="#FFF")
-        offset += font.getsize(line)[1]
+    text = "\n".join(textwrap.wrap(text, width=26))
+
+    draw.multiline_text((80, 750),text, font=font, fill="#FFF")
 
     result = BytesIO()
     background.save(result, "png")
