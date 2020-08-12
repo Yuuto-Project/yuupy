@@ -36,7 +36,19 @@ async def on_reaction_add(reaction: discord.Reaction, user: Union[discord.Member
     standby_messages = list(filter(lambda x: x == reaction.message.id, Minigame.standby_messages))
     if len(standby_messages) == 0:
         return
+    if user.bot:
+        return
     Minigame.register_player(reaction.message.channel.id, user)
+
+
+@bot.event
+async def on_reaction_remove(reaction: discord.Reaction, user: Union[discord.Member, discord.User]):
+    standby_messages = list(filter(lambda x: x == reaction.message.id, Minigame.standby_messages))
+    if len(standby_messages) == 0:
+        return
+    if user.bot:
+        return
+    Minigame.deregister_player(reaction.message.channel.id, user)
 
 
 if __name__ == '__main__':

@@ -94,8 +94,11 @@ class Fun(commands.Cog):
         result_text = 'OwO-ified for {}~!\n\n{}'.format(author.mention, result_text)
         await ctx.send(result_text)
 
-    @commands.command()
-    async def minigame(self, ctx: commands.Context, rounds: Optional[int] = None):
+    @commands.command(description='Play a fun quiz with your friends.', help='Run `minigame` to begin a new game, and react within the countdown to join.', aliases=['quiz'])
+    async def minigame(self, ctx: commands.Context, rounds: Optional[int] = 7):
+        if rounds < 2 or rounds > 10:
+            await ctx.send('The number of rounds has to be greater than 1 and less than 11.')
+            return
         game = await Minigame.create(ctx, rounds)
         if game is not None:
             asyncio.create_task(game.progress(ctx))
