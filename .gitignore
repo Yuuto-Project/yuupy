@@ -4,6 +4,7 @@ pyvenv.cfg
 .env
 .idea/
 cogs/__pycache__
+cogs/minigame/__pycache__
 utils/__pycache__
 bin/
 lib/

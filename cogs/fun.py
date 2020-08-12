@@ -1,8 +1,10 @@
+from cogs.minigame.minigame import Minigame
 from discord.ext import commands
 from io import BytesIO
 from owoify.owoify import owoify
-from typing import Optional, List, Tuple
+from typing import Dict, Optional, List, Tuple
 from utils.utils import search_user
+import asyncio
 import discord
 import json
 import requests
@@ -39,10 +41,10 @@ def calculate_score(first: discord.Member, second: discord.Member, ship_messages
 class Fun(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        with open('assets/shipMessages.json') as fs:
-            self.ship_messages = json.loads(fs.read())
+        with open('assets/shipMessages.json') as file_1:
+            self.ship_messages = json.loads(file_1.read())
+        self.games: Dict[int, Minigame] = dict()
 
-    # TODO: ship command
     @commands.command(description='Calculate if you and your crush will work out.',
                       help='Yuuto mastered the art of shipping users and can now calculate if you and your crush will '
                            'work out.',
@@ -95,6 +97,15 @@ class Fun(commands.Cog):
         author: discord.Member = ctx.author
         result_text = 'OwO-ified for {}~!\n\n{}'.format(author.mention, result_text)
         await ctx.send(result_text)
+
+    @commands.command(description='Play a fun quiz with your friends.', help='Run `minigame` to begin a new game, and react within the countdown to join.', aliases=['quiz'])
+    async def minigame(self, ctx: commands.Context, rounds: Optional[int] = 7):
+        if rounds < 2 or rounds > 10:
+            await ctx.send('The number of rounds has to be greater than 1 and less than 11.')
+            return
+        game = await Minigame.create(ctx, rounds)
+        if game is not None:
+            asyncio.create_task(game.progress(ctx))
 
 
 def setup(bot: commands.Bot):
