@@ -2,7 +2,7 @@ from cogs.minigame.minigame import Minigame
 from discord.ext import commands
 from io import BytesIO
 from owoify.owoify import owoify
-from typing import Dict, Optional, List, Tuple
+from typing import Optional, List, Tuple
 from utils.utils import search_user
 import asyncio
 import discord
@@ -43,7 +43,6 @@ class Fun(commands.Cog):
         self.bot = bot
         with open('assets/shipMessages.json') as file_1:
             self.ship_messages = json.loads(file_1.read())
-        self.games: Dict[int, Minigame] = dict()
 
     @commands.command(description='Calculate if you and your crush will work out.',
                       help='Yuuto mastered the art of shipping users and can now calculate if you and your crush will '
@@ -73,7 +72,6 @@ class Fun(commands.Cog):
         message = message.replace('{name}', user_1.display_name).replace('{name2}', user_2.display_name)
         embed = discord.Embed(title='{} and {}'.format(user_1.display_name, user_2.display_name))
         embed = embed.add_field(name=f'Your love score is {int(score)}', value=message, inline=False).set_image(url='attachment://result.png')
-        # await ctx.send(embed=embed)
         await ctx.send(embed=embed, file=discord.File(fp=BytesIO(response.content), filename='result.png'))
 
     @commands.command(description='Owoify your text.',
