@@ -87,7 +87,7 @@ class Info(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(description='do the dialog')
+    @commands.command(description='Generates an image of a character in Camp Buddy saying anything you want.', help='This command will generate an image of a character in Camp Buddy saying anything you want.', aliases=['dialogue'])
     async def dialog(self, ctx: commands.Context, *, args: str):
         splitted = args.split(' ')
         character = splitted.pop(0).lower()
