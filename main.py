@@ -1,6 +1,7 @@
 import os
 import discord
 import dotenv
+import help
 from cogs.minigame.minigame import Minigame
 from discord.ext import commands
 from typing import Union
@@ -12,9 +13,16 @@ EXTENSIONS = [
     'cogs.fun'
 ]
 
+# The detailed and brief descriptions, plus aliases, of the command `help` itself.
+HELP_TEXTS = {
+    'description': 'To see a list of commands.',
+    'help': 'This command will show all the commands available in Yuuto.',
+    'aliases': ['manual']
+}
+
 dotenv.load_dotenv()
 prefix = os.getenv('PREFIX') or 'y!'
-bot = commands.Bot(command_prefix=prefix)
+bot = commands.Bot(command_prefix=prefix, help_command=help.Help(HELP_TEXTS))
 
 @bot.event
 async def on_ready():
