@@ -1,3 +1,6 @@
+import cogs.fun
+import cogs.info
+import cogs.utility
 import os
 import discord
 import dotenv
