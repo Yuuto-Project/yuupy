@@ -123,3 +123,16 @@ def render_dialog(text: str, character: str, background: str = 'camp') -> BytesI
     result.seek(0)
 
     return result
+
+def status_embed(text : str, status = True) -> discord.Embed:
+    embed = discord.Embed(description=text)
+
+    if status :
+        embed.title = "✅"
+        embed.color = discord.Color.green()
+    else :
+        embed.title = "Oops"
+        embed.color = discord.Color.red()
+
+    return embed
+    
