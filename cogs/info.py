@@ -1,5 +1,5 @@
 from discord.ext import commands
-from utils.utils import color_hex_to_int, get_emote_url, get_first_name, render_dialog
+from utils.utils import color_hex_to_int, get_emote_url, get_first_name, render_dialog, status_embed
 import discord
 import json
 import time
@@ -7,6 +7,8 @@ import os
 import requests
 import glob
 import random
+import os
+import asyncio
 
 
 class Info(commands.Cog):
@@ -119,6 +121,45 @@ class Info(commands.Cog):
         file = discord.File(filename="res.png", fp=output)
 
         await ctx.send(f"{ctx.author.mention}, Here you go!", file=file)
+
+    @commands.command(description='Help yuuto by giving us a suggestion or a bug report!', help="This command will let you help yuuto by giving it a suggestion or a bug report!", aliases=['suggestion'])
+    async def suggest(self, ctx: commands.Context, *, args:str = None):
+        suggestchannel : discord.TextChannel = await ctx.bot.fetch_channel(os.getenv('SUGGESTIONS_CHANNEL'))
+
+        author : discord.User = ctx.author
+
+        if args == None :
+            await ctx.send(embed = status_embed("Message cannot be empty!", False))
+            return
+
+        embed = discord.Embed(title="Suggestion", description=args, color=discord.Color.blurple())\
+            .set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url)\
+            .set_footer(text="React ✅ to confirm the submission of message, react ❌ to cancel")
+        
+        sentembed : discord.Message = await ctx.send(embed=embed)
+
+        await sentembed.add_reaction('✅')
+        await sentembed.add_reaction('❌')
+
+        def check(reaction : discord.Reaction, user):
+            return user == ctx.author and reaction.message.id == sentembed.id and (str(reaction.emoji) == '✅' or str(reaction.emoji) == '❌')
+
+        async def cancel():
+            await ctx.message.delete()
+            await sentembed.delete()
+            await ctx.send('❌ Cancelled')
+
+        try:
+            reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+        except asyncio.TimeoutError:
+            # Timeout
+            await cancel()
+        else:
+            if reaction.emoji == '❌' :
+                await cancel()
+            else :
+                await suggestchannel.send(f"From {author.display_name}\n{args}")
+                await ctx.send(embed=status_embed('Submitted! Thank you for helping this community project!'))
 
 
 def setup(bot: commands.Bot):
