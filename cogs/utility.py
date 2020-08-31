@@ -131,7 +131,15 @@ class Utility(commands.Cog):
     @commands.command(description='Returns an enlarged emote.',
                       help='Get the permanent link of one or multiple emotes to see them in larger sizes.',
                       aliases=['emoji'])
-    async def enlarge(self, ctx: commands.Context, *, args: str):
+    async def enlarge(self, ctx: commands.Context, *, args: typing.Optional[str]):
+        if args is None or len(args) == 0:
+            await ctx.send("Sorry, but you need to provide me an emote or avatar to use this command~!")
+            return
+        member = search_user(ctx, args)
+        if len(member) > 0:
+            await ctx.send('{}, Here ya go~!'.format(ctx.author.mention))
+            await ctx.send(member[0].avatar_url)
+            return
         result = self.emote_regex.search(args)
         if result is None:
             await ctx.send('Sorry, but you need to provide me an emote to use this command~!')
