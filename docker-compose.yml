@@ -1,0 +1,7 @@
+version: '3'
+services: 
+  yuuto:
+    image: deadshot465/yuuto:latest
+    container_name: yuuto
+    env_file: 
+      - ./.env
