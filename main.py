@@ -23,9 +23,12 @@ HELP_TEXTS = {
     'aliases': ['manual']
 }
 
+intents = discord.Intents.default()
+intents.members = True
+
 dotenv.load_dotenv()
 prefix = os.getenv('PREFIX') or 'y!'
-bot = commands.Bot(command_prefix=prefix, help_command=help.Help(HELP_TEXTS))
+bot = commands.Bot(command_prefix=prefix, help_command=help.Help(HELP_TEXTS), intents=intents)
 
 @bot.event
 async def on_ready():
