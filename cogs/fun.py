@@ -6,7 +6,7 @@ from typing import Optional, List, Tuple
 from utils.utils import search_user
 import asyncio
 import discord
-import json
+import json5
 import requests
 
 
@@ -41,8 +41,8 @@ def calculate_score(first: discord.Member, second: discord.Member, ship_messages
 class Fun(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        with open('assets/shipMessages.json') as file_1:
-            self.ship_messages = json.loads(file_1.read())
+        with open('assets/shipMessages.json5') as file_1:
+            self.ship_messages = json5.loads(file_1.read())
 
     @commands.command(description='Calculate if you and your crush will work out.',
                       help='Yuuto mastered the art of shipping users and can now calculate if you and your crush will '
