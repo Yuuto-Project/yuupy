@@ -39,10 +39,18 @@ async def on_ready():
 
 @bot.event
 async def on_message(message: discord.Message):
-    if message.author == bot.user:
+    if message.author.bot:
         return
-    else:
-        await bot.process_commands(message)
+
+    if message.guild is None:
+        return
+
+    botcmds = os.getenv(f'BOTCMDS_{message.guild.id}')
+
+    if botcmds is not None and botcmds is message.channel.id:
+        return
+
+    await bot.process_commands(message)
 
 
 @bot.event
