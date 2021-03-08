@@ -47,7 +47,7 @@ async def on_message(message: discord.Message):
 
     botcmds = os.getenv(f'BOTCMDS_{message.guild.id}')
 
-    if botcmds is not None and botcmds is message.channel.id:
+    if botcmds is not None and int(botcmds) != message.channel.id:
         return
 
     await bot.process_commands(message)

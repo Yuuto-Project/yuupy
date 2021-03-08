@@ -1,0 +1,6 @@
+.idea/
+.git/
+venv/
+.actions/
+update.ps1
+.env.example
