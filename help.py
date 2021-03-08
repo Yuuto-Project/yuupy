@@ -13,6 +13,7 @@ class Help(commands.HelpCommand):
             'Info': 'ℹ️',
             'Fun': '🎲'
         }
+        self.embed_help = os.getenv('EMBED_HELP') is not None and int(os.getenv('EMBED_HELP')) == 1
 
     async def build_embed_bot_help(self, mapping: Mapping[Optional[commands.Cog], List[commands.Command]]) -> discord.Embed:
         author: Union[discord.User, discord.Member] = self.context.author
@@ -89,7 +90,7 @@ class Help(commands.HelpCommand):
 
     # Override the general help (without any arguments)
     async def send_bot_help(self, mapping: Mapping[Optional[commands.Cog], List[commands.Command]]):
-        if int(os.getenv('EMBED_HELP')) == 1:
+        if self.embed_help:
             embed = await self.build_embed_bot_help(mapping)
             await self.context.send(embed=embed)
         else:
@@ -107,7 +108,7 @@ class Help(commands.HelpCommand):
 
     # Help for each command. Showing the command's name, detailed description (help) and aliases.
     async def send_command_help(self, command: commands.Command):
-        if int(os.getenv('EMBED_HELP')) == 1:
+        if self.embed_help:
             embed = self.build_embed_command_help(command)
             await self.context.send(embed=embed)
         else:
