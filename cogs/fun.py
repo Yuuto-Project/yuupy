@@ -62,16 +62,25 @@ class Fun(commands.Cog):
             await ctx.send(f'No user found for input `{username_2}`')
             return
 
+        img1 = user_1.avatar_url_as(static_format='png', size=128)
+        img2 = user_2.avatar_url_as(static_format='png', size=128)
+
         score, message = calculate_score(user_1, user_2, self.ship_messages)
-        img_url1 = user_1.avatar_url
-        img_url2 = user_2.avatar_url
-        response = requests.get('https://api.alexflipnote.dev/ship?user={}&user2={}'.format(img_url1, img_url2))
+        response = requests.post('https://apis.duncte123.me/images/love',
+                                 json={'image1': f'{img1}', 'image2': f'{img2}'},
+                                 headers={
+                                     'Content-Type': 'application/json',
+                                     'User-Agent': 'Yuuto.py (https://github.com/Yuuto-Project/yuupy+)'
+                                 })
+
         if not response:
             await ctx.send('Failed to ship these 2! Guess it\'s a doomed ship...')
             return
+
         message = message.replace('{name}', user_1.display_name).replace('{name2}', user_2.display_name)
         embed = discord.Embed(title='{} and {}'.format(user_1.display_name, user_2.display_name))
-        embed = embed.add_field(name=f'Your love score is {int(score)}', value=message, inline=False).set_image(url='attachment://result.png')
+        embed = embed.add_field(name=f'Your love score is {int(score)}%', value=message, inline=False).set_image(
+            url='attachment://result.png')
         await ctx.send(embed=embed, file=discord.File(fp=BytesIO(response.content), filename='result.png'))
 
     @commands.command(description='Owoify your text.',
@@ -96,7 +105,9 @@ class Fun(commands.Cog):
         result_text = 'OwO-ified for {}~!\n\n{}'.format(author.mention, result_text)
         await ctx.send(result_text)
 
-    @commands.command(description='Play a fun quiz with your friends.', help='Run `minigame` to begin a new game, and react within the countdown to join.', aliases=['quiz'])
+    @commands.command(description='Play a fun quiz with your friends.',
+                      help='Run `minigame` to begin a new game, and react within the countdown to join.',
+                      aliases=['quiz'])
     async def minigame(self, ctx: commands.Context, rounds: Optional[int] = 7):
         if rounds < 2 or rounds > 10:
             await ctx.send('The number of rounds has to be greater than 1 and less than 11.')
