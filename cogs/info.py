@@ -66,7 +66,7 @@ class Info(commands.Cog):
                       help='This command will get you a random quote from both fictional and non-fictional characters. Feel like some inspiration for today?',
                       aliases=['quotation', 'saying'])
     async def quote(self, ctx: commands.Context):
-        if os.getenv('RAPID_API_KEY') is None:
+        if os.getenv('RAPID_API_KEY') is None or os.getenv('RAPID_API_KEY') == "":
             return
 
         res = requests.get(url=self.quote_url, headers=self.rapidapi_headers)
@@ -93,7 +93,12 @@ class Info(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(description='Generates an image of a character in Camp Buddy saying anything you want.', help='This command will generate an image of a character in Camp Buddy saying anything you want.', aliases=['dialogue'])
-    async def dialog(self, ctx: commands.Context, *, args: str):
+    async def dialog(self, ctx: commands.Context, *, args: str = ''):
+        if args == '':
+            await ctx.send('This command requires at least two arguments: `dialog [background] <character> <text>` (['
+                           '] is optional)')
+            return
+
         splitted = args.split(' ')
         character = splitted.pop(0).lower()
 
