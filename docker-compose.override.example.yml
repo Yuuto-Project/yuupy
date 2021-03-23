@@ -1,0 +1,8 @@
+version: '3'
+services: 
+  yuuto:
+    environment:
+      - TOKEN=
+      - PREFIX=
+      - EMBED_HELP=0
+      - RAPID_API_KEY=
