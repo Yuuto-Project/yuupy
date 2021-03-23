@@ -3,7 +3,6 @@ from utils.utils import color_hex_to_int, get_emote_url, get_first_name, render_
 import discord
 import json
 import time
-import os
 import requests
 import glob
 import random
@@ -20,6 +19,7 @@ class Info(commands.Cog):
             'x-rapidapi-host': "quotes15.p.rapidapi.com",
             'x-rapidapi-key': os.getenv('RAPID_API_KEY')
         }
+        # https://rapidapi.com/martin.svoboda/api/quotes15
         self.quote_url = "https://quotes15.p.rapidapi.com/quotes/random/"
 
         self.dialog.backgrounds = [os.path.splitext(os.path.basename(x))[0]
@@ -66,6 +66,9 @@ class Info(commands.Cog):
                       help='This command will get you a random quote from both fictional and non-fictional characters. Feel like some inspiration for today?',
                       aliases=['quotation', 'saying'])
     async def quote(self, ctx: commands.Context):
+        if os.getenv('RAPID_API_KEY') is None:
+            return
+
         res = requests.get(url=self.quote_url, headers=self.rapidapi_headers)
         data = json.loads(res.text)
 
