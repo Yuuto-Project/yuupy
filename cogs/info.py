@@ -130,26 +130,42 @@ class Info(commands.Cog):
 
         await ctx.send(f"{ctx.author.mention}, Here you go!", file=file)
 
+    @commands.command(description="Shows information about Yuuto", help="Shows information about yuuto",
+                      aliases=["info", "bot", "credits"])
+    async def about(self, ctx: commands.Context):
+        desc = "Yuuto was made and developed by the community, for the community. \n" \
+              "Join the dev team and start developing on the [project website](https://kyuuto.io/docs). \n" \
+              "Link to our discord server: [discord.gg/fPFbV8G](https://discord.gg/fPFbV8G) \n\n" \
+              "Yuuto was developed by: \n" \
+              "**Arch#0226**, **dunste123#0129**, **Tetsuki Syu#1250**, **zsotroav#8941**"
+        embed = discord.Embed(title="About Yuuto!", description=desc, color=discord.Colour(0xFDBBE4)) \
+            .set_author(
+            name="Yuuto from Camp Buddy",
+            url="https://blitsgames.com",
+            icon_url="https://cdn.discordapp.com/emojis/593518771554091011.png")
+
+        await ctx.send(embed=embed)
+
     @commands.command(description='Help yuuto by giving us a suggestion or a bug report!', help="This command will let you help yuuto by giving it a suggestion or a bug report!", aliases=['suggestion'])
-    async def suggest(self, ctx: commands.Context, *, args:str = None):
-        suggestchannel : discord.TextChannel = await ctx.bot.fetch_channel(os.getenv('SUGGESTIONS_CHANNEL'))
+    async def suggest(self, ctx: commands.Context, *, args: str = None):
+        suggestchannel: discord.TextChannel = await ctx.bot.fetch_channel(os.getenv('SUGGESTIONS_CHANNEL'))
 
-        author : discord.User = ctx.author
+        author: discord.User = ctx.author
 
-        if args == None :
-            await ctx.send(embed = status_embed("Message cannot be empty!", False))
+        if args == None:
+            await ctx.send(embed=status_embed("Message cannot be empty!", False))
             return
 
         embed = discord.Embed(title="Suggestion", description=args, color=discord.Color.blurple())\
             .set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url)\
             .set_footer(text="React ✅ to confirm the submission of message, react ❌ to cancel")
-        
-        sentembed : discord.Message = await ctx.send(embed=embed)
+
+        sentembed: discord.Message = await ctx.send(embed=embed)
 
         await sentembed.add_reaction('✅')
         await sentembed.add_reaction('❌')
 
-        def check(reaction : discord.Reaction, user):
+        def check(reaction: discord.Reaction, user):
             return user == ctx.author and reaction.message.id == sentembed.id and (str(reaction.emoji) == '✅' or str(reaction.emoji) == '❌')
 
         async def cancel():
@@ -163,9 +179,9 @@ class Info(commands.Cog):
             # Timeout
             await cancel()
         else:
-            if reaction.emoji == '❌' :
+            if reaction.emoji == '❌':
                 await cancel()
-            else :
+            else:
                 await suggestchannel.send(f"From {author.display_name}\n{args}")
                 await ctx.send(embed=status_embed('Submitted! Thank you for helping this community project!'))
 

@@ -1,6 +1,8 @@
 .idea/
 .git/
 venv/
-.actions/
+.github/
 update.ps1
 .env.example
+.env
+docker-compose.example*
