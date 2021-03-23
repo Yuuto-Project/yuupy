@@ -3,7 +3,6 @@ from utils.utils import color_hex_to_int, get_emote_url, get_first_name, render_
 import discord
 import json
 import time
-import os
 import requests
 import glob
 import random
@@ -20,6 +19,7 @@ class Info(commands.Cog):
             'x-rapidapi-host': "quotes15.p.rapidapi.com",
             'x-rapidapi-key': os.getenv('RAPID_API_KEY')
         }
+        # https://rapidapi.com/martin.svoboda/api/quotes15
         self.quote_url = "https://quotes15.p.rapidapi.com/quotes/random/"
 
         self.dialog.backgrounds = [os.path.splitext(os.path.basename(x))[0]
@@ -66,6 +66,9 @@ class Info(commands.Cog):
                       help='This command will get you a random quote from both fictional and non-fictional characters. Feel like some inspiration for today?',
                       aliases=['quotation', 'saying'])
     async def quote(self, ctx: commands.Context):
+        if os.getenv('RAPID_API_KEY') is None or os.getenv('RAPID_API_KEY') == "":
+            return
+
         res = requests.get(url=self.quote_url, headers=self.rapidapi_headers)
         data = json.loads(res.text)
 
@@ -90,7 +93,12 @@ class Info(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(description='Generates an image of a character in Camp Buddy saying anything you want.', help='This command will generate an image of a character in Camp Buddy saying anything you want.', aliases=['dialogue'])
-    async def dialog(self, ctx: commands.Context, *, args: str):
+    async def dialog(self, ctx: commands.Context, *, args: str = ''):
+        if args == '':
+            await ctx.send('This command requires at least two arguments: `dialog [background] <character> <text>` (['
+                           '] is optional)')
+            return
+
         splitted = args.split(' ')
         character = splitted.pop(0).lower()
 
@@ -122,26 +130,42 @@ class Info(commands.Cog):
 
         await ctx.send(f"{ctx.author.mention}, Here you go!", file=file)
 
+    @commands.command(description="Shows information about Yuuto", help="Shows information about yuuto",
+                      aliases=["info", "bot", "credits"])
+    async def about(self, ctx: commands.Context):
+        desc = "Yuuto was made and developed by the community, for the community. \n" \
+              "Join the dev team and start developing on the [project website](https://kyuuto.io/docs). \n" \
+              "Link to our discord server: [discord.gg/fPFbV8G](https://discord.gg/fPFbV8G) \n\n" \
+              "Yuuto was developed by: \n" \
+              "**Arch#0226**, **dunste123#0129**, **Tetsuki Syu#1250**, **zsotroav#8941**"
+        embed = discord.Embed(title="About Yuuto!", description=desc, color=discord.Colour(0xFDBBE4)) \
+            .set_author(
+            name="Yuuto from Camp Buddy",
+            url="https://blitsgames.com",
+            icon_url="https://cdn.discordapp.com/emojis/593518771554091011.png")
+
+        await ctx.send(embed=embed)
+
     @commands.command(description='Help yuuto by giving us a suggestion or a bug report!', help="This command will let you help yuuto by giving it a suggestion or a bug report!", aliases=['suggestion'])
-    async def suggest(self, ctx: commands.Context, *, args:str = None):
-        suggestchannel : discord.TextChannel = await ctx.bot.fetch_channel(os.getenv('SUGGESTIONS_CHANNEL'))
+    async def suggest(self, ctx: commands.Context, *, args: str = None):
+        suggestchannel: discord.TextChannel = await ctx.bot.fetch_channel(os.getenv('SUGGESTIONS_CHANNEL'))
 
-        author : discord.User = ctx.author
+        author: discord.User = ctx.author
 
-        if args == None :
-            await ctx.send(embed = status_embed("Message cannot be empty!", False))
+        if args == None:
+            await ctx.send(embed=status_embed("Message cannot be empty!", False))
             return
 
         embed = discord.Embed(title="Suggestion", description=args, color=discord.Color.blurple())\
             .set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url)\
             .set_footer(text="React ✅ to confirm the submission of message, react ❌ to cancel")
-        
-        sentembed : discord.Message = await ctx.send(embed=embed)
+
+        sentembed: discord.Message = await ctx.send(embed=embed)
 
         await sentembed.add_reaction('✅')
         await sentembed.add_reaction('❌')
 
-        def check(reaction : discord.Reaction, user):
+        def check(reaction: discord.Reaction, user):
             return user == ctx.author and reaction.message.id == sentembed.id and (str(reaction.emoji) == '✅' or str(reaction.emoji) == '❌')
 
         async def cancel():
@@ -155,9 +179,9 @@ class Info(commands.Cog):
             # Timeout
             await cancel()
         else:
-            if reaction.emoji == '❌' :
+            if reaction.emoji == '❌':
                 await cancel()
-            else :
+            else:
                 await suggestchannel.send(f"From {author.display_name}\n{args}")
                 await ctx.send(embed=status_embed('Submitted! Thank you for helping this community project!'))
 

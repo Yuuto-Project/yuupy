@@ -1,6 +1,3 @@
-import cogs.fun
-import cogs.info
-import cogs.utility
 import os
 import discord
 import dotenv
@@ -26,9 +23,13 @@ HELP_TEXTS = {
 intents = discord.Intents.default()
 intents.members = True
 
-dotenv.load_dotenv()
+# only try to load the env file if found, docker will use actual env vars
+if os.path.exists('.env'):
+    dotenv.load_dotenv()
+
 prefix = os.getenv('PREFIX') or 'y!'
 bot = commands.Bot(command_prefix=prefix, help_command=help.Help(HELP_TEXTS), intents=intents)
+
 
 @bot.event
 async def on_ready():
@@ -39,10 +40,18 @@ async def on_ready():
 
 @bot.event
 async def on_message(message: discord.Message):
-    if message.author == bot.user:
+    if message.author.bot:
         return
-    else:
-        await bot.process_commands(message)
+
+    if message.guild is None:
+        return
+
+    botcmds = os.getenv(f'BOTCMDS_{message.guild.id}')
+
+    if botcmds is not None and int(botcmds) != message.channel.id:
+        return
+
+    await bot.process_commands(message)
 
 
 @bot.event

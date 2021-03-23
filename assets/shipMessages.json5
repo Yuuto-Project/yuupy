@@ -1,0 +1,43 @@
+[
+    {
+        max_score: 10,
+        message: "This will probably be another Camp Disaster, don't bother with it.",
+    },
+    {
+        max_score: 29,
+        message: "Things will work out great between you guys, if you two stay in separate cabins.",
+    },
+    {
+        max_score: 39,
+        message: "This will work out just as well as Yuri and Yoshinori.",
+    },
+    {
+        // Important: Yuuto is still pessimistic here
+        max_score: 49,
+        message: "My magic beach ball says that you shouldn't count on it.",
+    },
+    {
+        max_score: 64,
+        message: "This might work, it might also not work. All you can do is try.",
+    },
+    {
+        max_score: 68,
+        message: "Breathe in and drink some water, you two might have a future.",
+    },
+    {
+        max_score: 69,
+        message: "Nice",
+    },
+    {
+        max_score: 89,
+        message: "Hey! You two should kiss!", // Guess the reference :P
+    },
+    {
+        max_score: 99,
+        message: "Wah this is amazingly rare! Stop whatever you're doing and go make out, NOW!",
+    },
+    {
+        max_score: 100,
+        message: "{name} and {name2} are like me and volleyball, a perfect match!",
+    },
+]

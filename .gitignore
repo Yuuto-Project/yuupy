@@ -14,3 +14,4 @@ lib64
 build/
 dist/
 main.spec
+docker-compose.override.yml
