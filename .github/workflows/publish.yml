@@ -15,4 +15,4 @@ jobs:
                 username: ${{ github.actor }}
                 password: ${{ secrets.GITHUB_TOKEN }}
                 registry: docker.pkg.github.com
-                repository: Yuuto-Project/yuupy
+                repository: yuuto-project/yuupy/yuupy
