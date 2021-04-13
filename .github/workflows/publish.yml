@@ -16,3 +16,4 @@ jobs:
                 password: ${{ secrets.GITHUB_TOKEN }}
                 registry: docker.pkg.github.com
                 repository: yuuto-project/yuupy/yuupy
+                tags: latest
