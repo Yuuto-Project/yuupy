@@ -4,6 +4,12 @@ services:
     build:
       context: .
     container_name: yuuto
+    deploy:
+      restart_policy:
+        condition: none
+      resources:
+        limits:
+          memory: 512m
     environment:
       - TOKEN=
       - PREFIX=
