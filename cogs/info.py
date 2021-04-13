@@ -133,9 +133,10 @@ class Info(commands.Cog):
     @commands.command(description="Shows information about Yuuto", help="Shows information about yuuto",
                       aliases=["info", "bot", "credits"])
     async def about(self, ctx: commands.Context):
+        inv = "https://discord.com/oauth2/authorize?client_id=684395509045264429&permissions=378944&scope=bot"
         desc = "Yuuto was made and developed by the community, for the community. \n" \
               "Join the dev team and start developing on the [project website](https://kyuuto.io/docs). \n" \
-              "Link to our discord server: [discord.gg/fPFbV8G](https://discord.gg/fPFbV8G) \n\n" \
+              f"Link to our discord server: [discord.gg/fPFbV8G](https://discord.gg/fPFbV8G) or [click here]({inv}) to invite me \n\n" \
               "Yuuto was developed by: \n" \
               "**Arch#0226**, **dunste123#0129**, **Tetsuki Syu#1250**, **zsotroav#8941**"
         embed = discord.Embed(title="About Yuuto!", description=desc, color=discord.Colour(0xFDBBE4)) \
@@ -145,6 +146,12 @@ class Info(commands.Cog):
             icon_url="https://cdn.discordapp.com/emojis/593518771554091011.png")
 
         await ctx.send(embed=embed)
+
+    @commands.command(description="Gives you the invite link for yuuto", help="Invite yuuto to your server!")
+    async def invite(self, ctx: commands.Context):
+        await ctx.send("You can invite me using this link: "
+                       "<https://discord.com/oauth2/authorize?client_id=684395509045264429&permissions=378944&scope"
+                       "=bot>")
 
     @commands.command(description='Help yuuto by giving us a suggestion or a bug report!', help="This command will let you help yuuto by giving it a suggestion or a bug report!", aliases=['suggestion'])
     async def suggest(self, ctx: commands.Context, *, args: str = None):
