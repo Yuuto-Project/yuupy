@@ -9,6 +9,8 @@ import random
 import os
 import asyncio
 
+quote_enabled = not (os.getenv('RAPID_API_KEY') is None or os.getenv('RAPID_API_KEY') == "")
+
 
 class Info(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -62,13 +64,10 @@ class Info(commands.Cog):
             .set_footer(text=f"Play {get_first_name(route['name'])}'s route next. All bois are best bois.")
         await ctx.send(embed=embed)
 
-    @commands.command(description='Get a random quote from famous people, fictional or non-fictional.',
+    @commands.command(description='Get a random quote from famous people, fictional or non-fictional.', enabled=quote_enabled,
                       help='This command will get you a random quote from both fictional and non-fictional characters. Feel like some inspiration for today?',
                       aliases=['quotation', 'saying'])
     async def quote(self, ctx: commands.Context):
-        if os.getenv('RAPID_API_KEY') is None or os.getenv('RAPID_API_KEY') == "":
-            return
-
         res = requests.get(url=self.quote_url, headers=self.rapidapi_headers)
         data = json.loads(res.text)
 
