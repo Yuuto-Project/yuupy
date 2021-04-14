@@ -58,7 +58,7 @@ def cvt_units(unit1: str, unit2: str, value: float):
             if unit2 == 'c':
                 unit_target = '\u2103'
             elif unit2 == 'f':
-                output = value * 9/5 + 32
+                output = (value - 273.15) * 9/5 + 32
                 unit_target = '\u2109'
             else:
                 error = True
