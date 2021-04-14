@@ -10,17 +10,103 @@ EMOTE_ID_REGEX = r'[^:]+(?=>)'
 EMOTE_IS_ANIMATED_REGEX = r'(<a)'
 EMOTE_BASE_LINK = 'https://cdn.discordapp.com/emojis/'
 
-with open('assets/convert.json', 'r', encoding='utf-8') as file:
-    raw_convert_table = file.read()
-    convert_table: typing.Dict[object, object] = json.loads(raw_convert_table)
-
-
 def cvt_units(unit1: str, unit2: str, value: float):
-    # Convert temperature units
+    convert_dictionary = {
+        # Lenght
+        "km": {
+            "km": 1,
+            "m": 0.001,
+            "cm": 1e-5,
+            "in": 39370,
+            "ft": 3280.84,
+            "mi": 0.621371,
+            "au": 6.68459e-9,
+        },
+        "m": {
+            "km": 0.001,
+            "m": 1,
+            "cm": 100,
+            "in": 39.37,
+            "ft": 3.28084,
+            "mi": 6.2137e-4,
+            "au": 6.6846e-12
+        },
+        "cm": {
+            "km": 1e-5,
+            "m": 0.001,
+            "cm": 1,
+            "in": 0.3937,
+            "ft": 0.0328,
+            "mi": 6.2137e-6,
+            "au": 6.68459e-14
+        },
+        "in": {
+            "km": 2.54e-5,
+            "m": 0.0254,
+            "cm": 2.54,
+            "in": 1,
+            "ft": 0.0833,
+            "mi": 1.5783e-5,
+            "au": 1.6979e-13
+        },
+        "ft": {
+            "km": 3.048e-4,
+            "m": 0.3048,
+            "cm": 30.48,
+            "in": 12,
+            "ft": 1,
+            "mi": 1.8939e-3,
+            "au": 2.0375e-12
+        },
+        "mi": {
+            "km": 1.60934,
+            "m": 1609.34,
+            "cm": 160934,
+            "in": 63360,
+            "ft": 5280,
+            "mi": 1,
+            "au": 2.0375e-12
+        },
+        "au": {
+            "km": 1.496e8,
+            "m": 1.496e11,
+            "cm": 1.496e13,
+            "in": 5.89e12,
+            "ft": 4.908e+11,
+            "mi": 9.296e+7,
+            "au": 1
+        },
+        # Weight
+        "g": {
+            "kg": 0.001,
+            "g": 1,
+            "lbs": 0.0022
+        },
+        "kg": {
+            "kg": 1,
+            "g": 1000,
+            "lbs": 2.2
+        },
+        "lbs": {
+            "kg": 0.453592,
+            "g": 453.592,
+            "lbs": 1
+        }
+    }
+
     output = 0.0
     error = False
-    unit_source = ''
-    unit_target = ''
+    unit_source = unit1
+    unit_target = unit2
+
+    # Account for aliases
+    if unit1 == "lb":
+        unit1 = "lbs"
+    if unit2 == "lb":
+        unit2 = "lbs"
+
+    # Use special calculations where it is not possible to use the Dictionary
+    # Temperatures
     if unit1 == 'c':
         unit_source = '\u2103'
         if unit1 == unit2:
@@ -62,59 +148,16 @@ def cvt_units(unit1: str, unit2: str, value: float):
                 unit_target = '\u2109'
             else:
                 error = True
-    elif unit1 == 'g':
-        unit_source = unit1
-        if unit1 == unit2:
-            output = value
-            unit_target = unit_source
-        elif unit2 == 'kg':
-            output = value * 0.001
-            unit_target = 'kg'
-        elif unit2 == 'lbs' or unit2 == 'lb':
-            output = value * 0.0022
-            unit_target = 'lbs'
-        else:
-            error = True
-    elif unit1 == 'kg':
-        unit_source = unit1
-        if unit1 == unit2:
-            output = value
-            unit_target = unit_source
-        elif unit2 == 'g':
-            output = value * 1000
-            unit_target = 'g'
-        elif unit2 == 'lbs' or unit2 == 'lb':
-            output = value * 2.2
-            unit_target = 'lbs'
-        else:
-            error = True
-    elif unit1 == 'lbs' or unit1 == 'lb':
-        unit_source = 'lbs'
-        if unit1 == unit2:
-            output = value
-            unit_target = unit_source
-        elif unit2 == 'kg':
-            output = value / 2.2
-            unit_target = 'kg'
-        elif unit2 == 'g':
-            output = (value / 2.2) * 1000
-            unit_target = 'g'
-        else:
-            error = True
+    
+    # If we don't need special calculations, use the Dictionary
     else:
-        cvt_factor = convert_table['length'].get(unit2)
-        if cvt_factor == None:
-            error = True
+        if unit1 in convert_dictionary and unit2 in convert_dictionary[unit1]:
+            output = value * convert_dictionary[unit1][unit2]
         else:
-            cvt_factor = cvt_factor.get(unit1)
-            if cvt_factor == None:
-                error = True
-            else:
-                output = value * cvt_factor
-                unit_source = unit1
-                unit_target = unit2
+            error = True
+
     if error:
-        return 'This is not possible!'
+        return 'This conversion is not possible!'
     else:
         output = round(output, 2)
         return [value, output, unit_source, unit_target]
@@ -126,7 +169,6 @@ class Utility(commands.Cog):
         self.emote_regex = re.compile(EMOTE_REGEX)
         self.emote_id_regex = re.compile(EMOTE_ID_REGEX)
         self.emote_is_animated_regex = re.compile(EMOTE_IS_ANIMATED_REGEX)
-
 
     @commands.command(description='Returns an enlarged emote.',
                       help='Get the permanent link of one or multiple emotes to see them in larger sizes.',
@@ -155,7 +197,8 @@ class Utility(commands.Cog):
                     else:
                         suffix = '.png'
                     emote_id = self.emote_id_regex.search(single.group())
-                    emote_links.append(EMOTE_BASE_LINK + str(emote_id.group()) + suffix)
+                    emote_links.append(EMOTE_BASE_LINK +
+                                       str(emote_id.group()) + suffix)
         await ctx.send('{}, here you go~!'.format(ctx.author.mention))
         for link in emote_links:
             await ctx.send(link)
@@ -183,7 +226,7 @@ class Utility(commands.Cog):
         if isinstance(answer, str):
             await ctx.send(answer)
         elif isinstance(answer, list):
-            await ctx.send('{}{} is equal to {}{}.'.format(answer[0], answer[2], answer[1], answer[3]))
+            await ctx.send('{}{} is the equivalent of {}{}.'.format(answer[0], answer[2], answer[1], answer[3]))
 
 
 def setup(bot: commands.Bot):
