@@ -134,8 +134,9 @@ class Info(commands.Cog):
     async def about(self, ctx: commands.Context):
         inv = "https://discord.com/oauth2/authorize?client_id=684395509045264429&permissions=378944&scope=bot"
         desc = "Yuuto was made and developed by the community, for the community. \n" \
-              "Join the dev team and start developing on the [project website](https://kyuuto.io/docs). \n" \
-              f"Link to our discord server: [discord.gg/fPFbV8G](https://discord.gg/fPFbV8G) or [click here]({inv}) to invite me \n\n" \
+              "Join the dev team and start developing on the project's [GitHub page](https://github.com/Yuuto-Project/yuupy/). \n" \
+              f"You can also join our [Discord server](https://discord.gg/fPFbV8G). \n" \
+              f"[Click here]({inv}) to invite the bot to your own server! \n\n" \
               "Yuuto was developed by: \n" \
               "**Arch#0226**, **dunste123#0129**, **Tetsuki Syu#1250**, **zsotroav#8941**"
         embed = discord.Embed(title="About Yuuto!", description=desc, color=discord.Colour(0xFDBBE4)) \
