@@ -44,7 +44,7 @@ def cvt_units(unit1: str, unit2: str, value: float):
             if unit2 == 'c':
                 unit_target = '\u2103'
             elif unit2 == 'k':
-                output = value + 273.15
+                output = (value - 32) * 5/9 + 273.15
                 unit_target = 'K'
             else:
                 error = True
