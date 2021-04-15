@@ -114,7 +114,7 @@ Testing channels are categorized based on the project branch they should be used
 
 - release-testing: will only be activated to give a final test to the bot before the code is deployed
 - development-testing: general testing of the code in the _develop_ branch
-- feature-testing-x: branches to test using self-hosted bots in feature branches
+- feature-testing-x: channels to test using self-hosted bots running code in feature branches
 
 ## Workflow
 
