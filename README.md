@@ -70,7 +70,7 @@ You will need to make and host a test bot for yourself during development.
 ### Docker setup
 
 1. Install docker and docker-compose (if not installed yet)
-2. Copy `docker-compose.example.yml` to `docker-compose.override.yml` (override is ignored by git)
+2. Copy `docker-compose.override.example.yml` to `docker-compose.override.yml` (override is ignored by git)
 3. Fill in the env vars in `docker-compose.override.yml`
 4. Run `docker-compose up --build` to start the bot
 5. Run `docker-compose down` to stop the bot (ctrl-c works, but that does not clean up the container)
