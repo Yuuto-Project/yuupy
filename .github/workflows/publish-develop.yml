@@ -21,4 +21,4 @@ jobs:
             - name: deploy to server
               uses: zzzze/webhook-trigger@v1.0.0
               with:
-                webhook_url: ${{ secrets.BABYSHARK_URL }}
+                webhook_url: ${{ secrets.BEACHBALL_URL }}
