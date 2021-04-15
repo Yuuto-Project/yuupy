@@ -26,6 +26,7 @@ The first command clones over HTTPS, the second one over SSH, thus requiring you
 
 - [Project Setup](#project-setup)
   - [First time set up](#first-time-set-up)
+  - [Docker setup](#docker-setup)
   - [Bot application](#bot-application)
   - [Development](#development)
   - [Intents](#intents)
@@ -65,6 +66,15 @@ You will need to make and host a test bot for yourself during development.
 5. Set up the `.env` based on the `.env.example` file.
 6. Run `pip install -r requirements.txt` to download and install the project's requirements.
 7. Start the bot with the `python main.py` command.
+
+### Docker setup
+
+1. Install docker and docker-compose (if not installed yet)
+2. Copy `docker-compose.example.yml` to `docker-compose.override.yml` (override is ignored by git)
+3. Fill in the env vars in `docker-compose.override.yml`
+4. Run `docker-compose up --build` to start the bot
+5. Run `docker-compose down` to stop the bot (ctrl-c works, but that does not clean up the container)
+
 
 ### Bot application
 
