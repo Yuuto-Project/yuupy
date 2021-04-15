@@ -75,7 +75,6 @@ You will need to make and host a test bot for yourself during development.
 4. Run `docker-compose up --build` to start the bot
 5. Run `docker-compose down` to stop the bot (ctrl-c works, but that does not clean up the container)
 
-
 ### Bot application
 
 The bot is developed using Python 3.8 or 3.9.
