@@ -32,7 +32,6 @@ def check_metric(input):
         "m": 1e-3,
         "c": 0.01,
         "d": 0.1,
-        "h": 100,
         "k": 1000
     }
     return multiplier[input[-2]]
@@ -46,7 +45,6 @@ def cvt_units(unit1: str, unit2: str, unit2_metr: str, value: float):
     error = False
     unit_source = unit1
     unit_target = unit2
-    print("Attempting the conversion of " + unit1 + " to " + unit2)
 
     # Use special calculations where it is not possible to use the Dictionary
     # Temperatures
@@ -164,6 +162,11 @@ class Utility(commands.Cog):
                       help='This command will help you convert between units. Ex: `cvt m 1ft`.',
                       aliases=['convert'])
     async def cvt(self, ctx: commands.Context, target_unit: str = '', input: str = ''):
+        # Convert target unit to lower case. 
+        # Might need removing in the future for compatibility reasons.
+        target_unit = target_unit.lower()
+        target_unit = parse_alias(target_unit)
+
         # Ensure parameters exist
         if not target_unit:
             await ctx.send("Please provide a target unit.")
@@ -177,7 +180,7 @@ class Utility(commands.Cog):
         # such as seconds are added (s & lbs)
         convert_dictionary = get_convert_dictionary()
         if target_unit not in convert_dictionary and target_unit[-1] not in convert_dictionary:
-            await ctx.send("Target unit of unknown type.")
+            await ctx.send("Unknown target unit.")
             return
 
         # Regular expressions for parsing the unit and value from the input value
@@ -194,19 +197,21 @@ class Utility(commands.Cog):
         if input_match.string != input:
             await ctx.send(
                 "I don't understand what you mean by {}.".format(input) +
-                " (Type assertion failed, please tell the developers.)")
+                " (Type assertion failed, please contact the developers ASAP.)")
             return
 
         # Get the source unit and value
-        source_unit = re.findall(unit_regx, input)[0]
+        # Note: .lower() might need removing in the future for compatibility reasons.
         source_value = int(re.findall(value_regx, input)[0])
+        source_unit = re.findall(unit_regx, input)[0].lower()
+        source_unit = parse_alias(source_unit)
 
         # Ensure source unit is known
         # Source and target units could be checked together for a more 'elegant' solution
         # A more complex implementation will be needed if conflicting types
         # such as seconds are added (s & lbs)
         if source_unit not in convert_dictionary and source_unit[-1] not in convert_dictionary:
-            await ctx.send("Source unit of unknown type.")
+            await ctx.send("Unknown source unit.")
             return
 
         # Check and apply logic if we are using the metric system as an input
@@ -222,13 +227,16 @@ class Utility(commands.Cog):
             target_unit_metric = target_unit[-2]
             target_unit = target_unit[-1]
 
-        answer = cvt_units(parse_alias(source_unit), parse_alias(target_unit), target_unit_metric, source_value)
+        answer = cvt_units(source_unit, target_unit, target_unit_metric, source_value)
         if isinstance(answer, str):
             await ctx.send(answer)
         elif isinstance(answer, list):
+            if metric_multiplier_inp != 1:
+                source_value /= metric_multiplier_inp
+                answer[2] = input[-2] + input[-1]
             answer[1] /= metric_multiplier_res
             answer[1] = round(answer[1], 2)
-            await ctx.send('{} is the equivalent of {}{}.'.format(input, answer[1], answer[3]))
+            await ctx.send('{}{} is the equivalent of {}{}.'.format(source_value, answer[2], answer[1], answer[3]))
 
 
 def setup(bot: commands.Bot):

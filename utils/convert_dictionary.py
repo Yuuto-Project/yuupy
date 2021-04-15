@@ -44,7 +44,12 @@ def get_convert_dictionary():
         "lbs": {
             "g": 453.592,
             "lbs": 1
-        }
+        },
+        # Temperatures for compatibility reasons
+        "c": {}, 
+        "f": {},
+        "k": {}
     }
     
     return convert_dictionary
+    
