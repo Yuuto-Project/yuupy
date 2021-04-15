@@ -1,7 +1,7 @@
 # YuuPy <!-- omit in toc -->
 _If you are interested in joining the project as a developer, please take the time to read the whole README file and join the [development server](https://discord.gg/fPFbV8G)._
 
-YuuPy bot (formerly Yuuto or Kyuuto) is meant to be a collaboration of the [Official Camp Buddy Fan Server](https://discord.gg/campbuddy) members, completely community-driven and open source. The bot's idea came from an increasing number of tech-oriented campers asking to see or contribute to _Super Hiro_ (the server's custom administrative bot).  
+YuuPy bot (formerly Yuuto or Kyuuto) is meant to be a collaboration of the [Official Camp Buddy Fan Server](https://discord.gg/campbuddy) members, completely community-driven and open source. The bot's idea came from an increasing number of tech-oriented campers asking to see or contribute to _Hiro_ (the server's custom administrative bot).  
 The following documentation contains information about the whole collaborative process, as well as guidelines for developers to get everyone started from the same base. For any questions that may arise, join the [development server](https://discord.gg/fPFbV8G).
 
 > **Note:** to start working on the bot, do not clone _master_, clone _develop_ instead. (read: [git flow](#workflow))
@@ -35,8 +35,9 @@ The first command clones over HTTPS, the second one over SSH, thus requiring you
   - [Channels](#channels)
   - [Testing channels](#testing-channels)
 - [Workflow](#workflow)
-  - [Master branch - Kyuuto](#master-branch---kyuuto)
-  - [Release branch - BabyShark](#release-branch---babyshark)
+  - [Latest release - Yuuto](#latest-release---Yuuto)
+  - [Master branch - BabyShark](#master-branch---babyshark)
+  - [Release branch ](#release-branch)
   - [Develop branch - BeachBall](#develop-branch---beachball)
   - [Feature branches - self-hosted](#feature-branches---self-hosted)
 - [Code Style](#code-style)
@@ -131,15 +132,23 @@ To keep the project smooth and running, it is important to have a rigorous devel
 
 The following sections contain information about branches, and how they should be treated. If you aren't familiar with how to work with git, please familiarise yourself with its basics, and remember to ask for help from other devs should you need to. Proper git workflow and usage are crucial for the smooth operation of the project.
 
-### Master branch - YuuPy
+### Latest release - Yuuto
 
-The _master_ branch is the most important branch and the one that contains the running code of YuuPy (Yuuto). This branch is protected, and nobody, not even the maintainers can push code to it directly. The only way code can make its way to the _master_ branch, is when _release_ gets merged with it by a maintainer.
+The _master_ branch is the most important branch and the one that mainly contains the running code of YuuPy (Yuuto). This branch is protected, and nobody, not even the maintainers can push code directly to it. The only way code can make its way to the _master_ branch is when _release_ gets merged with it by a maintainer.
 
-### Release branch - BabyShark
+Once the _release_ branch is merged into _master_ and is deemed ready for the public, it will be released using a tag. After being tagged, the official and publically available bot's code will be updated.
 
-The _release_ branch is a branch based on _develop_ branch, and any additions to it should only contain bug fixes, quality improvements, and final polishes. This branch is created once enough, or noticeable features on _develop_ get finalized, and it is time to deploy them to Yuuto. The code in the _release_ branch is run by BabyShark. Once a maintainer merges _release_ with _master_, the branch gets deleted.
+During the release cycle, multiple merges to the _master_ branch may be done before a tagged release to fix last-minute issues.
 
-Work can continue on the _develop_ branch and other branches while _release_ is being worked on, and the auditing of _release_ might take time due to external factors. After the branch is deleted, work will resume as previously, and BabyShark will go offline.
+### Master branch - BabyShark
+
+The _master_ branch is a branch based on _develop_ branch. This branch contains all code that would go into Yuuto before it releases to have time to fix up some issues. All code in this branch is run by BabyShark.
+
+Work can continue on the _develop_ branch and other branches while _release_ and _master_ is being worked on, and the auditing of _release_ might take time due to external factors. 
+
+### Release branch 
+
+The _release_ branch is a temporary branch that is based on the _develop_ branch. It is used to initiate a new release. This branch will be merged into _master_ once the developers and the release team approve it. No new features should be merged into this branch, only fixes, and minimal changes to existing ones. After the merging is complete, this branch will get deleted.
 
 ### Develop branch - BeachBall
 
