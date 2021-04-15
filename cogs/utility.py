@@ -18,7 +18,22 @@ def parse_alias(unit):
     else:
         return unit
 
-def cvt_units(unit1: str, unit2: str, value: float):
+def check_metric(input):
+    metric_regx = "[\\d.]+([umk][g]|[mcdh][l]|[umcdk][m])"
+    metric_match = re.match(input, metric_regx)
+    if metric_match == None: return 1
+
+    multiplier = {
+        "u": 1e-6,
+        "m": 1e-3,
+        "c": 0.01,
+        "d": 0.1,
+        "h": 100,
+        "k": 1000
+    }
+    return multiplier[input[-2]]
+
+def cvt_units(unit1: str, unit1_metr: str, unit2: str, unit2_metr: str, value: float):
     # The dictionary is stored in a seprate script
     convert_dictionary = get_convert_dictionary()
 
@@ -83,7 +98,7 @@ def cvt_units(unit1: str, unit2: str, value: float):
         return 'This conversion is not possible!'
     else:
         output = round(output, 2)
-        return [value, output, unit_source, unit_target]
+        return [value, output, unit_source + unit1_metr, unit_target + unit2_metr]
 
 
 class Utility(commands.Cog):
@@ -144,11 +159,43 @@ class Utility(commands.Cog):
     @commands.command(description='Convert units.',
                       help='This command will help you convert between units.',
                       aliases=['convert'])
-    async def cvt(self, ctx: commands.Context, unit1: str, unit2: str, value: typing.Optional[float] = 0.0):
-        answer = cvt_units(parse_alias(unit1), parse_alias(unit2), value)
+    async def cvt(self, ctx: commands.Context, unit_res: str, input: str):
+        input_regx = "(-?[\\d.]+)(\\D{1,3})"
+        input_match = re.match(input_regx, input)
+
+        # Check if input is in the correct and expected format
+        if input_match == None:
+            await ctx.send("I don't understand what you mean by {}.".format(input))
+            return
+        # In theory, this should never trigger
+        if input_match.string != input:
+            await ctx.send("I don't understand what you mean by {}.".format(input))
+            return
+            
+        # Get the value as numeric digits
+        value = int(re.findall("-?[\\d.]+", input)[0])
+
+        # Check and apply logic if we are using the metric system as an input
+        unit1_metr = ""
+        unit1 = re.findall("\\D{1,3}", input)[0]
+        metric_multiplier_inp = check_metric(input)
+        if metric_multiplier_inp != 1:
+            unit1 = input[-1]
+            unit1_metr = input[-2]
+            value * metric_multiplier_inp
+
+        unit2_metr = ""
+        unit2 = unit_res
+        metric_multiplier_res = check_metric(unit_res) 
+        if metric_multiplier_res != 1:
+            unit2 = unit_res[-1]
+            unit2_metr = unit_res[-2]
+
+        answer = cvt_units(parse_alias(unit1), unit1_metr, parse_alias(unit2), unit2_metr, value)
         if isinstance(answer, str):
             await ctx.send(answer)
         elif isinstance(answer, list):
+            answer[1] *= metric_multiplier_res
             await ctx.send('{}{} is the equivalent of {}{}.'.format(answer[0], answer[2], answer[1], answer[3]))
 
 
