@@ -39,7 +39,7 @@ def get_convert_dictionary():
         # Weight
         "g": {
             "g": 1,
-            "lbs": 0.0022
+            "lbs": 0.00220462
         },
         "lbs": {
             "g": 453.592,
@@ -52,4 +52,3 @@ def get_convert_dictionary():
     }
     
     return convert_dictionary
-    

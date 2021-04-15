@@ -100,7 +100,7 @@ def cvt_units(unit1: str, unit2: str, unit2_metr: str, value: float):
     if error:
         return 'This conversion is not possible!'
     else:
-        return [value, output, unit_source, unit2_metr + unit_target]
+        return [output, unit2_metr + unit_target, unit_source]
 
 
 class Utility(commands.Cog):
@@ -159,8 +159,9 @@ class Utility(commands.Cog):
         await ctx.send(member[0].avatar_url)
 
     @commands.command(description='Convert units.',
-                      help='This command will help you convert between units. Ex: `cvt m 1ft`.',
-                      aliases=['convert'])
+                      help='This command will help you convert between units.',
+                      aliases=['convert'],
+                      usage='<target_unit> <value> - Ex: cvt lbs 31.3kg')
     async def cvt(self, ctx: commands.Context, target_unit: str = '', input: str = ''):
         # Convert target unit to lower case. 
         # Might need removing in the future for compatibility reasons.
@@ -202,8 +203,8 @@ class Utility(commands.Cog):
 
         # Get the source unit and value
         # Note: .lower() might need removing in the future for compatibility reasons.
-        source_value = int(re.findall(value_regx, input)[0])
-        source_unit = re.findall(unit_regx, input)[0].lower()
+        source_value = float(re.findall(value_regx, input)[0])
+        source_unit = re.findall(unit_regx, input)[-1].lower()
         source_unit = parse_alias(source_unit)
 
         # Ensure source unit is known
@@ -234,9 +235,9 @@ class Utility(commands.Cog):
             if metric_multiplier_inp != 1:
                 source_value /= metric_multiplier_inp
                 answer[2] = input[-2] + input[-1]
-            answer[1] /= metric_multiplier_res
-            answer[1] = round(answer[1], 2)
-            await ctx.send('{}{} is the equivalent of {}{}.'.format(source_value, answer[2], answer[1], answer[3]))
+            answer[0] /= metric_multiplier_res
+            answer[0] = round(answer[0], 2)
+            await ctx.send('{}{} is the equivalent of {}{}.'.format(source_value, answer[2], answer[0], answer[1]))
 
 
 def setup(bot: commands.Bot):
