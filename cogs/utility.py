@@ -1,5 +1,6 @@
 from discord.ext import commands
 from utils.utils import search_user
+from utils.convert_dictionary import get_convert_dictionary
 import json
 import re
 import typing
@@ -10,100 +11,22 @@ EMOTE_ID_REGEX = r'[^:]+(?=>)'
 EMOTE_IS_ANIMATED_REGEX = r'(<a)'
 EMOTE_BASE_LINK = 'https://cdn.discordapp.com/emojis/'
 
+# Account for Aliases durring conversion
+def parse_alias(unit):
+    if unit == "lb":
+        return "lbs"
+    else:
+        return unit
+
 def cvt_units(unit1: str, unit2: str, value: float):
-    convert_dictionary = {
-        # Lenght
-        "km": {
-            "km": 1,
-            "m": 0.001,
-            "cm": 1e-5,
-            "in": 39370,
-            "ft": 3280.84,
-            "mi": 0.621371,
-            "au": 6.68459e-9,
-        },
-        "m": {
-            "km": 0.001,
-            "m": 1,
-            "cm": 100,
-            "in": 39.37,
-            "ft": 3.28084,
-            "mi": 6.2137e-4,
-            "au": 6.6846e-12
-        },
-        "cm": {
-            "km": 1e-5,
-            "m": 0.001,
-            "cm": 1,
-            "in": 0.3937,
-            "ft": 0.0328,
-            "mi": 6.2137e-6,
-            "au": 6.68459e-14
-        },
-        "in": {
-            "km": 2.54e-5,
-            "m": 0.0254,
-            "cm": 2.54,
-            "in": 1,
-            "ft": 0.0833,
-            "mi": 1.5783e-5,
-            "au": 1.6979e-13
-        },
-        "ft": {
-            "km": 3.048e-4,
-            "m": 0.3048,
-            "cm": 30.48,
-            "in": 12,
-            "ft": 1,
-            "mi": 1.8939e-3,
-            "au": 2.0375e-12
-        },
-        "mi": {
-            "km": 1.60934,
-            "m": 1609.34,
-            "cm": 160934,
-            "in": 63360,
-            "ft": 5280,
-            "mi": 1,
-            "au": 2.0375e-12
-        },
-        "au": {
-            "km": 1.496e8,
-            "m": 1.496e11,
-            "cm": 1.496e13,
-            "in": 5.89e12,
-            "ft": 4.908e+11,
-            "mi": 9.296e+7,
-            "au": 1
-        },
-        # Weight
-        "g": {
-            "kg": 0.001,
-            "g": 1,
-            "lbs": 0.0022
-        },
-        "kg": {
-            "kg": 1,
-            "g": 1000,
-            "lbs": 2.2
-        },
-        "lbs": {
-            "kg": 0.453592,
-            "g": 453.592,
-            "lbs": 1
-        }
-    }
+    # The dictionary is stored in a seprate script
+    convert_dictionary = get_convert_dictionary()
 
     output = 0.0
     error = False
     unit_source = unit1
     unit_target = unit2
-
-    # Account for aliases
-    if unit1 == "lb":
-        unit1 = "lbs"
-    if unit2 == "lb":
-        unit2 = "lbs"
+    print("Attempting the conversion of" + value + unit1 + " to " + unit2)
 
     # Use special calculations where it is not possible to use the Dictionary
     # Temperatures
@@ -222,7 +145,7 @@ class Utility(commands.Cog):
                       help='This command will help you convert between units.',
                       aliases=['convert'])
     async def cvt(self, ctx: commands.Context, unit1: str, unit2: str, value: typing.Optional[float] = 0.0):
-        answer = cvt_units(unit1, unit2, value)
+        answer = cvt_units(parse_alias(unit1), parse_alias(unit2), value)
         if isinstance(answer, str):
             await ctx.send(answer)
         elif isinstance(answer, list):
