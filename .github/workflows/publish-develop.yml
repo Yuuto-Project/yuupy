@@ -17,3 +17,8 @@ jobs:
                 registry: docker.pkg.github.com
                 repository: yuuto-project/yuupy/yuupy
                 tags: develop
+
+            - name: deploy to server
+              uses: zzzze/webhook-trigger@v1.0.0
+              with:
+                webhook_url: ${{ secrets.BABYSHARK_URL }}
