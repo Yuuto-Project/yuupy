@@ -19,6 +19,7 @@ class Utility(commands.Cog):
 
     @commands.command(description='Returns an enlarged emote.',
                       help='Get the permanent link of one or multiple emotes to see them in larger sizes.',
+                      usage='<emoji_1> [emoji_2] ... [emoji_n]',
                       aliases=['emoji'])
     async def enlarge(self, ctx: commands.Context, *, args: typing.Optional[str]):
         if args is None or len(args) == 0:
