@@ -1,5 +1,6 @@
 from discord.ext import commands
 import discord
+from discord.embeds import Colour
 import typing
 import re
 from PIL import ImageFont, ImageDraw, Image
@@ -12,6 +13,7 @@ DISCORD_ID = re.compile(r'\d{17,20}')
 font = ImageFont.truetype('./assets/fonts/halogen.ttf', 56)
 flag = Image.open('./assets/images/dialog/flag_overlay.png')
 textbox = Image.open('./assets/images/dialog/text_box.png')
+
 
 def color_hex_to_0x(hex_str):
     return '0x' + hex_str.replace('#', '')
@@ -124,15 +126,40 @@ def render_dialog(text: str, character: str, background: str = 'camp') -> BytesI
 
     return result
 
-def status_embed(text : str, status = True) -> discord.Embed:
+
+def status_embed(text: str, status=True) -> discord.Embed:
     embed = discord.Embed(description=text)
 
-    if status :
+    if status:
         embed.title = "✅"
-        embed.color = discord.Color.green()
-    else :
+        # color is not modifiable
+        embed.colour = discord.Color.green()
+    else:
         embed.title = "Oops"
-        embed.color = discord.Color.red()
+        embed.colour = discord.Color.red()
 
     return embed
-    
+
+
+def buddy_name_to_color(name: str) -> int:
+    items = {
+        'keitaro': 0x39fe19,
+        'hiro': 0xff6600,
+        'yoichi': 0xb11aff,
+        'natsumi': 0x1ab1ff,
+        'hunter': 0xf7f63c,
+        'taiga': 0xe81615,
+        'aiden': 0x5d8c6b,
+        'goro': 0x39fe19,
+        'yoshinori': 0xc07c35,
+        'yuri': 0xff73bb,
+        'seto': 0x9dd5e6,
+        'felix': 0xbdd7e6,
+        'eduard': 0xd37fb7,
+        'lee': 0x00aa6c,
+        'kieran': 0xe7ab0d,
+        'naoto': 0x227abe,
+    }
+
+    nameLwr = name.lower()
+    return items[nameLwr] if nameLwr in items else Colour.blurple().value

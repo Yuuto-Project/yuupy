@@ -3,14 +3,14 @@ from discord.ext import commands
 from io import BytesIO
 from owoify.owoify import owoify
 from typing import Optional, List, Tuple
-from utils.utils import search_user
+from utils.utils import search_user, buddy_name_to_color as get_color
 import asyncio
 import discord
 import json5
 import requests
 from glob import glob
-import markovify
 import random
+from utils.CampBuddyMakov import CampBuddyMakov
 
 
 def find_next_user(first: discord.Member, seconds: List[discord.Member]) -> Optional[discord.Member]:
@@ -65,16 +65,22 @@ class Fun(commands.Cog):
                       help='This command generates fake camp buddy quotes for the characters. It does this by '
                            'utilising a "makrov chain"', aliases=['quotation', 'saying'])
     async def quote(self, ctx: commands.Context):
-        # https://github.com/jsvine/markovify
         char = random.choice(self.charNames)
 
         with open(f'./assets/quote/{char}.txt') as lines:
             text = lines.read()
 
         # Build the model.
-        text_model = markovify.Text(text)
+        text_model = CampBuddyMakov(text)
+        generated = text_model.make_sentence()
 
-        await ctx.send(f'"{text_model.make_sentence()}" - {char}')
+        while not generated:
+            generated = text_model.make_sentence()
+
+        embed = discord.Embed(title=f'{char.capitalize()} once said', description=text_model.make_sentence(),
+                              color=get_color(char))
+
+        await ctx.send(embed=embed)
 
     @commands.command(description='Calculate if you and your crush will work out.',
                       help='Yuuto mastered the art of shipping users and can now calculate if you and your crush will '
