@@ -66,7 +66,10 @@ class Info(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(description='Generates an image of a character in Camp Buddy saying anything you want.', help='This command will generate an image of a character in Camp Buddy saying anything you want.', aliases=['dialogue'])
+    @commands.command(description='Generates an image of a character in Camp Buddy saying anything you want.', 
+                      help='This command will generate an image of a character in Camp Buddy saying anything you want.', 
+                      usage='[background] <character> <text>',
+                      aliases=['dialogue'])
     async def dialog(self, ctx: commands.Context, *, args: str = ''):
         if args == '':
             await ctx.send('This command requires at least two arguments: `dialog [background] <character> <text>` (['
