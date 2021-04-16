@@ -104,7 +104,7 @@ class Info(commands.Cog):
         await ctx.trigger_typing()
 
         if character in self.dialog.characters:
-            background = random.choice(self.dialog.backgrounds)
+            background = "camp"
         else:
             background = character
             character = splitted.pop(0).lower()
