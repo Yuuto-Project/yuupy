@@ -109,7 +109,7 @@ class Info(commands.Cog):
 
         await ctx.send(f"{ctx.author.mention}, Here you go! {bg_def}", file=file)
 
-    @commands.command(description="Shows information about Yuuto", help="Shows information about yuuto",
+    @commands.command(description="Shows information about Yuuto", help="Shows information about Yuuto",
                       aliases=["info", "bot", "credits"])
     async def about(self, ctx: commands.Context):
         inv = "https://discord.com/oauth2/authorize?client_id=684395509045264429&permissions=378944&scope=bot"
@@ -127,13 +127,13 @@ class Info(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(description="Gives you the invite link for yuuto", help="Invite yuuto to your server!")
+    @commands.command(description="Gives you the invite link for Yuuto", help="Invite Yuuto to your server!")
     async def invite(self, ctx: commands.Context):
         await ctx.send("You can invite Yuuto using this link: "
                        "<https://discord.com/oauth2/authorize?client_id=684395509045264429&permissions=378944&scope"
                        "=bot>")
 
-    @commands.command(description='Help yuuto by giving us a suggestion or a bug report!', help="This command will let you help yuuto by giving it a suggestion or a bug report!", aliases=['suggestion'])
+    @commands.command(description='Help Yuuto by giving us a suggestion or a bug report!', help="This command will let you help Yuuto by giving it a suggestion or a bug report!", aliases=['suggestion'])
     async def suggest(self, ctx: commands.Context, *, args: str = None):
         suggestchannel: discord.TextChannel = await ctx.bot.fetch_channel(os.getenv('SUGGESTIONS_CHANNEL'))
 
