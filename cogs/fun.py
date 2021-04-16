@@ -152,7 +152,8 @@ class Fun(commands.Cog):
 
     @commands.command(description='Play a fun quiz with your friends.',
                       help='Run `minigame` to begin a new game, and react within the countdown to join.',
-                      aliases=['quiz'])
+                      uage='[rounds, default = 7]',
+                      aliases=['quiz', 'trivia'])
     async def minigame(self, ctx: commands.Context, rounds: Optional[int] = 7):
         if rounds < 2 or rounds > 10:
             await ctx.send('The number of rounds has to be greater than 1 and less than 11.')
