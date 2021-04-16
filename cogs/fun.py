@@ -9,6 +9,8 @@ import discord
 import json5
 import requests
 from glob import glob
+import markovify
+import random
 
 
 def find_next_user(first: discord.Member, seconds: List[discord.Member]) -> Optional[discord.Member]:
@@ -69,14 +71,15 @@ class Fun(commands.Cog):
                            'utilising a "makrov chain"', aliases=['quotation', 'saying'])
     async def quote(self, ctx: commands.Context):
         # https://github.com/jsvine/markovify
-        global quote_enabled
+        char = random.choice(self.charNames)
 
-        # disable for future use
-        if not quote_enabled:
-            self.bot.get_command('quote').enabled = False
+        with open(f'./assets/quote/{char}.txt') as lines:
+            text = lines.read()
 
-        print('TODO')
-        await ctx.send('should not run')
+        # Build the model.
+        text_model = markovify.Text(text)
+
+        await ctx.send(f'"{text_model.make_sentence()}" - {char}')
 
     @commands.command(description='Calculate if you and your crush will work out.',
                       help='Yuuto mastered the art of shipping users and can now calculate if you and your crush will '
