@@ -158,14 +158,15 @@ class Utility(commands.Cog):
                       aliases=['pfp'])
     async def avatar(self, ctx: commands.Context, user: typing.Optional[str] = ''):
         if user is None or len(user) == 0:
-            await ctx.send('{}, Here ya go~!'.format(ctx.author.mention))
-            await ctx.send(ctx.author.avatar_url)
+            await ctx.send('{}, Here ya go~!\n{}'.format(ctx.author.mention,
+                                                         ctx.author.avatar_url_as(format='png', size=2048)))
             return
         member = search_user(ctx, user)
         if len(member) == 0:
             await ctx.send('{} Sorry, but I can\'t find that user'.format(ctx.author.mention))
             return
-        await ctx.send('{}, Here ya go~!\n{}?size=2048'.format(ctx.author.mention, member[0].avatar_url))
+        await ctx.send('{}, Here ya go~!\n{}'.format(ctx.author.mention,
+                                                     member[0].avatar_url_as(format='png', size=2048)))
 
     @commands.command(description='Convert units.',
                       help='This command will help you convert between units.',
