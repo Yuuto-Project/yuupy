@@ -41,7 +41,10 @@ def calculate_score(first: discord.Member, second: discord.Member, ship_messages
         return score, find_message(score, ship_messages)
 
 
-quote_enabled = True
+quote_enabled = bool(glob('./assets/quote/*.txt'))
+
+if not quote_enabled:
+    print('No quotes found, disabling command')
 
 
 class Fun(commands.Cog):
@@ -54,16 +57,8 @@ class Fun(commands.Cog):
             # strip off stuff that we don't need
             return file.replace('./assets/quote/', '').replace('.txt', '')
 
-        fileNames = glob('./assets/quote/*.txt')
-
-        # Why is this now you check if a list is empty
-        # wtf python
-        if not fileNames:
-            global quote_enabled
-            print('No quotes found, disabling command')
-            quote_enabled = False
-            print(self.bot.get_command('quote'))
-        else:
+        if quote_enabled:
+            fileNames = glob('./assets/quote/*.txt')
             self.charNames = list(map(parse_files, fileNames))
 
     @commands.command(description='Get a fake camp buddy quote', enabled=quote_enabled,
