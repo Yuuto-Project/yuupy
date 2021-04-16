@@ -1,6 +1,7 @@
 .idea/
 .git/
 venv/
+.vs/
 .github/
 update.ps1
 .env.example

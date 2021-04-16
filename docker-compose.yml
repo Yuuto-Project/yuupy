@@ -3,6 +3,8 @@ services:
   yuuto:
     build:
       context: .
+    volumes:
+      - yuuto:/yuupy/assets/quote/:ro #ro being read only
     container_name: yuuto
     deploy:
       restart_policy:
@@ -18,3 +20,11 @@ services:
       - PYTHONUNBUFFERED=1
       # ignore format is BOTCMDS_{guild.id}={channel.id}
       # - BOTCMDS_684392803131850779=684788256797229066 for example
+
+volumes:
+    yuuto:
+        driver: local
+        driver_opts:
+            type: 'none'
+            o: 'bind'
+            device: './quote_files/'

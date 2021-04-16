@@ -65,6 +65,8 @@ class Fun(commands.Cog):
                       help='This command generates fake camp buddy quotes from the characters. It does this by '
                            'utilising a "makrov chain"', aliases=['quotation', 'saying'])
     async def quote(self, ctx: commands.Context, character: str = None):
+        await ctx.trigger_typing()
+
         if character:
             char = character.lower()
             if char not in self.charNames:
