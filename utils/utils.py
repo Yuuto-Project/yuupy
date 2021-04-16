@@ -1,3 +1,5 @@
+import json
+
 from discord.ext import commands
 import discord
 from discord.embeds import Colour
@@ -142,24 +144,14 @@ def status_embed(text: str, status=True) -> discord.Embed:
 
 
 def buddy_name_to_color(name: str) -> int:
-    items = {
-        'keitaro': 0x39fe19,
-        'hiro': 0xff6600,
-        'yoichi': 0xb11aff,
-        'natsumi': 0x1ab1ff,
-        'hunter': 0xf7f63c,
-        'taiga': 0xe81615,
-        'aiden': 0x5d8c6b,
-        'goro': 0x39fe19,
-        'yoshinori': 0xc07c35,
-        'yuri': 0xff73bb,
-        'seto': 0x9dd5e6,
-        'felix': 0xbdd7e6,
-        'eduard': 0xd37fb7,
-        'lee': 0x00aa6c,
-        'kieran': 0xe7ab0d,
-        'naoto': 0x227abe,
-    }
+    def filter_on_name(char_name: any):
+        return get_first_name(char_name['name']).lower() == name
 
-    nameLwr = name.lower()
-    return items[nameLwr] if nameLwr in items else Colour.blurple().value
+    with open('assets/chars.json') as c:
+        chars = json.load(c)
+        filtered = list(filter(filter_on_name, chars))
+
+        if filtered:
+            return color_hex_to_int(filtered[0]['color'])
+        else:
+            return Colour.blurple().value
