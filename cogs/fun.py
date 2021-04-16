@@ -64,8 +64,15 @@ class Fun(commands.Cog):
     @commands.command(description='Get a fake camp buddy quote', enabled=quote_enabled,
                       help='This command generates fake camp buddy quotes for the characters. It does this by '
                            'utilising a "makrov chain"', aliases=['quotation', 'saying'])
-    async def quote(self, ctx: commands.Context):
-        char = random.choice(self.charNames)
+    async def quote(self, ctx: commands.Context, character: str = None):
+        if character:
+            lower = character.lower()
+            if lower not in self.charNames:
+                await ctx.send(f'I don\'t know who "{character}" is')
+                return
+            char = lower
+        else:
+            char = random.choice(self.charNames)
 
         with open(f'./assets/quote/{char}.txt') as lines:
             text = lines.read()
