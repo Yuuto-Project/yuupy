@@ -85,8 +85,7 @@ class Fun(commands.Cog):
         while not generated:
             generated = text_model.make_sentence()
 
-        embed = discord.Embed(title=f'{char.capitalize()} once said', description=text_model.make_sentence(),
-                              color=get_color(char))
+        embed = discord.Embed(title=f'{char.capitalize()} once said', description=generated, color=get_color(char))
 
         await ctx.send(embed=embed)
 
