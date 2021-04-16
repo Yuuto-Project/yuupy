@@ -129,7 +129,7 @@ class Info(commands.Cog):
 
     @commands.command(description="Gives you the invite link for yuuto", help="Invite yuuto to your server!")
     async def invite(self, ctx: commands.Context):
-        await ctx.send("You can invite me using this link: "
+        await ctx.send("You can invite Yuuto using this link: "
                        "<https://discord.com/oauth2/authorize?client_id=684395509045264429&permissions=378944&scope"
                        "=bot>")
 
