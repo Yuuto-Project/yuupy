@@ -128,24 +128,27 @@ class Fun(commands.Cog):
             url='attachment://result.png')
         await ctx.send(embed=embed, file=discord.File(fp=BytesIO(response.content), filename='result.png'))
 
-    @commands.command(description='Owoify your text.',
-                      help='Turn your sentences and texts to nonsensical babyspeaks (a.k.a. owoify). Using `y!owoify '
-                           '<text>` will make use of the default owoify level (owo), which is the most vanilla one. '
-                           'Using `y!owoify [level] <text>` will explicitly set the owoify level. Currently, '
-                           '3 levels are supported (from the lowest to the highest): **soft**, **medium**, **hard**')
+    @commands.command(description='OwO-ify your text.',
+                      help='Turn your sentences and texts to nonsensical babyspeaks (a.k.a. owoify). Currently, '
+                           '3 levels of OwO are supported: **soft**, **medium**, **hard**',
+                      usage='[level] <text>',
+                      aliases=['owo'])
     async def owoify(self, ctx: commands.Context, level: Optional[str], *, text: Optional[str] = ''):
         result_text = ''
-        if len(level) > 0 and level != '':
-            level = level.lower()
-            if level == 'soft':
-                result_text = owoify(text, 'owo').replace('`', '\\`').replace('*', '\\*')
-            elif level == 'medium':
-                result_text = owoify(text, 'uwu').replace('`', '\\`').replace('*', '\\*')
-            elif level == 'hard':
-                result_text = owoify(text, 'uvu').replace('`', '\\`').replace('*', '\\*')
-            else:
-                text = f'{level} {text}'
-                result_text = owoify(text).replace('`', '\\`').replace('*', '\\*')
+        if level is None:
+            await ctx.send("You need to supply an input text!")
+            return
+
+        level = level.lower()
+        if level == 'soft':
+            result_text = owoify(text, 'owo').replace('`', '\\`').replace('*', '\\*')
+        elif level == 'medium':
+            result_text = owoify(text, 'uwu').replace('`', '\\`').replace('*', '\\*')
+        elif level == 'hard':
+            result_text = owoify(text, 'uvu').replace('`', '\\`').replace('*', '\\*')
+        else:
+            text = f'{level} {text}'
+            result_text = owoify(text).replace('`', '\\`').replace('*', '\\*')
         author: discord.Member = ctx.author
         result_text = 'OwO-ified for {}~!\n\n{}'.format(author.mention, result_text)
         await ctx.send(result_text)
