@@ -8,6 +8,7 @@ import asyncio
 import discord
 import json5
 import requests
+from glob import glob
 
 
 def find_next_user(first: discord.Member, seconds: List[discord.Member]) -> Optional[discord.Member]:
@@ -38,11 +39,44 @@ def calculate_score(first: discord.Member, second: discord.Member, ship_messages
         return score, find_message(score, ship_messages)
 
 
+quote_enabled = True
+
+
 class Fun(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         with open('assets/shipMessages.json5') as file_1:
             self.ship_messages = json5.loads(file_1.read())
+
+        def parse_files(file: str):
+            # strip off stuff that we don't need
+            return file.replace('./assets/quote/', '').replace('.txt', '')
+
+        fileNames = glob('./assets/quote/*.txt')
+
+        # Why is this now you check if a list is empty
+        # wtf python
+        if not fileNames:
+            global quote_enabled
+            print('No quotes found, disabling command')
+            quote_enabled = False
+            print(self.bot.get_command('quote'))
+        else:
+            self.charNames = list(map(parse_files, fileNames))
+
+    @commands.command(description='Get a fake camp buddy quote', enabled=quote_enabled,
+                      help='This command generates fake camp buddy quotes for the characters. It does this by '
+                           'utilising a "makrov chain"', aliases=['quotation', 'saying'])
+    async def quote(self, ctx: commands.Context):
+        # https://github.com/jsvine/markovify
+        global quote_enabled
+
+        # disable for future use
+        if not quote_enabled:
+            self.bot.get_command('quote').enabled = False
+
+        print('TODO')
+        await ctx.send('should not run')
 
     @commands.command(description='Calculate if you and your crush will work out.',
                       help='Yuuto mastered the art of shipping users and can now calculate if you and your crush will '

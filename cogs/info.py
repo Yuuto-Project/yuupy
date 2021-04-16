@@ -3,13 +3,10 @@ from utils.utils import color_hex_to_int, get_emote_url, get_first_name, render_
 import discord
 import json
 import time
-import requests
 import glob
 import random
 import os
 import asyncio
-
-quote_enabled = not (os.getenv('RAPID_API_KEY') is None or os.getenv('RAPID_API_KEY') == "")
 
 
 class Info(commands.Cog):
@@ -17,12 +14,6 @@ class Info(commands.Cog):
         self.bot = bot
         self.pings = ['Pang', 'Peng', 'Pong', 'Pung']
         self.endings = ['Perfect', 'Good', 'Bad', 'Worst']
-        self.rapidapi_headers = {
-            'x-rapidapi-host': "quotes15.p.rapidapi.com",
-            'x-rapidapi-key': os.getenv('RAPID_API_KEY')
-        }
-        # https://rapidapi.com/martin.svoboda/api/quotes15
-        self.quote_url = "https://quotes15.p.rapidapi.com/quotes/random/"
 
         self.dialog.backgrounds = [os.path.splitext(os.path.basename(x))[0]
                                    for x in glob.glob('./assets/images/dialog/backgrounds/*.png')]
@@ -62,22 +53,6 @@ class Info(commands.Cog):
             .add_field(name="Birthday", value=route["birthday"], inline=True) \
             .add_field(name="Animal Motif", value=route["animal"], inline=True) \
             .set_footer(text=f"Play {get_first_name(route['name'])}'s route next. All bois are best bois.")
-        await ctx.send(embed=embed)
-
-    @commands.command(description='Get a random quote from famous people, fictional or non-fictional.', enabled=quote_enabled,
-                      help='This command will get you a random quote from both fictional and non-fictional characters. Feel like some inspiration for today?',
-                      aliases=['quotation', 'saying'])
-    async def quote(self, ctx: commands.Context):
-        res = requests.get(url=self.quote_url, headers=self.rapidapi_headers)
-        data = json.loads(res.text)
-
-        embed = discord.Embed(title=data['originator']['name'], description='*{}*'.format(data['content']),
-                              color=discord.Color.gold()) \
-            .set_author(name='Click here for source', url=data['url'])
-
-        if len(data['tags']) > 0:
-            embed.set_footer(text='Tags: ' + ', '.join(data['tags']) + ' | Powered by RapidAPI')
-
         await ctx.send(embed=embed)
 
     @commands.command(description='Shows the Buddy Laws by Yuri.', help='Every camper should know this!')
@@ -159,7 +134,7 @@ class Info(commands.Cog):
 
         author: discord.User = ctx.author
 
-        if args == None:
+        if args is None:
             await ctx.send(embed=status_embed("Message cannot be empty!", False))
             return
 

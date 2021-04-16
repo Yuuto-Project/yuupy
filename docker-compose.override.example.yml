@@ -5,4 +5,3 @@ services:
       - TOKEN=
       - PREFIX=
       - EMBED_HELP=0
-      - RAPID_API_KEY=

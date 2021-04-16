@@ -14,7 +14,7 @@ services:
       - TOKEN=
       - PREFIX=
       - EMBED_HELP=0
-      - RAPID_API_KEY=
+      - SUGGESTIONS_CHANNEL=
       - PYTHONUNBUFFERED=1
       # ignore format is BOTCMDS_{guild.id}={channel.id}
       # - BOTCMDS_684392803131850779=684788256797229066 for example
