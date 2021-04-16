@@ -102,7 +102,7 @@ class Info(commands.Cog):
         character = splitted.pop(0).lower()
 
         await ctx.trigger_typing()
-        bg_def = " "
+        bg_def = ""
 
         if character in self.dialog.characters:
             bg_def = "\nNo background supplied, defaulting to Camp. Use `dialog [background] <character> <message>` to set a background!"
