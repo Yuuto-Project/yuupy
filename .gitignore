@@ -16,3 +16,4 @@ build/
 dist/
 main.spec
 docker-compose.override.yml
+quote_files/

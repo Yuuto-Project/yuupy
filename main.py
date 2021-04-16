@@ -1,6 +1,8 @@
 import os
 import discord
 import dotenv
+from discord.ext.commands import DisabledCommand
+
 import help
 from cogs.minigame.minigame import Minigame
 from discord.ext import commands
@@ -51,7 +53,11 @@ async def on_message(message: discord.Message):
     if botcmds is not None and int(botcmds) != message.channel.id:
         return
 
-    await bot.process_commands(message)
+    try:
+        await bot.process_commands(message)
+    except DisabledCommand:
+        pass
+
 
 
 @bot.event

@@ -1,5 +1,8 @@
+import json
+
 from discord.ext import commands
 import discord
+from discord.embeds import Colour
 import typing
 import re
 from PIL import ImageFont, ImageDraw, Image
@@ -12,6 +15,7 @@ DISCORD_ID = re.compile(r'\d{17,20}')
 font = ImageFont.truetype('./assets/fonts/halogen.ttf', 56)
 flag = Image.open('./assets/images/dialog/flag_overlay.png')
 textbox = Image.open('./assets/images/dialog/text_box.png')
+
 
 def color_hex_to_0x(hex_str):
     return '0x' + hex_str.replace('#', '')
@@ -124,15 +128,30 @@ def render_dialog(text: str, character: str, background: str = 'camp') -> BytesI
 
     return result
 
-def status_embed(text : str, status = True) -> discord.Embed:
+
+def status_embed(text: str, status=True) -> discord.Embed:
     embed = discord.Embed(description=text)
 
-    if status :
+    if status:
         embed.title = "✅"
-        embed.color = discord.Color.green()
-    else :
+        # color is not modifiable
+        embed.colour = discord.Color.green()
+    else:
         embed.title = "Oops"
-        embed.color = discord.Color.red()
+        embed.colour = discord.Color.red()
 
     return embed
-    
+
+
+def buddy_name_to_color(name: str) -> int:
+    def filter_on_name(char_name: any):
+        return get_first_name(char_name['name']).lower() == name
+
+    with open('assets/chars.json') as c:
+        chars = json.load(c)
+        filtered = list(filter(filter_on_name, chars))
+
+        if filtered:
+            return color_hex_to_int(filtered[0]['color'])
+        else:
+            return Colour.blurple().value

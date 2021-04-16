@@ -3,11 +3,14 @@ from discord.ext import commands
 from io import BytesIO
 from owoify.owoify import owoify
 from typing import Optional, List, Tuple
-from utils.utils import search_user
+from utils.utils import search_user, buddy_name_to_color as get_color
 import asyncio
 import discord
 import json5
 import requests
+from glob import glob
+import random
+from utils.CampBuddyMakov import CampBuddyMakov
 
 
 def find_next_user(first: discord.Member, seconds: List[discord.Member]) -> Optional[discord.Member]:
@@ -38,11 +41,53 @@ def calculate_score(first: discord.Member, second: discord.Member, ship_messages
         return score, find_message(score, ship_messages)
 
 
+quote_enabled = bool(glob('./assets/quote/*.txt'))
+
+if not quote_enabled:
+    print('No quotes found, disabling command')
+
+
 class Fun(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         with open('assets/shipMessages.json5') as file_1:
             self.ship_messages = json5.loads(file_1.read())
+
+        def parse_files(file: str):
+            # strip off stuff that we don't need
+            return file.replace('./assets/quote/', '').replace('.txt', '')
+
+        if quote_enabled:
+            fileNames = glob('./assets/quote/*.txt')
+            self.charNames = list(map(parse_files, fileNames))
+
+    @commands.command(description='Get a fake camp buddy quote', enabled=quote_enabled,
+                      help='This command generates fake camp buddy quotes from the characters. It does this by '
+                           'utilising a "makrov chain"', aliases=['quotation', 'saying'])
+    async def quote(self, ctx: commands.Context, character: str = None):
+        await ctx.trigger_typing()
+
+        if character:
+            char = character.lower()
+            if char not in self.charNames:
+                await ctx.send(f'I don\'t know who "{character}" is')
+                return
+        else:
+            char = random.choice(self.charNames)
+
+        with open(f'./assets/quote/{char}.txt') as lines:
+            text = lines.read()
+
+        # Build the model.
+        text_model = CampBuddyMakov(text)
+        generated = text_model.make_sentence()
+
+        while not generated:
+            generated = text_model.make_sentence()
+
+        embed = discord.Embed(title=f'{char.capitalize()} once said', description=generated, color=get_color(char))
+
+        await ctx.send(embed=embed)
 
     @commands.command(description='Calculate if you and your crush will work out.',
                       help='Yuuto mastered the art of shipping users and can now calculate if you and your crush will '
