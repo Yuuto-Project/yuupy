@@ -90,10 +90,14 @@ class Fun(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(description='Calculate if you and your crush will work out.',
-                      help='Yuuto mastered the art of shipping users and can now calculate if you and your crush will '
-                           'work out.',
+                      help='Yuuto mastered the art of shipping users and can now calculate if you and your crush will work out.',
+                      usage='<user_1> <user_2>',
                       aliases=['love', 'ratecouple'])
-    async def ship(self, ctx: commands.Context, username_1: str, username_2: str):
+    async def ship(self, ctx: commands.Context, username_1: Optional[str], username_2: Optional[str]):
+        if username_1 is None or username_2 is None:
+            await ctx.send("You have to provide two usernames!")
+            return
+
         search_result = search_user(ctx, username_1.lower())
         user_1: discord.Member
         if len(search_result) > 0:
