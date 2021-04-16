@@ -1,0 +1,24 @@
+name: Publish BeachBall
+on:
+    push:
+        branches: [develop]
+jobs:
+    push_to_registry:
+        name: Push Docker image to GitHub Packages
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out the repo
+              uses: actions/checkout@v2
+            - name: Push Yuuto to github packages
+              uses: docker/build-push-action@v1
+              with:
+                username: ${{ github.actor }}
+                password: ${{ secrets.GITHUB_TOKEN }}
+                registry: docker.pkg.github.com
+                repository: yuuto-project/yuupy/yuupy
+                tags: develop
+
+            - name: deploy to server
+              uses: zzzze/webhook-trigger@v1.0.0
+              with:
+                webhook_url: ${{ secrets.BEACHBALL_URL }}
