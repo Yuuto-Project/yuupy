@@ -4,6 +4,7 @@ Scripts/
 pyvenv.cfg
 .env
 .idea/
+.vs/
 cogs/__pycache__
 cogs/minigame/__pycache__
 utils/__pycache__
