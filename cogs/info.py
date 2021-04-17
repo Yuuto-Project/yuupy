@@ -148,6 +148,7 @@ class Info(commands.Cog):
                       usage='<message>',
                       aliases=['suggestion'])
     async def suggest(self, ctx: commands.Context, *, args: str = None):
+        # Check if we have access to the suggestion channel
         try:
             suggestchannel: discord.TextChannel = await ctx.bot.fetch_channel(705013080844926988)
         except:
@@ -161,6 +162,7 @@ class Info(commands.Cog):
             await ctx.send(embed=status_embed("Message cannot be empty!", False))
             return
         
+        # Show a confirmation message befor submitting
         # await ctx.message.delete()
         embed = discord.Embed(title="Suggestion", 
                               description=args, 
@@ -185,22 +187,26 @@ class Info(commands.Cog):
             await ctx.send(embed=embed_cancel)
             return
 
+        # Wait for added reactions
         try:
             reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
         except asyncio.TimeoutError:
-            # Timeout
+            # Timeout after 10 secunds
             await cancel()
         else:
+            # If didn't react with confirm, cancel
             if reaction.emoji != '✅':
                 await cancel()
                 return
 
+            # Send the suggestion to the dev server
             embed_suggest = discord.Embed(title="New Suggestion!",
                                           description=args,
                                           color=discord.Color.green())\
                     .set_author(name=f"{author.display_name} ({author.id})", icon_url=author.avatar_url)
             await suggestchannel.send(embed=embed_suggest)
             
+            # Send a confirmation message to the user
             embed_submitted = discord.Embed(title="Submitted ✅", 
                                             description='Thank you for helping this community project!', 
                                               color=discord.Color.green())\
