@@ -72,7 +72,7 @@ class Minigame(object):
                 player_mentions = ', '.join(players)
                 embed.description = 'React below to join the game! \n'\
                                     'This game may contain spoilers or NSFW themes.\n'\
-                                    'Please run `skip` in order to skip a question.\n'\
+                                    'Please type `skip` in order to skip a question.\n'\
                                     'Current players: {}\n'\
                                     '{} seconds left!'.format(player_mentions, i)
                 await message.edit(embed=embed)
