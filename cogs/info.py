@@ -30,7 +30,8 @@ class Info(commands.Cog):
             self.routes = json.load(raw_routes)
 
     @commands.command(description='Get current latency and API ping.',
-                      help='Send a ping to the bot and get latency information.', aliases=['pong'])
+                      help='Send a ping to the bot and get latency information.', 
+                      aliases=['pong'])
     async def ping(self, ctx: commands.Context):
         curr = time.time()
         latency: float = round(ctx.bot.latency * 1000.0, 2)
@@ -39,7 +40,8 @@ class Info(commands.Cog):
             content=f'🏓 {random.choice(self.pings)}! Latency is {round((time.time() - curr) * 1000.0, 2)}ms. API latency is {latency}ms.')
 
     @commands.command(description='Tells you what route to play next.',
-                      help='This command will let Yuuto decide which route you should play next.', aliases=['r'])
+                      help='This command will let Yuuto decide which route you should play next.', 
+                      aliases=['r'])
     async def route(self, ctx: commands.Context):
         author: discord.Member = ctx.author
         route = random.choice(self.routes)
@@ -55,7 +57,9 @@ class Info(commands.Cog):
             .set_footer(text=f"Play {get_first_name(route['name'])}'s route next. All bois are best bois.")
         await ctx.send(embed=embed)
 
-    @commands.command(description='Shows the Buddy Laws by Yuri.', help='Every camper should know this!')
+    @commands.command(description='Shows the Buddy Laws by Yuri.', 
+                      help='Every camper should know this!',
+                      aliases=[])
     async def law(self, ctx: commands.Context):
         title = "The Buddy Law"
         desc = "1) A buddy should be kind, helpful, and trustworthy to each other!\n" \
@@ -68,7 +72,7 @@ class Info(commands.Cog):
 
     @commands.command(description='Generates an image of a character in Camp Buddy saying anything you want.', 
                       help='This command will generate an image of a character in Camp Buddy saying anything you want.', 
-                      usage='[background] <character> <text>',
+                      usage='[background=camp] <character> <text>',
                       aliases=['dialogue'])
     async def dialog(self, ctx: commands.Context, *, args: str = ''):
         if args == '':
@@ -109,7 +113,8 @@ class Info(commands.Cog):
 
         await ctx.send(f"{ctx.author.mention}, Here you go! {bg_def}", file=file)
 
-    @commands.command(description="Shows information about Yuuto", help="Shows information about Yuuto",
+    @commands.command(description="Shows information about Yuuto", 
+                      help="Shows information about Yuuto",
                       aliases=["info", "bot", "credits"])
     async def about(self, ctx: commands.Context):
         inv = "https://discord.com/oauth2/authorize?client_id=684395509045264429&permissions=378944&scope=bot"
@@ -127,13 +132,16 @@ class Info(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(description="Gives you the invite link for Yuuto", help="Invite Yuuto to your server!")
+    @commands.command(description="Gives you the invite link for Yuuto", 
+                      help="Invite Yuuto to your server!",
+                      aliases=[])
     async def invite(self, ctx: commands.Context):
         await ctx.send("You can invite Yuuto using this link: "
-                       "<https://discord.com/oauth2/authorize?client_id=684395509045264429&permissions=378944&scope"
-                       "=bot>")
+                       "<https://discord.com/oauth2/authorize?client_id=684395509045264429&permissions=378944&scope=bot>")
 
-    @commands.command(description='Help Yuuto by giving us a suggestion or a bug report!', help="This command will let you help Yuuto by giving it a suggestion or a bug report!", aliases=['suggestion'])
+    @commands.command(description='Help Yuuto by giving us a suggestion or a bug report!', 
+                      help="This command will let you help Yuuto by giving it a suggestion or a bug report!", 
+                      aliases=['suggestion'])
     async def suggest(self, ctx: commands.Context, *, args: str = None):
         suggestchannel: discord.TextChannel = await ctx.bot.fetch_channel(os.getenv('SUGGESTIONS_CHANNEL'))
 

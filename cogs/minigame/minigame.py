@@ -44,7 +44,7 @@ class Minigame(object):
                     if player.id == pair[1][0]:
                         mapped_scores.append('{}) {} with {} points'.format(pair[0] + 1, player.mention, pair[1][1]))
                         break
-            embed = discord.Embed(color=discord.Color.from_rgb(255, 147, 206), 
+            embed = discord.Embed(color=0xFF93CE,
                                   title='Minigame ended!', 
                                   description='Total points:\n{}'.format('\n'.join(mapped_scores)))
             await ctx.send(embed=embed)

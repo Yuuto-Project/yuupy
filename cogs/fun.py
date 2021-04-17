@@ -63,7 +63,8 @@ class Fun(commands.Cog):
 
     @commands.command(description='Get a fake camp buddy quote', enabled=quote_enabled,
                       help='This command generates fake camp buddy quotes from the characters. It does this by '
-                           'utilising a "makrov chain"', aliases=['quotation', 'saying'])
+                           'utilising a "makrov chain"', 
+                      aliases=['quotation', 'saying'])
     async def quote(self, ctx: commands.Context, character: str = None):
         await ctx.trigger_typing()
 
@@ -93,8 +94,8 @@ class Fun(commands.Cog):
                       help='Yuuto mastered the art of shipping users and can now calculate if you and your crush will work out.',
                       usage='<user_1> <user_2>',
                       aliases=['love', 'ratecouple'])
-    async def ship(self, ctx: commands.Context, username_1: Optional[str], username_2: Optional[str]):
-        if username_1 is None or username_2 is None:
+    async def ship(self, ctx: commands.Context, username_1: str = '', username_2: str = ''):
+        if username_1 == '' or username_2 == '':
             await ctx.send("You have to provide two usernames!")
             return
 
@@ -111,8 +112,8 @@ class Fun(commands.Cog):
             await ctx.send(f'No user found for input `{username_2}`')
             return
 
-        img1 = user_1.avatar_url_as(static_format='png', size=128)
-        img2 = user_2.avatar_url_as(static_format='png', size=128)
+        img1 = user_1.avatar_url_as(static_format='png', size=256)
+        img2 = user_2.avatar_url_as(static_format='png', size=256)
 
         score, message = calculate_score(user_1, user_2, self.ship_messages)
         response = requests.post('https://apis.duncte123.me/images/love',
@@ -145,21 +146,21 @@ class Fun(commands.Cog):
 
         level = level.lower()
         if level == 'soft':
-            result_text = owoify(text, 'owo').replace('`', '\\`').replace('*', '\\*')
+            result_text = owoify(text, 'owo')
         elif level == 'medium':
-            result_text = owoify(text, 'uwu').replace('`', '\\`').replace('*', '\\*')
+            result_text = owoify(text, 'uwu')
         elif level == 'hard':
-            result_text = owoify(text, 'uvu').replace('`', '\\`').replace('*', '\\*')
+            result_text = owoify(text, 'uvu')
         else:
             text = f'{level} {text}'
-            result_text = owoify(text).replace('`', '\\`').replace('*', '\\*')
+            result_text = owoify(text)
         author: discord.Member = ctx.author
-        result_text = 'OwO-ified for {}~!\n\n{}'.format(author.mention, result_text)
+        result_text = 'OwO-ified for {}~!\n\n{}'.format(author.mention, result_text.replace('`', '\\`').replace('*', '\\*'))
         await ctx.send(result_text)
 
     @commands.command(description='Play a fun quiz with your friends.',
                       help='Run `minigame` to begin a new game, and react within the countdown to join.',
-                      uage='[rounds, default = 7]',
+                      uage='[rounds=7]',
                       aliases=['quiz', 'trivia'])
     async def minigame(self, ctx: commands.Context, rounds: Optional[int] = 7):
         if rounds < 2 or rounds > 10:

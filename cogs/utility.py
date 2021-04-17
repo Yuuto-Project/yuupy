@@ -19,7 +19,7 @@ class Utility(commands.Cog):
 
     @commands.command(description='Returns an enlarged emote.',
                       help='Get the permanent link of one or multiple emotes to see them in larger sizes.',
-                      usage='<emoji_1> [emoji_2] ... [emoji_n]',
+                      usage='<emojis...>',
                       aliases=['emoji'])
     async def enlarge(self, ctx: commands.Context, *, args: typing.Optional[str]):
         if args is None or len(args) == 0:
@@ -60,9 +60,9 @@ class Utility(commands.Cog):
                                                      member[0].avatar_url_as(format='png', size=2048)))
     
     @commands.command(description='Convert units.',
-                      help='This command will help you convert between units.',
-                      aliases=['convert'],
-                      usage='<target_unit> <value> - Ex: cvt lbs 31.3kg')
+                      help='This command will help you convert between units.',                      
+                      usage='<target_unit> <value> - Ex: cvt lbs 31.3kg',
+                      aliases=['convert'])
     async def cvt(self, ctx: commands.Context, target_unit: str = '', input: str = ''):
         # Conversion is handeled externally
         await Convert.cvt(self, ctx, target_unit, input)
