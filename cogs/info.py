@@ -168,7 +168,8 @@ class Info(commands.Cog):
                               description=args, 
                               color=discord.Color.blurple())\
             .set_author(name=author.display_name, icon_url=author.avatar_url)\
-            .set_footer(text="React with ✅ to confirm or with ❌ to cancel the submission of the message.")
+            .set_footer(text="React with ✅ to confirm or with ❌ to cancel the submission of the message. \n"\
+                             "Your username, user id, and server id will be submitted with the suggestion.")
 
         sentembed: discord.Message = await ctx.send(embed=embed)
 
@@ -200,17 +201,20 @@ class Info(commands.Cog):
                 return
 
             # Send the suggestion to the dev server
-            embed_suggest = discord.Embed(title="New Suggestion!",
-                                          description=args,
+            embed_suggest = discord.Embed(description=args,
                                           color=discord.Color.green())\
-                    .set_author(name=f"{author.display_name} ({author.id})", icon_url=author.avatar_url)
+                    .set_author(name=f"{author.display_name} ({author.id})", 
+                                icon_url=author.avatar_url,
+                                url=f"https://discord.com/users/{author.id}")\
+                    .set_footer(text=f"From {ctx.guild.name} ({ctx.guild.id})")
             await suggestchannel.send(embed=embed_suggest)
             
             # Send a confirmation message to the user
             embed_submitted = discord.Embed(title="Submitted ✅", 
-                                            description='Thank you for helping this community project!', 
+                                            description='Thank you for helping this community project! \n', 
                                               color=discord.Color.green())\
-                    .set_author(name=author.display_name, icon_url=author.avatar_url)
+                    .set_author(name=author.display_name, icon_url=author.avatar_url)\
+                    .set_footer(text='Your username, user id and server id has been submitted with the request.')
             await sentembed.delete()
             await ctx.send(embed=embed_submitted)
 
