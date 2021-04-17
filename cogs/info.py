@@ -150,7 +150,7 @@ class Info(commands.Cog):
     async def suggest(self, ctx: commands.Context, *, args: str = None):
         # Check if we have access to the suggestion channel
         try:
-            suggestchannel: discord.TextChannel = await ctx.bot.fetch_channel(705013080844926988)
+            suggestchannel: discord.TextChannel = await ctx.bot.fetch_channel(os.getenv('SUGGESTIONS_CHANNEL'))
         except:
             await ctx.send("An error occured: I can't find the suggestions channel")
             print("Couldn't find suggestions channel!")
