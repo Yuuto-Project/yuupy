@@ -211,8 +211,8 @@ class Info(commands.Cog):
             
             # Send a confirmation message to the user
             embed_submitted = discord.Embed(title="Submitted ✅", 
-                                            description='Thank you for helping this community project! \n', 
-                                              color=discord.Color.green())\
+                                            description='Thank you for helping this community project!', 
+                                            color=discord.Color.green())\
                     .set_author(name=author.display_name, icon_url=author.avatar_url)\
                     .set_footer(text='Your username, user id and server id has been submitted with the request.')
             await sentembed.delete()
