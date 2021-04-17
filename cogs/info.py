@@ -8,6 +8,9 @@ import random
 import os
 import asyncio
 
+suggest_enabled = bool(os.getenv('SUGGESTIONS_CHANNEL'))
+if not suggest_enabled:
+    print('Suggestions channel not set, disabling command.')
 
 class Info(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -140,20 +143,30 @@ class Info(commands.Cog):
                        "<https://discord.com/oauth2/authorize?client_id=684395509045264429&permissions=378944&scope=bot>")
 
     @commands.command(description='Help Yuuto by giving us a suggestion or a bug report!', 
-                      help="This command will let you help Yuuto by giving it a suggestion or a bug report!", 
+                      enabled=suggest_enabled,
+                      help='This command will let you help Yuuto by giving it a suggestion or a bug report!', 
+                      usage='<message>',
                       aliases=['suggestion'])
     async def suggest(self, ctx: commands.Context, *, args: str = None):
-        suggestchannel: discord.TextChannel = await ctx.bot.fetch_channel(os.getenv('SUGGESTIONS_CHANNEL'))
+        try:
+            suggestchannel: discord.TextChannel = await ctx.bot.fetch_channel(705013080844926988)
+        except:
+            await ctx.send("An error occured: I can't find the suggestions channel")
+            print("Couldn't find suggestions channel!")
+            return
 
         author: discord.User = ctx.author
 
         if args is None:
             await ctx.send(embed=status_embed("Message cannot be empty!", False))
             return
-
-        embed = discord.Embed(title="Suggestion", description=args, color=discord.Color.blurple())\
-            .set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url)\
-            .set_footer(text="React ✅ to confirm the submission of message, react ❌ to cancel")
+        
+        # await ctx.message.delete()
+        embed = discord.Embed(title="Suggestion", 
+                              description=args, 
+                              color=discord.Color.blurple())\
+            .set_author(name=author.display_name, icon_url=author.avatar_url)\
+            .set_footer(text="React with ✅ to confirm or with ❌ to cancel the submission of the message.")
 
         sentembed: discord.Message = await ctx.send(embed=embed)
 
@@ -161,12 +174,16 @@ class Info(commands.Cog):
         await sentembed.add_reaction('❌')
 
         def check(reaction: discord.Reaction, user):
-            return user == ctx.author and reaction.message.id == sentembed.id and (str(reaction.emoji) == '✅' or str(reaction.emoji) == '❌')
+            return user == author and reaction.message.id == sentembed.id and (str(reaction.emoji) == '✅' or str(reaction.emoji) == '❌')
 
         async def cancel():
-            await ctx.message.delete()
+            embed_cancel = discord.Embed(title="Cancelled ❌", 
+                                      description='Cancelled the suggestion', 
+                                      color=discord.Color.red())\
+                    .set_author(name=author.display_name, icon_url=author.avatar_url)
             await sentembed.delete()
-            await ctx.send('❌ Cancelled')
+            await ctx.send(embed=embed_cancel)
+            return
 
         try:
             reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
@@ -174,11 +191,22 @@ class Info(commands.Cog):
             # Timeout
             await cancel()
         else:
-            if reaction.emoji == '❌':
+            if reaction.emoji != '✅':
                 await cancel()
-            else:
-                await suggestchannel.send(f"From {author.display_name}\n{args}")
-                await ctx.send(embed=status_embed('Submitted! Thank you for helping this community project!'))
+                return
+
+            embed_suggest = discord.Embed(title="New Suggestion!",
+                                          description=args,
+                                          color=discord.Color.green())\
+                    .set_author(name=f"{author.display_name} ({author.id})", icon_url=author.avatar_url)
+            await suggestchannel.send(embed=embed_suggest)
+            
+            embed_submitted = discord.Embed(title="Submitted ✅", 
+                                            description='Thank you for helping this community project!', 
+                                              color=discord.Color.green())\
+                    .set_author(name=author.display_name, icon_url=author.avatar_url)
+            await sentembed.delete()
+            await ctx.send(embed=embed_submitted)
 
 
 def setup(bot: commands.Bot):

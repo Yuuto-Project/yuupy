@@ -61,7 +61,8 @@ class Fun(commands.Cog):
             fileNames = glob('./assets/quote/*.txt')
             self.charNames = list(map(parse_files, fileNames))
 
-    @commands.command(description='Get a fake camp buddy quote', enabled=quote_enabled,
+    @commands.command(description='Get a fake camp buddy quote', 
+                      enabled=quote_enabled,
                       help='This command generates fake camp buddy quotes from the characters. It does this by '
                            'utilising a "makrov chain"', 
                       aliases=['quotation', 'saying'])
