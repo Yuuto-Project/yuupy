@@ -16,10 +16,11 @@ class Help(commands.HelpCommand):
         self.embed_help = os.getenv('EMBED_HELP') is not None and int(os.getenv('EMBED_HELP')) == 1
 
     async def build_embed_bot_help(self, mapping: Mapping[Optional[commands.Cog], List[commands.Command]]) -> discord.Embed:
+        prefix = os.getenv("PREFIX")
         author: Union[discord.User, discord.Member] = self.context.author
         embed = discord.Embed(description='Here is a list of all commands and their descriptions:', color=self.color)
         embed.set_footer(
-            text='Type y!help <command> for more info on a command.\nYou can also type y!help <category> for more info on a category.')
+            text=f"Type {prefix}help <command> for more info on a command.\nYou can also type {prefix}help <category> for more info on a category.")
         embed.set_author(name=author.display_name, icon_url=author.avatar_url)
         for item in mapping.items():
             # Get sorted command list of the cog the commands belong to
@@ -37,6 +38,7 @@ class Help(commands.HelpCommand):
         return embed
 
     async def build_list_bot_help(self, mapping: Mapping[Optional[commands.Cog], List[commands.Command]]) -> str:
+        prefix = os.getenv("PREFIX")
         result_string = 'Here is a list of all commands and their descriptions:\n\n'
         for item in mapping.items():
             result_string += '{} {}\n'.format(self.emoji_mapping[item[0].qualified_name], item[0].qualified_name) if item[0] is not None else '💡 No Category\n'
@@ -48,12 +50,13 @@ class Help(commands.HelpCommand):
         return result_string
 
     def build_embed_cog_help(self, cog: commands.Cog) -> discord.Embed:
+        prefix = os.getenv("PREFIX")
         author: Union[discord.User, discord.Member] = self.context.author
         cmds: List[commands.Command] = cog.get_commands()
         cog_name = cog.qualified_name
         embed = discord.Embed(title=cog_name, description='Here is a list of commands for `' + cog_name + '`.',
                               color=self.color)
-        embed.set_footer(text='Type y!help <command> for more info on a command.')
+        embed.set_footer(text=f"Type {prefix}help <command> for more info on a command.")
         embed.set_author(name=author.display_name, icon_url=author.avatar_url)
         cmds = sorted(cmds, key=lambda x: x.name)
         for cmd in cmds:
@@ -90,11 +93,13 @@ class Help(commands.HelpCommand):
 
     # Override the general help (without any arguments)
     async def send_bot_help(self, mapping: Mapping[Optional[commands.Cog], List[commands.Command]]):
+        prefix = os.getenv("PREFIX")
         if self.embed_help:
             embed = await self.build_embed_bot_help(mapping)
             await self.context.send(embed=embed)
         else:
             result = await self.build_list_bot_help(mapping)
+            result += f"_The current prefix is `{prefix}` Usage example: `{prefix}ping`_"
             await self.context.send(result)
 
     # Help for each cog. List all available commands under that specific cog.

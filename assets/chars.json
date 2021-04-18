@@ -6,11 +6,11 @@
     "birthday": "September 22",
     "animal": "Raccoon",
     "color": "#ff6600",
-    "height":"166 cm (5'5\")",
-    "weight":"55 kg (121 lbs)",
-    "blood_type":"B",
+    "height": "166 cm (5'5\")",
+    "weight": "55 kg (121 lbs)",
+    "blood_type": "B",
     "emoteId": "514541939979452431",
-    "cuteEmoteId":"514293666853158913"
+    "cuteEmoteId": "514293666853158913"
   },
   {
     "name": "Keitaro Nagame",
@@ -19,11 +19,11 @@
     "birthday": "April 8",
     "animal": "Frog",
     "color": "#42a82b",
-    "height":"168 cm (5'6\")",
-    "weight":"55 kg (121 lbs)",
-    "blood_type":"A",
+    "height": "168 cm (5'6\")",
+    "weight": "55 kg (121 lbs)",
+    "blood_type": "A",
     "emoteId": "514627809919107072",
-    "cuteEmoteId":"514293667041771531"
+    "cuteEmoteId": "514293667041771531"
   },
   {
     "name": "Hunter Springfield",
@@ -32,11 +32,11 @@
     "birthday": "March 20",
     "animal": "Bunny",
     "color": "#f7f63c",
-    "height":"160 cm (5'3\")",
-    "weight":"51 kg (112 lbs)",
-    "blood_type":"AB",
+    "height": "160 cm (5'3\")",
+    "weight": "51 kg (112 lbs)",
+    "blood_type": "AB",
     "emoteId": "514543742167023625",
-    "cuteEmoteId":"514294078570102784"
+    "cuteEmoteId": "514294078570102784"
   },
   {
     "name": "Natsumi Hamasaki",
@@ -45,11 +45,11 @@
     "birthday": "June 20",
     "animal": "Stag Beetle",
     "color": "#1ab1ff",
-    "height":"179 cm (5'10\")",
-    "weight":"62 kg (137 lbs)",
-    "blood_type":"AB",
+    "height": "179 cm (5'10\")",
+    "weight": "62 kg (137 lbs)",
+    "blood_type": "AB",
     "emoteId": "514542811937505301",
-    "cuteEmoteId":"514293667192766465"
+    "cuteEmoteId": "514293667192766465"
   },
   {
     "name": "Yoichi Yukimura",
@@ -58,11 +58,11 @@
     "birthday": "January 21",
     "animal": "Wolf",
     "color": "#b11aff",
-    "height":"170 cm (5'7\")",
-    "weight":"69 kg (152 lbs)",
-    "blood_type":"O",
+    "height": "170 cm (5'7\")",
+    "weight": "69 kg (152 lbs)",
+    "blood_type": "O",
     "emoteId": "514543014979567617",
-    "cuteEmoteId":"514293667595419663"
+    "cuteEmoteId": "514293667595419663"
   },
   {
     "name": "Taiga Akatora",
@@ -71,11 +71,11 @@
     "birthday": "July 13",
     "animal": "Tiger",
     "color": "#e81615",
-    "height":"168 cm (5'6\")",
-    "weight":"56 kg (123 lbs)",
-    "blood_type":"O",
+    "height": "168 cm (5'6\")",
+    "weight": "56 kg (123 lbs)",
+    "blood_type": "O",
     "emoteId": "514535865691930634",
-    "cuteEmoteId":"514293667507208193"
+    "cuteEmoteId": "514293667507208193"
   },
   {
     "name": "Seto (Shintaro) Aihara",
@@ -84,11 +84,11 @@
     "birthday": "July 24",
     "animal": "Cat",
     "color": "#9dd5e6",
-    "height":"165 cm (5'5\")",
-    "weight":"52 kg (114 lbs)",
-    "blood_type":"B",
+    "height": "165 cm (5'5\")",
+    "weight": "52 kg (114 lbs)",
+    "blood_type": "B",
     "emoteId": "514293667205349377",
-    "cuteEmoteId":"514293667205349377"
+    "cuteEmoteId": "514293667205349377"
   },
   {
     "name": "Felix Clermont",
@@ -97,11 +97,11 @@
     "birthday": "September 26",
     "animal": "Arctic Fox",
     "color": "#bdd7e6",
-    "height":"157 cm (5'2\")",
-    "weight":"49 kg (108 lbs)",
-    "blood_type":"AB",
+    "height": "157 cm (5'2\")",
+    "weight": "49 kg (108 lbs)",
+    "blood_type": "AB",
     "emoteId": "514293667247423498",
-    "cuteEmoteId":"514293667247423498"
+    "cuteEmoteId": "514293667247423498"
   },
   {
     "name": "Eduard Fitzpatrick",
@@ -110,11 +110,11 @@
     "birthday": "May 30",
     "animal": "Flamingo",
     "color": "#d37fb7",
-    "height":"165 cm (5'5\")",
-    "weight":"50 kg (110 lbs)",
-    "blood_type":"B",
+    "height": "165 cm (5'5\")",
+    "weight": "50 kg (110 lbs)",
+    "blood_type": "B",
     "emoteId": "514293667234709519",
-    "cuteEmoteId":"514293667234709519"
+    "cuteEmoteId": "514293667234709519"
   },
   {
     "name": "Lee Kurosawa",
@@ -123,11 +123,11 @@
     "birthday": "August 4",
     "animal": "Snake",
     "color": "#00aa6c",
-    "height":"164 cm (5'4\")",
-    "weight":"49 kg (108 lbs)",
-    "blood_type":"B",
+    "height": "164 cm (5'4\")",
+    "weight": "49 kg (108 lbs)",
+    "blood_type": "B",
     "emoteId": "586763383806754816",
-    "cuteEmoteId":"586763383806754816"
+    "cuteEmoteId": "586763383806754816"
   },
   {
     "name": "Kieran Moreno",
@@ -136,11 +136,11 @@
     "birthday": "August 8",
     "animal": "Lion",
     "color": "#e7ab0d",
-    "height":"169 cm (5'7\")",
-    "weight":"54 kg (119 lbs)",
-    "blood_type":"A",
+    "height": "169 cm (5'7\")",
+    "weight": "54 kg (119 lbs)",
+    "blood_type": "A",
     "emoteId": "652587591115472907",
-    "cuteEmoteId":"652587591115472907"
+    "cuteEmoteId": "652587591115472907"
   },
   {
     "name": "Aiden Flynn",
@@ -149,11 +149,11 @@
     "birthday": "June 9",
     "animal": "Lizard",
     "color": "#5d8c6b",
-    "height":"183 cm (6'0\")",
-    "weight":"88 kg (194 lbs)",
-    "blood_type":"AB",
+    "height": "183 cm (6'0\")",
+    "weight": "88 kg (194 lbs)",
+    "blood_type": "AB",
     "emoteId": "514293666936782850",
-    "cuteEmoteId":"514293666936782850"
+    "cuteEmoteId": "514293666936782850"
   },
   {
     "name": "Yoshinori Nagira",
@@ -162,11 +162,11 @@
     "birthday": "March 7",
     "animal": "Grizzly Bear",
     "color": "#c07c35",
-    "height":"188 cm (6'2\")",
-    "weight":"85 kg (187 lbs)",
-    "blood_type":"A",
+    "height": "188 cm (6'2\")",
+    "weight": "85 kg (187 lbs)",
+    "blood_type": "A",
     "emoteId": "514293667473653781",
-    "cuteEmoteId":"514293667473653781"
+    "cuteEmoteId": "514293667473653781"
   },
   {
     "name": "Goro Nomoru",
@@ -175,11 +175,11 @@
     "birthday": "July 3",
     "animal": "Panda",
     "color": "#9c9b99",
-    "height":"196 cm (6'5\")",
-    "weight":"115 kg (253 lbs)",
-    "blood_type":"O",
+    "height": "196 cm (6'5\")",
+    "weight": "115 kg (253 lbs)",
+    "blood_type": "O",
     "emoteId": "514293666861416466",
-    "cuteEmoteId":"514293666861416466"
+    "cuteEmoteId": "514293666861416466"
   },
   {
     "name": "Yuri Nomoru",
@@ -188,11 +188,11 @@
     "birthday": "May 8",
     "animal": "Butterfly",
     "color": "#ff73bb",
-    "height":"171 cm (5'7\")",
-    "weight":"65 kg (143 lbs)",
-    "blood_type":"B",
+    "height": "171 cm (5'7\")",
+    "weight": "65 kg (143 lbs)",
+    "blood_type": "B",
     "emoteId": "514291726069006336",
-    "cuteEmoteId":"514291726069006336"
+    "cuteEmoteId": "514291726069006336"
   },
   {
     "name": "Naoto Hamasaki",
@@ -201,11 +201,11 @@
     "birthday": "June 14",
     "animal": "Hercules Beetle",
     "color": "#227abe",
-    "height":"185 cm (6'1\")",
-    "weight":"84 kg (185 lbs)",
-    "blood_type":"AB",
+    "height": "185 cm (6'1\")",
+    "weight": "84 kg (185 lbs)",
+    "blood_type": "AB",
     "emoteId": "586763400562868234",
-    "cuteEmoteId":"586763400562868234"
+    "cuteEmoteId": "586763400562868234"
   },
   {
     "name": "Jirou",
@@ -214,11 +214,11 @@
     "birthday": "April 8",
     "color": "#fead3e",
     "animal": "Red-Eyed Tree Frog",
-    "height":"165 cm (5'5\")",
-    "weight":"52 kg (114 lbs)",
-    "blood_type":"B",
+    "height": "165 cm (5'5\")",
+    "weight": "52 kg (114 lbs)",
+    "blood_type": "B",
     "emoteId": "586763281977311243",
-    "cuteEmoteId":"586763281977311243"
+    "cuteEmoteId": "586763281977311243"
   },
   {
     "name": "Connor Bleufin",
@@ -227,11 +227,11 @@
     "birthday": "June 2",
     "animal": "Marlin",
     "color": "#5ca0d5",
-    "height":"168 cm (5'6\")",
-    "weight":"54 kg (119 lbs)",
-    "blood_type":"AB",
+    "height": "168 cm (5'6\")",
+    "weight": "54 kg (119 lbs)",
+    "blood_type": "AB",
     "emoteId": "586763102306172958",
-    "cuteEmoteId":"586763102306172958"
+    "cuteEmoteId": "586763102306172958"
   },
   {
     "name": "Avan Geiserford",
@@ -240,11 +240,11 @@
     "birthday": "January 9",
     "animal": "Penguin",
     "color": "#13c4d4",
-    "height":"177 cm (5'9\")",
-    "weight":"63 kg (139 lbs)",
-    "blood_type":"0",
+    "height": "177 cm (5'9\")",
+    "weight": "63 kg (139 lbs)",
+    "blood_type": "0",
     "emoteId": "586763085398933504",
-    "cuteEmoteId":"586763085398933504"
+    "cuteEmoteId": "586763085398933504"
   },
   {
     "name": "Yuuto Mizushima",
@@ -253,11 +253,11 @@
     "birthday": "April 4",
     "animal": "Sea Otter",
     "color": "#fdbbe4",
-    "height":"177 cm (5'9\")",
-    "weight":"68 kg (149 lbs)",
-    "blood_type":"A",
+    "height": "177 cm (5'9\")",
+    "weight": "68 kg (149 lbs)",
+    "blood_type": "A",
     "emoteId": "586763775156420618",
-    "cuteEmoteId":"586763775156420618"
+    "cuteEmoteId": "586763775156420618"
   },
   {
     "name": "Haruki Sakurai",
@@ -266,11 +266,11 @@
     "birthday": "August 19",
     "animal": "Fox",
     "color": "#f0534e",
-    "height":"180 cm (5'10\")",
-    "weight":"67 kg (150 lbs)",
-    "blood_type":"O",
+    "height": "180 cm (5'10\")",
+    "weight": "67 kg (150 lbs)",
+    "blood_type": "O",
     "emoteId": "586763119234252810",
-    "cuteEmoteId":"586763119234252810"
+    "cuteEmoteId": "586763119234252810"
   },
   {
     "name": "Chiaki Yumeno",
@@ -279,11 +279,11 @@
     "birthday": "June 25",
     "animal": "Ocelot",
     "color": "#b46075",
-    "height":"170 cm (5'7\")",
-    "weight":"56 kg (123 lbs)",
-    "blood_type":"A",
+    "height": "170 cm (5'7\")",
+    "weight": "56 kg (123 lbs)",
+    "blood_type": "A",
     "emoteId": "609824438715809957",
-    "cuteEmoteId":"609824438715809957"
+    "cuteEmoteId": "609824438715809957"
   },
   {
     "name": "Noah Reiner",
@@ -292,11 +292,11 @@
     "birthday": "October 10",
     "animal": "Panther",
     "color": "#554ca0",
-    "height":"166 cm (5'5\")",
-    "weight":"53 kg (117 lbs)",
-    "blood_type":"O",
+    "height": "166 cm (5'5\")",
+    "weight": "53 kg (117 lbs)",
+    "blood_type": "O",
     "emoteId": "610168246477520919",
-    "cuteEmoteId":"610168246477520919"
+    "cuteEmoteId": "610168246477520919"
   },
   {
     "name": "Knox",
@@ -305,10 +305,140 @@
     "birthday": "September 16",
     "animal": "Jackal",
     "color": "#a53154",
-    "height":"169 cm (5'7\")",
-    "weight":"59 kg (130 lbs)",
-    "blood_type":"B",
+    "height": "169 cm (5'7\")",
+    "weight": "59 kg (130 lbs)",
+    "blood_type": "B",
     "emoteId": "586763368044429312",
-    "cuteEmoteId":"586763368044429312"
+    "cuteEmoteId": "586763368044429312"
+  },
+  {
+    "name": "Orlando Knight",
+    "age": 21,
+    "description": "As an aspiring star, Orlando is always ready to do a photo shoot for a little extra exposure",
+    "birthday": "December 17",
+    "animal": "Shark",
+    "color": "#AC39AF",
+    "height": "180 cm (5'11\")",
+    "weight": "60 kg (132 lbs)",
+    "blood_type": "O",
+    "emoteId": "833315913755394078",
+    "cuteEmoteId": "833315913755394078"
+  },
+  {
+    "name": "Rex",
+    "age": 22,
+    "description": "Rex is an elusive hacker who usually avoids spotlight due to his anonymous nature.",
+    "birthday": "April 4",
+    "animal": "Turtle",
+    "color": "#750D34",
+    "height": "179 cm (5'10\")",
+    "weight": "67 kg (148 lbs)",
+    "blood_type": "O",
+    "emoteId": "833319911651541013",
+    "cuteEmoteId": "833319911651541013"
+  },
+  {
+    "name": "Lief Tealwood",
+    "age": 21,
+    "description": "Lief is in tune with nature, and clothes aren't very natural, so he's more than happy to strip them off for anyone who asks.",
+    "birthday": "July 3",
+    "animal": "Hummingbird",
+    "color": "#047B7A",
+    "height": "184 cm (6'0\")",
+    "weight": "71 kg (157 lbs)",
+    "blood_type": "O",
+    "emoteId": "833320757390999553",
+    "cuteEmoteId": "833320757390999553"
+  },
+  {
+    "name": "Marco Bentham",
+    "age": 22,
+    "description": "Marco is one of the most fashionable people out there, he is a slim, soft kind of guy with a love for the latest and hottest in cuisine and couture.",
+    "birthday": "November 11",
+    "animal": "Unknown",
+    "color": "#75B036",
+    "height": "170 cm (5'7\")",
+    "weight": "58 kg (128 lbs)",
+    "blood_type": "B",
+    "emoteId": "833321532159295538",
+    "cuteEmoteId": "833321532159295538"
+  },
+  {
+    "name": "Hina Akiba",
+    "age": "46",
+    "description": "Hina understands her son Hiro very well and is very supportive of his happiness.",
+    "birthday": "October 16",
+    "animal": "Red Panda",
+    "color": "#FCA86E",
+    "height": "168 cm (5'8\")",
+    "weight": "59 kg (130 lbs)",
+    "blood_type": "B",
+    "emoteId": "833324364085985310",
+    "cuteEmoteId": "833324364085985310"
+  },
+  {
+    "name": "Heather Springfield",
+    "age": 42,
+    "description": "Heather and Archer are very business-minded and they want to secure Hunter's future to the best they can.",
+    "birthday": "July 11",
+    "animal": "Fuzzy Lop",
+    "color": "#FFE6A9",
+    "height": "170 cm (5'7\")",
+    "weight": "61 kg (134 lbs)",
+    "blood_type": "B",
+    "emoteId": "833326325694988348",
+    "cuteEmoteId": "833326325694988348"
+  },
+  {
+    "name": "Archer Springfield",
+    "age": 43,
+    "description": "Archer and Heather are very business-minded and they want to secure Hunter's future to the best they can.",
+    "birthday": "July 11",
+    "animal": "Hare",
+    "color": "#FFEF5A",
+    "height": "180 cm (5'11\")",
+    "weight": "67 kg (154 lbs)",
+    "blood_type": "A",
+    "emoteId": "833328366991573012",
+    "cuteEmoteId": "833328366991573012"
+  },
+  {
+    "name": "William Clermont",
+    "age": 51,
+    "description": "William is a renowned writer and publicist. He is the CEO and Founder of Clermont Media Inc. A publishing company that supports independent authors and sponsors other businesses.",
+    "birthday": "August 31",
+    "animal": "Polar Bear",
+    "color": "#A37AC6",
+    "height": "183 cm (5'11\")",
+    "weight": "81 kg (179 lbs)",
+    "blood_type": "A",
+    "emoteId": "833329518085013526",
+    "cuteEmoteId": "833329518085013526"
+  },
+  {
+    "name": "Hyunjin Choi",
+    "age": "??",
+    "description": "Hyunjin is a Tech specialist hired after Keitaro's adventures to help bring the camp into the modern era. He is going outside of his comfort zone by going to the camp.",
+    "birthday": "??",
+    "animal": "??",
+    "color": "#3C5396",
+    "height": "??",
+    "weight": "??",
+    "blood_type": "??",
+    "emoteId": "833333254634602496",
+    "cuteEmoteId": "833333254634602496"
+  },
+  {
+    "name": "Emilia Komarova",
+    "age": "??",
+    "description": "Emilia has been sent out by Clermont Inc. to make sure that Camp Buddy meets all of the requirements set by the sponsorship.",
+    "birthday": "??",
+    "animal": "??",
+    "color": "#1FD3A9",
+    "height": "??",
+    "weight": "??",
+    "blood_type": "??",
+    "emoteId": "833333254634602496",
+    "cuteEmoteId": "833333254634602496"
   }
 ]

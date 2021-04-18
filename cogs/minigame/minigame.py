@@ -44,7 +44,9 @@ class Minigame(object):
                     if player.id == pair[1][0]:
                         mapped_scores.append('{}) {} with {} points'.format(pair[0] + 1, player.mention, pair[1][1]))
                         break
-            embed = discord.Embed(color=discord.Color.from_rgb(255, 147, 206), title='Minigame ended!', description='Total points:\n{}'.format('\n'.join(mapped_scores)))
+            embed = discord.Embed(color=0xFF93CE,
+                                  title='Minigame ended!', 
+                                  description='Total points:\n{}'.format('\n'.join(mapped_scores)))
             await ctx.send(embed=embed)
         Minigame.ongoing_games.pop(self.channel_id)
 
@@ -56,15 +58,23 @@ class Minigame(object):
             return m.author in self.players
 
         if self.state == GameState.STARTING:
-            embed = discord.Embed(title='Minigame Starting!', description='React below to join the game! \nThis game may contain spoilers or NSFW themes.\nPlease run `skip` in order to skip a question.', color=color)
+            embed = discord.Embed(title='Minigame Starting!', 
+                                  description='React below to join the game! \n'\
+                                              'This game may contain spoilers or NSFW themes.\n'\
+                                              'Please run `skip` in order to skip a question.', 
+                                  color=color)
             message = await ctx.send(embed=embed)
-            await message.add_reaction('🇴')
+            await message.add_reaction('🎲')
             Minigame.standby_messages.append(message.id)
             self.message_id = message.id
             for i in range(10, -1, -2):
                 players = list(map(lambda x: x.mention, self.players))
                 player_mentions = ', '.join(players)
-                embed.description = 'React below to join the game! \nThis game may contain spoilers or NSFW themes.\nPlease run `skip` in order to skip a question.\nCurrent players: {}\n{} seconds left!'.format(player_mentions, i)
+                embed.description = 'React below to join the game! \n'\
+                                    'This game may contain spoilers or NSFW themes.\n'\
+                                    'Please type `skip` in order to skip a question.\n'\
+                                    'Current players: {}\n'\
+                                    '{} seconds left!'.format(player_mentions, i)
                 await message.edit(embed=embed)
                 await asyncio.sleep(2.0)
 

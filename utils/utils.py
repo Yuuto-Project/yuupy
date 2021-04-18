@@ -1,5 +1,4 @@
 import json
-
 from discord.ext import commands
 import discord
 from discord.embeds import Colour
@@ -8,6 +7,7 @@ import re
 from PIL import ImageFont, ImageDraw, Image
 from io import BytesIO
 import textwrap
+import random
 
 USER_MENTION_REGEX = re.compile(r'<@!?(\d{17,20})>')
 USER_TAG = re.compile(r'(\S.{0,30}\S)\s*#(\d{4})')
@@ -155,3 +155,23 @@ def buddy_name_to_color(name: str) -> int:
             return color_hex_to_int(filtered[0]['color'])
         else:
             return Colour.blurple().value
+
+def get_buddy_data(name: str = None):
+    def filter_on_name(char_name: any):
+        if char_name['name'].find(name.capitalize()) != -1:
+            return True
+        else: 
+            return False
+
+    with open('assets/chars.json') as c:
+        chars = json.load(c)
+        # If no name is given, return a random character
+        if name is None:
+            return random.choice(chars)
+        else:
+            filtered = list(filter(filter_on_name, chars))
+
+        if filtered:
+            return filtered[0]
+        else:
+            return None
