@@ -6,6 +6,7 @@ import time
 import glob
 import random
 import os
+import re
 import asyncio
 
 # suggest_enabled = bool(os.getenv('SUGGESTIONS_CHANNEL'))
@@ -98,13 +99,14 @@ class Info(commands.Cog):
                       usage='[background=camp] <character> <text>',
                       aliases=['dialogue'])
     async def dialog(self, ctx: commands.Context, *, args: str = ''):
-        if args == '':
+        split = args.split(' ')
+
+        if not split or len(split) < 2:
             await ctx.send('This command requires at least two arguments: `dialog [background] <character> <text>` (['
                            '] is optional)')
             return
 
-        splitted = args.split(' ')
-        character = splitted.pop(0).lower()
+        character = split.pop(0).lower()
 
         await ctx.trigger_typing()
         bg_def = ""
@@ -114,7 +116,7 @@ class Info(commands.Cog):
             background = "camp"
         else:
             background = character
-            character = splitted.pop(0).lower()
+            character = split.pop(0).lower()
 
         if background not in self.dialog.backgrounds:
             await ctx.send(f"Sorry, but I couldn't find {background} as a location\nAvailable backgrounds are: {self.dialog.backgrounds_string}")
@@ -124,10 +126,11 @@ class Info(commands.Cog):
             await ctx.send(f"Sorry, but I couldn't find {character} as a location\nAvailable characters are: {self.dialog.characters_string}")
             return
 
-        text = " ".join(splitted[0:])
+        text = " ".join(split[0:])
+        text = re.sub(r'/[‘’]/g', '\'', text)
 
         if len(text) > 140:
-            await ctx.send('Sorry, but the message limit is 140 characters :hiroJey:')
+            await ctx.send('Sorry, but the message limit is 140 characters <:hiroJey:692008426842226708>')
             return
 
         output = render_dialog(text, character, background)
