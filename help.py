@@ -56,7 +56,7 @@ class Help(commands.HelpCommand):
         cog_name = cog.qualified_name
         embed = discord.Embed(title=cog_name, description='Here is a list of commands for `' + cog_name + '`.',
                               color=self.color)
-        embed.set_footer(text='Type {prefix}help <command> for more info on a command.')
+        embed.set_footer(text=f"Type {prefix}help <command> for more info on a command.")
         embed.set_author(name=author.display_name, icon_url=author.avatar_url)
         cmds = sorted(cmds, key=lambda x: x.name)
         for cmd in cmds:
