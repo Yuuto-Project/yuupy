@@ -8,9 +8,9 @@ import random
 import os
 import asyncio
 
-suggest_enabled = bool(os.getenv('SUGGESTIONS_CHANNEL'))
-if not suggest_enabled:
-    print('Suggestions channel not set, disabling command.')
+# suggest_enabled = bool(os.getenv('SUGGESTIONS_CHANNEL'))
+# if not suggest_enabled:
+#     print('Suggestions channel not set, disabling command.')
 
 class Info(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -142,12 +142,13 @@ class Info(commands.Cog):
         await ctx.send("You can invite Yuuto using this link: "
                        "<https://discord.com/oauth2/authorize?client_id=684395509045264429&permissions=378944&scope=bot>")
 
-    @commands.command(description='Help Yuuto by giving us a suggestion or a bug report!', 
-                      enabled=suggest_enabled,
-                      help='This command will let you help Yuuto by giving it a suggestion or a bug report!', 
-                      usage='<message>',
-                      aliases=['suggestion'])
-    async def suggest(self, ctx: commands.Context, *, args: str = None):
+    # This command got disabled due to the concern of trolls abusing it
+    # @commands.command(description='Help Yuuto by giving us a suggestion or a bug report!', 
+    #                   enabled=suggest_enabled, 
+    #                   help='This command will let you help Yuuto by giving it a suggestion or a bug report!', 
+    #                   usage='<message>',
+    #                   aliases=['suggestion'])
+    async def suggest_old(self, ctx: commands.Context, *, args: str = None):
         # Check if we have access to the suggestion channel
         try:
             suggestchannel: discord.TextChannel = await ctx.bot.fetch_channel(os.getenv('SUGGESTIONS_CHANNEL'))
@@ -217,6 +218,19 @@ class Info(commands.Cog):
                     .set_footer(text='Your username, user id and server id has been submitted with the request.')
             await sentembed.delete()
             await ctx.send(embed=embed_submitted)
+
+    @commands.command(description='Help Yuuto by giving us a suggestion or a bug report!', 
+                      enabled=True,
+                      help='This command will let you help Yuuto by giving it a suggestion or a bug report!', 
+                      aliases=['suggestion'])
+    async def suggest(self, ctx: commands.Context):
+        author: discord.User = ctx.author
+        embed = discord.Embed(title="Got a suggestion or bug report?", 
+                              description="Don't hesitate to reach out to the developers in the [Project Yuuto](https://discord.gg/FAZaeBnxpz) discord server! "\
+                                          "You can also create an issue on the bot's [GitHub page](https://github.com/Yuuto-Project/yuupy/) if you would prefer that!", 
+                              color=0xFDBBE4)\
+            .set_author(name=author.display_name, icon_url=author.avatar_url)
+        await ctx.send(embed=embed)
 
 
 def setup(bot: commands.Bot):
