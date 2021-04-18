@@ -1,5 +1,5 @@
 from discord.ext import commands
-from utils.utils import color_hex_to_int, get_emote_url, get_first_name, render_dialog, status_embed
+from utils.utils import color_hex_to_int, get_emote_url, get_first_name, get_buddy_data, render_dialog, status_embed
 import discord
 import json
 import time
@@ -58,6 +58,27 @@ class Info(commands.Cog):
             .add_field(name="Birthday", value=route["birthday"], inline=True) \
             .add_field(name="Animal Motif", value=route["animal"], inline=True) \
             .set_footer(text=f"Play {get_first_name(route['name'])}'s route next. All bois are best bois.")
+        await ctx.send(embed=embed)
+
+    @commands.command(description='Show information about a specific character.',
+                      help='This command will show information about a specific character..', 
+                      usage='<character>',
+                      aliases=['character'])
+    async def char(self, ctx: commands.Context, char: str = ''):
+        char_data = get_buddy_data(char) # utils.utils.get_buddy_data()
+        if char_data is None:
+            await ctx.send(f"I don't know who {char} is.")
+            return
+
+        embed = discord.Embed(description=char_data['description'],
+                              color=color_hex_to_int(char_data['color']))\
+                            .set_author(name=char_data['name'], icon_url=f"https://cdn.discordapp.com/emojis/{char_data['cuteEmoteId']}.png")\
+                            .add_field(name='Age', value=char_data['age'])\
+                            .add_field(name='Birthday', value=char_data['birthday'])\
+                            .add_field(name='Animal motif', value=char_data['animal'])\
+                            .add_field(name='Height', value=char_data['height'])\
+                            .add_field(name='Weight', value=char_data['weight'])\
+                            .add_field(name='Blood Type', value=char_data['blood_type'])
         await ctx.send(embed=embed)
 
     @commands.command(description='Shows the Buddy Laws by Yuri.', 
