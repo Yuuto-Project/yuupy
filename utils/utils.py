@@ -156,7 +156,7 @@ def buddy_name_to_color(name: str) -> int:
         else:
             return Colour.blurple().value
 
-def get_buddy_data(name: str = ''):
+def get_buddy_data(name: str = None):
     def filter_on_name(char_name: any):
         if char_name['name'].find(name.capitalize()) != -1:
             return True
@@ -166,7 +166,7 @@ def get_buddy_data(name: str = ''):
     with open('assets/chars.json') as c:
         chars = json.load(c)
         # If no name is given, return a random character
-        if name == '':
+        if name is None:
             return random.choice(chars)
         else:
             filtered = list(filter(filter_on_name, chars))

@@ -82,8 +82,7 @@ class Info(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(description='Shows the Buddy Laws by Yuri.', 
-                      help='Every camper should know this!',
-                      aliases=[])
+                      help='Every camper should know this!')
     async def law(self, ctx: commands.Context):
         title = "The Buddy Law"
         desc = "1) A buddy should be kind, helpful, and trustworthy to each other!\n" \
@@ -157,8 +156,7 @@ class Info(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(description="Gives you the invite link for Yuuto", 
-                      help="Invite Yuuto to your server!",
-                      aliases=[])
+                      help="Invite Yuuto to your server!")
     async def invite(self, ctx: commands.Context):
         await ctx.send("You can invite Yuuto using this link: "
                        "<https://discord.com/oauth2/authorize?client_id=684395509045264429&permissions=378944&scope=bot>")
@@ -240,8 +238,7 @@ class Info(commands.Cog):
             await sentembed.delete()
             await ctx.send(embed=embed_submitted)
 
-    @commands.command(description='Help Yuuto by giving us a suggestion or a bug report!', 
-                      enabled=True,
+    @commands.command(description='Help Yuuto by giving us a suggestion or a bug report!',
                       help='This command will let you help Yuuto by giving it a suggestion or a bug report!', 
                       aliases=['suggestion'])
     async def suggest(self, ctx: commands.Context):
