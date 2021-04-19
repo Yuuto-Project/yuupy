@@ -127,7 +127,11 @@ class Info(commands.Cog):
             return
 
         text = " ".join(split[0:])
-        text = re.sub(r'/[‘’]/g', '\'', text)
+        text = re.sub(r'/[‘’]/g', '\'', text).strip()
+
+        if text == '':
+            await ctx.send('Correct usage is `y!dialog [background] <character> <message>` :)')
+            return
 
         if len(text) > 140:
             await ctx.send('Sorry, but the message limit is 140 characters <:hiroJey:692008426842226708>')
