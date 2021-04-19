@@ -4,4 +4,3 @@ services:
     environment:
       - TOKEN=
       - PREFIX=
-      - EMBED_HELP=0
