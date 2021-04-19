@@ -14,38 +14,65 @@ class Help(commands.HelpCommand):
             'Fun': '🎲'
         }
 
+    # This function builds the text for the help (list) command (ex: y!help)
     async def build_list_bot_help(self, mapping: Mapping[Optional[commands.Cog], List[commands.Command]]) -> str:
-        prefix = os.getenv("PREFIX")
         result_string = 'Here is a list of all commands and their descriptions:\n\n'
+
+        # For every type (cog) of command (Utility, Info, Fun)
         for item in mapping.items():
-            result_string += '{} {}\n'.format(self.emoji_mapping[item[0].qualified_name], item[0].qualified_name) if item[0] is not None else '💡 No Category\n'
+            # If it has a type, add an entry for it
+            if item[0] is not None:
+                result_string += f'{self.emoji_mapping[item[0].qualified_name]} {item[0].qualified_name} \n'
+            else:
+                result_string += '💡 No Category\n'
+
+            # Get every command and their details from the cogs and then sort them
             cmds: List[commands.Command] = await self.filter_commands(commands=item[1], sort=True)
             deduplicated = sorted(set(cmds), key=lambda x: x.name)
+
+            # For every command; add them to the list
             for cmd in deduplicated:
-                result_string += '`{}` - {}\n'.format(cmd.name, cmd.description)
+                result_string += f'`{cmd.name}` - {cmd.description}\n'
             result_string += '\n'
         return result_string
 
+    # This function builds the text for the help [cog] command (ex: y!help Utility)
     def build_list_cog_help(self, cog: commands.Cog) -> str:
-        result_string = f'{self.emoji_mapping[cog.qualified_name]} Here is a list of commands for `{cog.qualified_name}`\n'
+        result_string = f'{self.emoji_mapping[cog.qualified_name]} Here is a list of commands in the `{cog.qualified_name}` category\n'
+
         cmds: List[commands.Command] = sorted(cog.get_commands(), key=lambda x: x.name)
         for cmd in cmds:
-            result_string += '`{}` - {}\n'.format(cmd.name, cmd.description)
+            result_string += f'`{cmd.name}` - {cmd.description}\n'
         return result_string
 
+    # This function builds the text for the help [command] command (ex: y!help ping)
     def build_list_command_help(self, command: commands.Command) -> str:
-        result_string = '**Category:** {} {}\n'.format(self.emoji_mapping[command.cog.qualified_name], command.cog.qualified_name) if command.cog is not None else '**Category:** 💡 No Category\n'
-        if command.signature is not None and len(command.signature) > 0:
-            result_string += '**Usage:** `{}{} {}`\n'.format(os.getenv('PREFIX'), command.name, command.signature)
+        prefix = os.getenv('PREFIX')
+        if command.cog is not None:
+            result_string = f'**Category:** {self.emoji_mapping[command.cog.qualified_name]} {command.cog.qualified_name}\n'
         else:
-            result_string += '**Usage:** `{}{}`\n'.format(os.getenv('PREFIX'), command.name)
-        result_string += '**Description:** {}\n'.format(command.help)
-        if len(command.aliases) > 0:
-            aliases = list(map(lambda x: '`{}`'.format(x), command.aliases))
+           result_string = '**Category:** 💡 No Category\n'
+
+        # Signiture = Default generated usage or overwritten by the usage='' parameter
+        if command.signature is not None and len(command.signature) > 0:
+            result_string += f'**Usage:** `{prefix}{command.name} {command.signature}`\n'
+        else:
+            result_string += f'**Usage:** `{prefix}{command.name}`\n'
+
+        # Note: help='' parameter is used for the detailed help command, list uses the shorter description=''
+        if command.help is not None and len(command.help) > 0: 
+            result_string += '**Description:** {command.help}\n'
+        # This should only be used as a fallback and help='' should always be defined.
+        elif command.description is not None and len(command.description) > 0:
+            result_string += '**Description:** {command.description}\n'
+
+        # If there are any aliases, list them
+        if command.aliases is not None and len(command.aliases) > 0:
+            aliases = list(map(lambda x: f'`{x}`', command.aliases))
             result_string += '**Aliases:** {}'.format(', '.join(aliases))
         return result_string
 
-    # Override the general help (without any arguments)
+    # Override the Discord.py built in general help (the one without any arguments)
     async def send_bot_help(self, mapping: Mapping[Optional[commands.Cog], List[commands.Command]]):
         prefix = os.getenv("PREFIX")
         result = await self.build_list_bot_help(mapping)
