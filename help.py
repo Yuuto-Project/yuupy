@@ -68,7 +68,7 @@ class Help(commands.HelpCommand):
 
         # If there are any aliases, list them
         if command.aliases is not None and len(command.aliases) > 0:
-            aliases = list(map(lambda x: f'`{x}`', command.aliases))
+            aliases = list(map(lambda x: f'`{x}`', sorted(command.aliases)))
             result_string += '**Aliases:** {}'.format(', '.join(aliases))
         return result_string
 
