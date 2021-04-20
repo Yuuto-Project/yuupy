@@ -7,11 +7,12 @@ import os
 class Help(commands.HelpCommand):
     def __init__(self, attributes: dict):
         super().__init__(command_attrs=attributes)
-        self.color = discord.Colour(0xFDBBE4)
+        self.prefix = os.getenv('PREFIX')
         self.emoji_mapping = {
             'Utility': '⚙️',
             'Info': 'ℹ️',
-            'Fun': '🎲'
+            'Fun': '🎲',
+            'No Category': '💡'
         }
 
     # This function builds the text for the help (list) command (ex: y!help)
@@ -24,7 +25,7 @@ class Help(commands.HelpCommand):
             if item[0] is not None:
                 result_string += f'{self.emoji_mapping[item[0].qualified_name]} {item[0].qualified_name} \n'
             else:
-                result_string += '💡 No Category\n'
+                result_string += f'{self.emoji_mapping["No Category"]} No Category \n'
 
             # Get every command and their details from the cogs and then sort them
             cmds: List[commands.Command] = await self.filter_commands(commands=item[1], sort=True)
@@ -47,24 +48,23 @@ class Help(commands.HelpCommand):
 
     # This function builds the text for the help [command] command (ex: y!help ping)
     def build_list_command_help(self, command: commands.Command) -> str:
-        prefix = os.getenv('PREFIX')
         if command.cog is not None:
             result_string = f'**Category:** {self.emoji_mapping[command.cog.qualified_name]} {command.cog.qualified_name}\n'
         else:
-           result_string = '**Category:** 💡 No Category\n'
+           result_string = f'**Category:** {self.emoji_mapping["No Category"]} No Category \n'
 
         # Signiture = Default generated usage or overwritten by the usage='' parameter
         if command.signature is not None and len(command.signature) > 0:
-            result_string += f'**Usage:** `{prefix}{command.name} {command.signature}`\n'
+            result_string += f'**Usage:** `{self.prefix}{command.name} {command.signature}`\n'
         else:
-            result_string += f'**Usage:** `{prefix}{command.name}`\n'
+            result_string += f'**Usage:** `{self.prefix}{command.name}`\n'
 
         # Note: help='' parameter is used for the detailed help command, list uses the shorter description=''
         if command.help is not None and len(command.help) > 0: 
-            result_string += '**Description:** {command.help}\n'
+            result_string += f'**Description:** {command.help}\n'
         # This should only be used as a fallback and help='' should always be defined.
         elif command.description is not None and len(command.description) > 0:
-            result_string += '**Description:** {command.description}\n'
+            result_string += f'**Description:** {command.description}\n'
 
         # If there are any aliases, list them
         if command.aliases is not None and len(command.aliases) > 0:
@@ -74,14 +74,14 @@ class Help(commands.HelpCommand):
 
     # Override the Discord.py built in general help (the one without any arguments)
     async def send_bot_help(self, mapping: Mapping[Optional[commands.Cog], List[commands.Command]]):
-        prefix = os.getenv("PREFIX")
         result = await self.build_list_bot_help(mapping)
-        result += f"_The current prefix is `{prefix}` Usage example: `{prefix}ping`_"
+        result += f"_The current prefix is `{self.prefix}` Usage example: `{self.prefix}ping`_"
         await self.context.send(result)
 
     # Help for each cog. List all available commands under that specific cog.
     async def send_cog_help(self, cog: commands.Cog):
         result = self.build_list_cog_help(cog)
+        result += f"\n_The current prefix is `{self.prefix}` Usage example: `{self.prefix}ping`_"
         await self.context.send(result)
 
     # Help for each command. Showing the command's name, detailed description (help) and aliases.
