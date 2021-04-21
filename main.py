@@ -19,7 +19,7 @@ EXTENSIONS = [
 HELP_TEXTS = {
     'description': 'To see a list of commands.',
     'help': 'This command will show all the commands available in Yuuto.',
-    'aliases': ['manual']
+    'aliases': ['manual', 'cmds', 'commands']
 }
 
 intents = discord.Intents.default()

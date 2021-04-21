@@ -15,7 +15,6 @@ services:
     environment:
       - TOKEN=
       - PREFIX=
-      - EMBED_HELP=0
       - SUGGESTIONS_CHANNEL=
       - PYTHONUNBUFFERED=1
       # ignore format is BOTCMDS_{guild.id}={channel.id}

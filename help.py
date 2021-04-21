@@ -7,115 +7,84 @@ import os
 class Help(commands.HelpCommand):
     def __init__(self, attributes: dict):
         super().__init__(command_attrs=attributes)
-        self.color = discord.Colour(0xFDBBE4)
+        self.prefix = os.getenv('PREFIX')
         self.emoji_mapping = {
             'Utility': '⚙️',
             'Info': 'ℹ️',
-            'Fun': '🎲'
+            'Fun': '🎲',
+            'No Category': '💡'
         }
-        self.embed_help = os.getenv('EMBED_HELP') is not None and int(os.getenv('EMBED_HELP')) == 1
 
-    async def build_embed_bot_help(self, mapping: Mapping[Optional[commands.Cog], List[commands.Command]]) -> discord.Embed:
-        prefix = os.getenv("PREFIX")
-        author: Union[discord.User, discord.Member] = self.context.author
-        embed = discord.Embed(description='Here is a list of all commands and their descriptions:', color=self.color)
-        embed.set_footer(
-            text=f"Type {prefix}help <command> for more info on a command.\nYou can also type {prefix}help <category> for more info on a category.")
-        embed.set_author(name=author.display_name, icon_url=author.avatar_url)
-        for item in mapping.items():
-            # Get sorted command list of the cog the commands belong to
-            cmds: List[commands.Command] = await self.filter_commands(commands=item[1], sort=True)
-            # Deduplicate the command list so that we won't have repeated items
-            cmds_deduplicated = sorted(set(map(lambda x: x.name, cmds)))
-            cmd_names = []
-            for cmd in cmds_deduplicated:
-                cmd_names.append('`' + cmd + '`')
-            cmd_string = ' '.join(cmd_names)
-            category_name = 'No Category'
-            if item[0] is not None:
-                category_name = str(item[0].qualified_name)
-            embed.add_field(name=category_name, value=cmd_string, inline=True)
-        return embed
-
+    # This function builds the text for the help (list) command (ex: y!help)
     async def build_list_bot_help(self, mapping: Mapping[Optional[commands.Cog], List[commands.Command]]) -> str:
-        prefix = os.getenv("PREFIX")
         result_string = 'Here is a list of all commands and their descriptions:\n\n'
+
+        # For every type (cog) of command (Utility, Info, Fun)
         for item in mapping.items():
-            result_string += '{} {}\n'.format(self.emoji_mapping[item[0].qualified_name], item[0].qualified_name) if item[0] is not None else '💡 No Category\n'
+            # If it has a type, add an entry for it
+            if item[0] is not None:
+                result_string += f'{self.emoji_mapping[item[0].qualified_name]} {item[0].qualified_name} \n'
+            else:
+                result_string += f'{self.emoji_mapping["No Category"]} No Category \n'
+
+            # Get every command and their details from the cogs and then sort them
             cmds: List[commands.Command] = await self.filter_commands(commands=item[1], sort=True)
             deduplicated = sorted(set(cmds), key=lambda x: x.name)
+
+            # For every command; add them to the list
             for cmd in deduplicated:
-                result_string += '`{}` - {}\n'.format(cmd.name, cmd.description)
+                result_string += f'`{cmd.name}` - {cmd.description}\n'
             result_string += '\n'
         return result_string
 
-    def build_embed_cog_help(self, cog: commands.Cog) -> discord.Embed:
-        prefix = os.getenv("PREFIX")
-        author: Union[discord.User, discord.Member] = self.context.author
-        cmds: List[commands.Command] = cog.get_commands()
-        cog_name = cog.qualified_name
-        embed = discord.Embed(title=cog_name, description='Here is a list of commands for `' + cog_name + '`.',
-                              color=self.color)
-        embed.set_footer(text=f"Type {prefix}help <command> for more info on a command.")
-        embed.set_author(name=author.display_name, icon_url=author.avatar_url)
-        cmds = sorted(cmds, key=lambda x: x.name)
-        for cmd in cmds:
-            embed.add_field(name=cmd.name, value=cmd.description, inline=False)
-        return embed
-
+    # This function builds the text for the help [cog] command (ex: y!help Utility)
     def build_list_cog_help(self, cog: commands.Cog) -> str:
-        result_string = f'{self.emoji_mapping[cog.qualified_name]} Here is a list of commands for `{cog.qualified_name}`\n'
+        result_string = f'{self.emoji_mapping[cog.qualified_name]} Here is a list of commands in the `{cog.qualified_name}` category\n'
+
         cmds: List[commands.Command] = sorted(cog.get_commands(), key=lambda x: x.name)
         for cmd in cmds:
-            result_string += '`{}` - {}\n'.format(cmd.name, cmd.description)
+            result_string += f'`{cmd.name}` - {cmd.description}\n'
         return result_string
 
-    def build_embed_command_help(self, command: commands.Command) -> discord.Embed:
-        author: Union[discord.User, discord.Member] = self.context.author
-        embed = discord.Embed(title=command.name, color=self.color, description=command.help)
-        embed.set_author(name=author.display_name, icon_url=author.avatar_url)
-        if len(command.aliases) > 0:
-            aliases = map(lambda x: '`' + x + '`', command.aliases)
-            embed.add_field(name='Aliases', value=' '.join(aliases), inline=False)
-        return embed
-
+    # This function builds the text for the help [command] command (ex: y!help ping)
     def build_list_command_help(self, command: commands.Command) -> str:
-        result_string = '**Category:** {} {}\n'.format(self.emoji_mapping[command.cog.qualified_name], command.cog.qualified_name) if command.cog is not None else '**Category:** 💡 No Category\n'
-        if command.signature is not None and len(command.signature) > 0:
-            result_string += '**Usage:** `{}{} {}`\n'.format(os.getenv('PREFIX'), command.name, command.signature)
+        if command.cog is not None:
+            result_string = f'**Category:** {self.emoji_mapping[command.cog.qualified_name]} {command.cog.qualified_name}\n'
         else:
-            result_string += '**Usage:** `{}{}`\n'.format(os.getenv('PREFIX'), command.name)
-        result_string += '**Description:** {}\n'.format(command.help)
-        if len(command.aliases) > 0:
-            aliases = list(map(lambda x: '`{}`'.format(x), command.aliases))
+           result_string = f'**Category:** {self.emoji_mapping["No Category"]} No Category \n'
+
+        # Signiture = Default generated usage or overwritten by the usage='' parameter
+        if command.signature is not None and len(command.signature) > 0:
+            result_string += f'**Usage:** `{self.prefix}{command.name} {command.signature}`\n'
+        else:
+            result_string += f'**Usage:** `{self.prefix}{command.name}`\n'
+
+        # Note: help='' parameter is used for the detailed help command, list uses the shorter description=''
+        if command.help is not None and len(command.help) > 0: 
+            result_string += f'**Description:** {command.help}\n'
+        # This should only be used as a fallback and help='' should always be defined.
+        elif command.description is not None and len(command.description) > 0:
+            result_string += f'**Description:** {command.description}\n'
+
+        # If there are any aliases, list them
+        if command.aliases is not None and len(command.aliases) > 0:
+            aliases = list(map(lambda x: f'`{x}`', sorted(command.aliases)))
             result_string += '**Aliases:** {}'.format(', '.join(aliases))
         return result_string
 
-    # Override the general help (without any arguments)
+    # Override the Discord.py built in general help (the one without any arguments)
     async def send_bot_help(self, mapping: Mapping[Optional[commands.Cog], List[commands.Command]]):
-        prefix = os.getenv("PREFIX")
-        if self.embed_help:
-            embed = await self.build_embed_bot_help(mapping)
-            await self.context.send(embed=embed)
-        else:
-            result = await self.build_list_bot_help(mapping)
-            result += f"_The current prefix is `{prefix}` Usage example: `{prefix}ping`_"
-            await self.context.send(result)
+        result = await self.build_list_bot_help(mapping)
+        result += f"_The current prefix is `{self.prefix}` Usage example: `{self.prefix}ping`_"
+        await self.context.send(result)
 
     # Help for each cog. List all available commands under that specific cog.
     async def send_cog_help(self, cog: commands.Cog):
-        if int(os.getenv('EMBED_HELP')) == 1:
-            embed = self.build_embed_cog_help(cog)
-            await self.context.send(embed=embed)
-        else:
-            result = self.build_list_cog_help(cog)
-            await self.context.send(result)
+        result = self.build_list_cog_help(cog)
+        result += f"\n_The current prefix is `{self.prefix}` Usage example: `{self.prefix}ping`_"
+        await self.context.send(result)
 
     # Help for each command. Showing the command's name, detailed description (help) and aliases.
     async def send_command_help(self, command: commands.Command):
-        if self.embed_help:
-            embed = self.build_embed_command_help(command)
-            await self.context.send(embed=embed)
-        else:
-            result = self.build_list_command_help(command)
-            await self.context.send(result)
+        result = self.build_list_command_help(command)
+        await self.context.send(result)
