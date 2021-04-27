@@ -1,4 +1,5 @@
-# This code is kindly stolen from StackOverlow.
+# This code is kindly stolen from StackOverlow. 
+# Parts of it have been updated to better suit our needs
 # https://stackoverflow.com/a/49719319
 
 from PIL import ImageFont, ImageDraw, Image
@@ -40,22 +41,33 @@ class TextWrapper(object):
         buf_width = 0
 
         for line in self.text_lines:
+            # Go through every word in the text (seperated by ' ')
             for word in line.split(' '):
                 word_width = self.get_text_width(word)
 
-                expected_width = word_width if not buf else \
-                    buf_width + self.space_width + word_width
+                # Determine the expected width of the text with the next word added to it
+                if not buf:
+                    # If this is the first word, simply add the word itself
+                    expected_width = word_width 
+                else:
+                    # Not the first word, add to existing lenght, including the length of the space
+                    expected_width = buf_width + self.space_width + word_width
 
                 if expected_width <= self.max_width:
-                    # word fits in line
+                    # Word fits in line
                     buf_width = expected_width
                     buf.append(word)
                 else:
-                    # word doesn't fit in line
-                    wrapped_lines.append(' '.join(buf))
+                    # Word doesn't fit in line
+                    if buf:
+                        # Append line to the output array
+                        wrapped_lines.append(' '.join(buf))
+                    
+                    # Clear buffer array and buffer width
                     buf = [word]
                     buf_width = word_width
 
+            # If there is any leftower, add it to the output array and cler the buffer
             if buf:
                 wrapped_lines.append(' '.join(buf))
                 buf = []
