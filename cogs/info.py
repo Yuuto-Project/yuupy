@@ -137,6 +137,10 @@ class Info(commands.Cog):
             await ctx.send('Sorry, but the message limit is 140 characters <:hiroJey:692008426842226708>')
             return
 
+        if len(re.findall('(<a?:\w+:\d+>)', text)) > 0:
+            await ctx.send("Sorry, but Discord emojis are currently not supported <:hiroJey:692008426842226708>")
+            return
+
         experimental_warn = ""
         if len(re.findall('[^\0-~]', text)) > 0 :
             experimental_warn = "\n**Warning:** Unicode support is currently experimental, some characters may not display correctly."
