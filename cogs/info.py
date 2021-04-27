@@ -137,7 +137,7 @@ class Info(commands.Cog):
             await ctx.send('Sorry, but the message limit is 140 characters <:hiroJey:692008426842226708>')
             return
 
-        if len(re.findall('(<@!\d+>)', text)) > 0:
+        if len(re.findall('<(@|#)(!|&)?\d+>', text)) > 0:
             await ctx.send("Sorry, but mentions are not supported <:hiroJey:692008426842226708>")
             return
 
