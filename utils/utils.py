@@ -12,7 +12,7 @@ import random
 USER_MENTION_REGEX = re.compile(r'<@!?(\d{17,20})>')
 USER_TAG = re.compile(r'(\S.{0,30}\S)\s*#(\d{4})')
 DISCORD_ID = re.compile(r'\d{17,20}')
-font = ImageFont.truetype('./assets/fonts/halogen.ttf', 56)
+font = ImageFont.truetype('./assets/fonts/YuuPy_combined.ttf', 56)
 flag = Image.open('./assets/images/dialog/flag_overlay.png')
 textbox = Image.open('./assets/images/dialog/text_box.png')
 

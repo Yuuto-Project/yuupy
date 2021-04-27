@@ -137,11 +137,15 @@ class Info(commands.Cog):
             await ctx.send('Sorry, but the message limit is 140 characters <:hiroJey:692008426842226708>')
             return
 
+        experimental_warn = ""
+        if len(re.findall('[^\0-~]', text)) > 0 :
+            experimental_warn = "\n**Warning:** Unicode support is currently experimental, some characters may not display correctly."
+
         output = render_dialog(text, character, background)
 
         file = discord.File(filename="res.png", fp=output)
 
-        await ctx.send(f"{ctx.author.mention}, Here you go! {bg_def}", file=file)
+        await ctx.send(f"{ctx.author.mention}, Here you go! {experimental_warn} {bg_def}", file=file)
 
     @commands.command(description="Shows information about Yuuto", 
                       help="Shows information about Yuuto",
