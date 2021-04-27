@@ -109,8 +109,8 @@ class Info(commands.Cog):
         character = split.pop(0).lower()
 
         await ctx.trigger_typing()
-        bg_def = ""
 
+        bg_def = ""
         if character in self.dialog.characters:
             bg_def = "\nNo background supplied, defaulting to Camp. Use `dialog [background] <character> <message>` to set a background!"
             background = "camp"
@@ -135,6 +135,10 @@ class Info(commands.Cog):
 
         if len(text) > 140:
             await ctx.send('Sorry, but the message limit is 140 characters <:hiroJey:692008426842226708>')
+            return
+
+        if len(re.findall('(<@!\d+>)', text)) > 0:
+            await ctx.send("Sorry, but mentions are not supported <:hiroJey:692008426842226708>")
             return
 
         if len(re.findall('(<a?:\w+:\d+>)', text)) > 0:
