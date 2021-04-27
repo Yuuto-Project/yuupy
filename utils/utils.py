@@ -8,6 +8,7 @@ from PIL import ImageFont, ImageDraw, Image
 from io import BytesIO
 import textwrap
 import random
+from utils.TextWrap import TextWrapper
 
 USER_MENTION_REGEX = re.compile(r'<@!?(\d{17,20})>')
 USER_TAG = re.compile(r'(\S.{0,30}\S)\s*#(\d{4})')
@@ -120,7 +121,10 @@ def render_dialog(text: str, character: str, background: str = 'camp') -> BytesI
     draw = ImageDraw.Draw(background)
     text = "\n".join(textwrap.wrap(text, width=26))
 
-    draw.multiline_text((80, 750),text, font=font, fill="#FFF")
+    wrapper = TextWrapper(text, font, 940)
+    wrapped_text = wrapper.wrapped_text()
+
+    draw.multiline_text((80, 750), wrapped_text, font=font, fill="#FFF")
 
     result = BytesIO()
     background.save(result, "png")
