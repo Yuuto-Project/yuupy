@@ -109,8 +109,8 @@ class Info(commands.Cog):
         character = split.pop(0).lower()
 
         await ctx.trigger_typing()
-        bg_def = ""
 
+        bg_def = ""
         if character in self.dialog.characters:
             bg_def = "\nNo background supplied, defaulting to Camp. Use `dialog [background] <character> <message>` to set a background!"
             background = "camp"
@@ -137,11 +137,23 @@ class Info(commands.Cog):
             await ctx.send('Sorry, but the message limit is 140 characters <:hiroJey:692008426842226708>')
             return
 
+        if len(re.findall('<(@|#)(!|&)?\d+>', text)) > 0:
+            await ctx.send("Sorry, but mentions are not supported <:hiroJey:692008426842226708>")
+            return
+
+        if len(re.findall('(<a?:\w+:\d+>)', text)) > 0:
+            await ctx.send("Sorry, but Discord emojis are currently not supported <:hiroJey:692008426842226708>")
+            return
+
+        experimental_warn = ""
+        if len(re.findall('[^\0-~]', text)) > 0 :
+            experimental_warn = "\n**Warning:** Unicode support is currently experimental, some characters may not display correctly."
+
         output = render_dialog(text, character, background)
 
         file = discord.File(filename="res.png", fp=output)
 
-        await ctx.send(f"{ctx.author.mention}, Here you go! {bg_def}", file=file)
+        await ctx.send(f"{ctx.author.mention}, Here you go! {experimental_warn} {bg_def}", file=file)
 
     @commands.command(description="Shows information about Yuuto", 
                       help="Shows information about Yuuto",
