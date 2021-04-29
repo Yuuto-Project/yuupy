@@ -34,11 +34,21 @@ def find_message(score: float, ship_messages: List[object]) -> str:
 def calculate_score(first: discord.Member, second: discord.Member, ship_messages: List[object]) -> Tuple[float, str]:
     first_id: int = first.id
     second_id: int = second.id
+    
     if first_id == second_id:
         return 100, 'You\'re a perfect match... for yourself!'
-    else:
-        score = ((first_id + second_id) // 7) % 100
-        return score, find_message(score, ship_messages)
+
+    with open('assets/riggedShips.json') as file_2:
+        rigged_ships = json5.loads(file_2.read())
+
+    for member in rigged_ships:
+        if member['id1'] != first_id and member['id1'] != second_id:
+            continue
+        if member['id2'] == first_id or member['id2'] == second_id:
+            return 100, 'It\'s a perfect match!'
+
+    score = ((first_id + second_id) // 7) % 100
+    return score, find_message(score, ship_messages)
 
 
 quote_enabled = bool(glob('./assets/quote/*.txt'))
