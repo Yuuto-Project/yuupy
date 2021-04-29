@@ -8,6 +8,7 @@ import asyncio
 import discord
 import json5
 import requests
+import os
 from glob import glob
 import random
 from utils.CampBuddyMakov import CampBuddyMakov
@@ -38,13 +39,10 @@ def calculate_score(first: discord.Member, second: discord.Member, ship_messages
     if first_id == second_id:
         return 100, 'You\'re a perfect match... for yourself!'
 
-    with open('assets/riggedShips.json') as file_2:
-        rigged_ships = json5.loads(file_2.read())
+    if os.getenv(f'RIGGED_{first_id}') is not None:
+        rigged = os.getenv(f'RIGGED_{first_id}').split('-')
 
-    for member in rigged_ships:
-        if member['id1'] != first_id and member['id1'] != second_id:
-            continue
-        if member['id2'] == first_id or member['id2'] == second_id:
+        if str(second_id) in rigged:
             return 100, 'It\'s a perfect match!'
 
     score = ((first_id + second_id) // 7) % 100
