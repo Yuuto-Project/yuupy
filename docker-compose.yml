@@ -19,7 +19,7 @@ services:
       - PYTHONUNBUFFERED=1
       
       # rigged ships
-      # RIGGED_{id1} = {id2}-{id3}-{id4} # stb...
+      # RIGGED_{id0} = {id1}
       # RIGGED_{id2} = {id3}
 
       # ignore format is BOTCMDS_{guild.id}={channel.id}

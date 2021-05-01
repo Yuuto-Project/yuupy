@@ -39,11 +39,13 @@ def calculate_score(first: discord.Member, second: discord.Member, ship_messages
     if first_id == second_id:
         return 100, 'You\'re a perfect match... for yourself!'
 
-    if os.getenv(f'RIGGED_{first_id}') is not None:
-        rigged = os.getenv(f'RIGGED_{first_id}').split('-')
+    rigged = os.getenv(f'RIGGED_{first_id}')
+    if rigged is not None and str(second_id) == rigged:
+        return 100, 'It\'s a perfect match! That is very rare, so you should treasure it!'
 
-        if str(second_id) in rigged:
-            return 100, 'It\'s a perfect match!'
+    rigged = os.getenv(f'RIGGED_{second_id}')
+    if rigged is not None and str(first_id) == rigged:
+        return 100, 'It\'s a perfect match! That is very rare, so you should treasure it!'
 
     score = ((first_id + second_id) // 7) % 100
     return score, find_message(score, ship_messages)
