@@ -8,6 +8,7 @@ import asyncio
 import discord
 import json5
 import requests
+import os
 from glob import glob
 import random
 from utils.CampBuddyMakov import CampBuddyMakov
@@ -34,12 +35,23 @@ def find_message(score: float, ship_messages: List[object]) -> str:
 def calculate_score(first: discord.Member, second: discord.Member, ship_messages: List[object]) -> Tuple[float, str]:
     first_id: int = first.id
     second_id: int = second.id
+    
     if first_id == second_id:
         return 100, 'You\'re a perfect match... for yourself!'
+        
+    if check_rig(first_id, second_id) or check_rig(second_id, first_id):
+        score = 100
     else:
         score = ((first_id + second_id) // 7) % 100
-        return score, find_message(score, ship_messages)
+    
+    return score, find_message(score, ship_messages)
 
+def check_rig(id1, id2):
+    rigged = os.getenv(f'RIGGED_{id1}')
+    if rigged == str(id2):
+        return True
+    else:
+       return False
 
 quote_enabled = bool(glob('./assets/quote/*.txt'))
 
