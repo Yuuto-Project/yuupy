@@ -38,15 +38,22 @@ def calculate_score(first: discord.Member, second: discord.Member, ship_messages
     
     if first_id == second_id:
         return 100, 'You\'re a perfect match... for yourself!'
-
-    rigged = os.getenv(f'RIGGED_{first_id}')
-    rigged = rigged if rigged is not None else os.getenv(f'RIGGED_{second_id}')
-    
-    if rigged == str(first_id) or rigged == str(second_id):
-        return 100, 'It\'s a perfect match! That is very rare, so you should treasure it!'
+        
+    if check_rig(first_id, second_id) == 100:
+        score = 100
+    elif check_rig(second_id, first_id) == 100:
+        score = 100
+    else:
+        score = ((first_id + second_id) // 7) % 100
     
     return score, find_message(score, ship_messages)
 
+def check_rig(id1, id2):
+    rigged = os.getenv(f'RIGGED_{id1}')
+    if rigged == str(id2):
+        return 100
+    else:
+       return 0
 
 quote_enabled = bool(glob('./assets/quote/*.txt'))
 
