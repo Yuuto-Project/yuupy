@@ -1,4 +1,4 @@
-from cogs.minigame.question import Question
+import cogs.minigame.questions as miniq
 from discord.ext import commands
 from enum import Enum
 from typing import Dict, List, Tuple
@@ -17,9 +17,6 @@ class GameState(Enum):
 
 
 class Minigame(object):
-    questions_schema = marshmallow_dataclass.class_schema(Question)
-    with open('assets/minigame.json') as file:
-        questions: List[Question] = questions_schema().loads(json_data=file.read(), many=True)
     ongoing_games = dict()
     standby_messages: List[int] = list()
 
@@ -32,7 +29,7 @@ class Minigame(object):
         self.message_id = 0
         self.players: List[discord.User] = list()
         self.score_board: Dict[int, int] = dict()
-        self.questions = Minigame.questions
+        self.questions = miniq.get_questions()
         random.shuffle(self.questions)
 
     async def destroy(self, ctx: commands.Context, show_scoreboard: bool = False):
@@ -61,7 +58,7 @@ class Minigame(object):
             embed = discord.Embed(title='Minigame Starting!', 
                                   description='React below to join the game! \n'\
                                               'This game may contain spoilers or NSFW themes.\n'\
-                                              'Please run `skip` in order to skip a question.', 
+                                              'Please type `skip` in order to skip a question.', 
                                   color=color)
             message = await ctx.send(embed=embed)
             await message.add_reaction('🎲')
@@ -109,13 +106,13 @@ class Minigame(object):
                 await self.progress(ctx)
                 return
 
-            if current_question.type == 'FILL':
-                current_question.answers = list(map(lambda x: x.lower(), current_question.answers))
-                await ctx.send(current_question.question)
+            if current_question['type'] == 'FILL':
+                current_question['answers'] = list(map(lambda x: x.lower(), current_question['answers']))
+                await ctx.send(current_question['question'])
                 try:
                     while True:
                         message = await ctx.bot.wait_for('message', check=check_participation, timeout=30)
-                        if message.content.lower() in current_question.answers:
+                        if message.content.lower() in current_question['answers']:
                             self.score_board[message.author.id] += 1
                             await ctx.send(f'{message.author.mention} got the point!')
                             self.current_round += 1
@@ -130,24 +127,24 @@ class Minigame(object):
                     await self.destroy(ctx)
                     return
 
-            elif current_question.type == 'MULTIPLE':
-                current_question.wrong.append(current_question.answers[0])
-                random.shuffle(current_question.wrong)
+            elif current_question['type'] == 'MULTIPLE':
+                current_question['wrong'].append(current_question['answers'][0])
+                random.shuffle(current_question['wrong'])
 
                 def map_multiple_answers(answer: Tuple[int, str]) -> str:
                     ordinal = answer[0] + 1
                     option = '{}) {}'.format(ordinal, answer[1])
-                    if answer[1] in current_question.answers:
-                        current_question.answers.append(str(ordinal))
+                    if answer[1] in current_question['answers']:
+                        current_question['answers'].append(str(ordinal))
                     return option
 
-                answers = list(map(map_multiple_answers, list(enumerate(current_question.wrong))))
-                message = '{}\n{}'.format(current_question.question, '\n'.join(answers))
+                answers = list(map(map_multiple_answers, list(enumerate(current_question['wrong']))))
+                message = '{}\n{}'.format(current_question['question'], '\n'.join(answers))
                 await ctx.send(message)
                 try:
                     while True:
                         message = await ctx.bot.wait_for('message', check=check_participation, timeout=30)
-                        if message.content in current_question.answers:
+                        if message.content in current_question['answers']:
                             self.score_board[message.author.id] += 1
                             await ctx.send(f'{message.author.mention} got the point!')
                             self.current_round += 1
