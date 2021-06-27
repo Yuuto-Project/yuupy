@@ -181,7 +181,7 @@ class Fun(commands.Cog):
             return
         game = await Minigame.create(ctx, rounds)
         if game is not None:
-            asyncio.create_task(game.progress(ctx))
+            asyncio.create_task(game.game(ctx))
 
 
 def setup(bot: commands.Bot):
