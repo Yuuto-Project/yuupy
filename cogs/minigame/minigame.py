@@ -155,13 +155,11 @@ class Minigame(object):
         await self.game(ctx)
 
     async def game(self, ctx: commands.Context):
-        client: discord.Client = ctx.bot
-
         if self.current_round > self.max_rounds:
             await self.destroy(ctx, True)
             return
 
-        if self.state == GameState.STARTING:
+        elif self.state == GameState.STARTING:
             await self.start(ctx)
 
         elif self.state == GameState.IN_PROGRESS:
