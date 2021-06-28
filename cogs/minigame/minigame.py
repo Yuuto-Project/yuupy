@@ -114,21 +114,13 @@ class Minigame(object):
             await ctx.send('Oh no! I messed up the questions! Game over.')
             print(f'[!] [{datetime.datetime.now()}] Minigame failed due to index error')
             self.state = 3
-            await self.game(ctx)
+            await self.destroy(ctx, True)
             return
 
         if current_question['type'] == 'FILL':
             current_question['answers'] = list(map(lambda x: x.lower(), current_question['answers']))
             await ctx.send(current_question['question'])
-
-            try:
-                await self.ask(ctx, current_question)
-            except asyncio.TimeoutError:
-                await ctx.send('Cancelling stale game...')
-                await self.destroy(ctx)
-                return 
             
-
         elif current_question['type'] == 'MULTIPLE':
             current_question['wrong'].append(current_question['answers'][0])
             random.shuffle(current_question['wrong'])
@@ -142,14 +134,15 @@ class Minigame(object):
 
             answers = list(map(map_multiple_answers, list(enumerate(current_question['wrong']))))
             message = '{}\n{}'.format(current_question['question'], '\n'.join(answers))
-
             await ctx.send(message)
-            try:
-                await self.ask(ctx, current_question)
-            except asyncio.TimeoutError:
-                await ctx.send('Cancelling stale game...')
-                await self.destroy(ctx)
-                return
+
+        # Get answer
+        try:
+            await self.ask(ctx, current_question)
+        except asyncio.TimeoutError:
+            await ctx.send('Cancelling stale game...')
+            await self.destroy(ctx)
+            return
 
         self.timer = time.perf_counter()
         await self.game(ctx)
@@ -164,10 +157,7 @@ class Minigame(object):
 
         elif self.state == GameState.IN_PROGRESS:
             await self.prog(ctx)
-            
-        elif self.state == GameState.END:
-            await self.destroy(ctx, True)
-            
+                        
     @classmethod
     def register_player(cls, channel_id: int, user: discord.User):
         game: Minigame = cls.ongoing_games.get(channel_id)
