@@ -180,6 +180,20 @@ Your code should be well documented and commented. It is not necessary to commen
 
 In addition, the maintainers will have to audit the code before it is merged to _master_, and all obscure or undocumented code will be refused, no questions asked, until properly documented.
 
+### Logging and error messages
+
+The project uses the built-in python logging library. If you need to print a message to the console or the log, use this library. See levels of logging below for more usage information.
+
+Using the proper level of logging is mandatory wherever it is applicable.
+
+#### Levels of logging
+
+- **DEBUG**: Strictly for debugging purposes where breakpoints are not feasible.
+- **INFO**: Used for general reporting, shall be kept at a minimal level.
+- **WARNING** (warn): Used for reporting anomalies that don't affect features and the bot's stability.
+- **ERROR**: Used to warn the console about unexpected behavior and errors that can affect features.
+- **CRITICAL**: Used for critical errors that can affect the bot's stability.
+
 ### Commit messages
 
 No specific git commit message style is set in place, and you are free to name your commits however you want. However, your commit messages should still be informative and carry the essence of the commits. Any purposeful trolling or lazy commits will not be tolerated.
