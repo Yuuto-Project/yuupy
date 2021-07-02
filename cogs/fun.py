@@ -12,6 +12,7 @@ import os
 from glob import glob
 import random
 from utils.CampBuddyMakov import CampBuddyMakov
+import utils.yuuto as yuuto
 
 
 def find_next_user(first: discord.Member, seconds: List[discord.Member]) -> Optional[discord.Member]:
@@ -56,7 +57,7 @@ def check_rig(id1, id2):
 quote_enabled = bool(glob('./assets/quote/*.txt'))
 
 if not quote_enabled:
-    print('No quotes found, disabling command')
+    yuuto.logger.warn('No quotes found, disabling command')
 
 
 class Fun(commands.Cog):

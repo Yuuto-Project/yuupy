@@ -8,10 +8,11 @@ import random
 import os
 import re
 import asyncio
+import utils.yuuto as yuuto
 
 # suggest_enabled = bool(os.getenv('SUGGESTIONS_CHANNEL'))
 # if not suggest_enabled:
-#     print('Suggestions channel not set, disabling command.')
+#     yuuto.logger.warn('Suggestions channel not set, disabling command.')
 
 class Info(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -192,7 +193,7 @@ class Info(commands.Cog):
             suggestchannel: discord.TextChannel = await ctx.bot.fetch_channel(os.getenv('SUGGESTIONS_CHANNEL'))
         except:
             await ctx.send("An error occured: I can't find the suggestions channel")
-            print("Couldn't find suggestions channel!")
+            yuuto.logger.error("Couldn't find suggestions channel!")
             return
 
         author: discord.User = ctx.author
