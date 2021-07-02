@@ -190,7 +190,7 @@ Using the proper level of logging is mandatory wherever it is applicable.
 
 - **DEBUG**: Strictly for debugging purposes where breakpoints are not feasible.
 - **INFO**: Used for general reporting, shall be kept at a minimal level.
-- **WARNING** (warn): Used for reporting anomalies that don't affect features and the bot's stability.
+- **WARNING** (warn): Used for reporting anomalies that don't affect active features and the bot's stability. (Disabling commands fall under this category.)
 - **ERROR**: Used to warn the console about unexpected behavior and errors that can affect features.
 - **CRITICAL**: Used for critical errors that can affect the bot's stability.
 

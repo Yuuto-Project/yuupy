@@ -16,7 +16,7 @@ ch = logging.StreamHandler()
 ch.setLevel(LEVEL)
 
 # Format for Logging
-# [LEVEL] YYYY/MM/DD HH:mm:SS @ MODULE - MESSAGE
+# [LEVEL] YYYY/MM/DD hh:mm:ss @ MODULE - MESSAGE
 LOG_FORMAT = '[%(levelname)s] %(asctime)s @ %(module)s - %(message)s'
 DATE_FORMAT = '%Y/%m/%d %H:%M:%S'
 formatter = logging.Formatter(LOG_FORMAT, datefmt=DATE_FORMAT)

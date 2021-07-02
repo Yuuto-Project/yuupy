@@ -18,6 +18,7 @@ services:
       - SUGGESTIONS_CHANNEL=
       - PYTHONUNBUFFERED=1
 
+      # level of logging displayed in the console (20 means INFO and above):
       # 10 DEBUG
       # 20 INFO
       # 30 WARNING
