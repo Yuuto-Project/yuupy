@@ -1,7 +1,11 @@
+import dotenv
 import logging
+import os
 
+if os.path.exists('.env'):
+    dotenv.load_dotenv('.env')
 
-LEVEL = logging.INFO
+LEVEL = int(os.getenv('LOGGING_LEVEL'))
 
 # Set up the logger
 logger = logging.getLogger()

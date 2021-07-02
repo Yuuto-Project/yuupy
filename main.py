@@ -35,7 +35,7 @@ bot = commands.Bot(command_prefix=prefix, help_command=help.Help(HELP_TEXTS), in
 
 @bot.event
 async def on_ready():
-    yuuto.logger.info(f'Logged on as {bot.user}')
+    yuuto.logger.info(f'Logged in as {bot.user}')
     game = discord.Game('Volleyball')
     await bot.change_presence(activity=game, status=discord.Status.online)
 

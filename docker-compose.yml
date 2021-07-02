@@ -17,6 +17,14 @@ services:
       - PREFIX=
       - SUGGESTIONS_CHANNEL=
       - PYTHONUNBUFFERED=1
+
+      # 10 DEBUG
+      # 20 INFO
+      # 30 WARNING
+      # 40 ERROR
+      # 50 CRITICAL
+      - LOGGING_LEVEL=
+
       
       # rigged ships
       # RIGGED_{id0} = {id1}
