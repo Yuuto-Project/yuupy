@@ -2,7 +2,8 @@ import discord
 import dotenv
 import os
 import help
-import utils.yuuto as yuuto
+import logging
+import utils.logger
 from cogs.minigame.minigame import Minigame
 from discord.ext import commands
 from discord.ext.commands import DisabledCommand
@@ -35,7 +36,7 @@ bot = commands.Bot(command_prefix=prefix, help_command=help.Help(HELP_TEXTS), in
 
 @bot.event
 async def on_ready():
-    yuuto.logger.info(f'Logged in as {bot.user}')
+    logging.info(f'Logged in as {bot.user}')
     game = discord.Game('Volleyball')
     await bot.change_presence(activity=game, status=discord.Status.online)
 
