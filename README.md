@@ -43,6 +43,7 @@ The first command clones over HTTPS, the second one over SSH, thus requiring you
 - [Code Style](#code-style)
   - [End of Line](#end-of-line)
   - [Commenting](#commenting)
+  - [Logging and error messages](#Logging-and-error-messages)
   - [Commit messages](#commit-messages)
   - [Signed or Verified commits](#Signed-or-Verified-commits)
 
