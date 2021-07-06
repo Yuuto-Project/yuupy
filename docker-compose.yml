@@ -17,6 +17,17 @@ services:
       - PREFIX=
       - SUGGESTIONS_CHANNEL=
       - PYTHONUNBUFFERED=1
+
+      # level of logging displayed in the console (20 means INFO and above):
+      # 10 DEBUG
+      # 20 INFO
+      # 30 WARNING
+      # 40 ERROR
+      # 50 CRITICAL
+      - LOGGING_LEVEL=20
+
+      # True or False
+      - LOG_FILE=False
       
       # rigged ships
       # RIGGED_{id0} = {id1}

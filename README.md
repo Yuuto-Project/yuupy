@@ -43,6 +43,7 @@ The first command clones over HTTPS, the second one over SSH, thus requiring you
 - [Code Style](#code-style)
   - [End of Line](#end-of-line)
   - [Commenting](#commenting)
+  - [Logging and error messages](#Logging-and-error-messages)
   - [Commit messages](#commit-messages)
   - [Signed or Verified commits](#Signed-or-Verified-commits)
 
@@ -179,6 +180,20 @@ Throughout the whole project, all files should be using the _LF_ end of line sep
 Your code should be well documented and commented. It is not necessary to comment every single function, loop, variable, etc. However, if the purpose of a piece of code isn't immediately clear from the naming or trivial function, some form of documentation is expected. People of various coding backgrounds, skill levels, and programming styles may work together on this project, and poor documentation or assumptions about the understanding of others are not viable.
 
 In addition, the maintainers will have to audit the code before it is merged to _master_, and all obscure or undocumented code will be refused, no questions asked, until properly documented.
+
+### Logging and error messages
+
+The project uses the built-in python logging library. If you need to print a message to the console or the log, use this library. See levels of logging below for more usage information.
+
+Using the proper level of logging is mandatory wherever it is applicable.
+
+#### Levels of logging
+
+- **DEBUG**: Strictly for debugging purposes where breakpoints are not feasible.
+- **INFO**: Used for general reporting, shall be kept at a minimal level.
+- **WARNING** (warn): Used for reporting anomalies that don't affect active features and the bot's stability. (Disabling commands fall under this category.)
+- **ERROR**: Used to warn the console about unexpected behavior and errors that can affect features.
+- **CRITICAL**: Used for critical errors that can affect the bot's stability.
 
 ### Commit messages
 
