@@ -26,6 +26,8 @@ services:
       # 50 CRITICAL
       - LOGGING_LEVEL=
 
+      # YES or NO
+      - LOG_FILE=
       
       # rigged ships
       # RIGGED_{id0} = {id1}

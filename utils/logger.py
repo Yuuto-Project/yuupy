@@ -24,3 +24,12 @@ formatter = logging.Formatter(LOG_FORMAT, datefmt=DATE_FORMAT)
 ch.setFormatter(formatter)
 
 logger.addHandler(ch)
+
+# File handler
+if os.getenv('LOG_FILE') == 'YES':
+    fh = logging.FileHandler('yuuto.log', "w", encoding="UTF-8")
+    fh.setLevel(LEVEL)
+    fh.setFormatter(formatter)
+    logger.addHandler(fh)
+
+    logging.info('Logging to file started')
