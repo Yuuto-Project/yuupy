@@ -24,10 +24,10 @@ services:
       # 30 WARNING
       # 40 ERROR
       # 50 CRITICAL
-      - LOGGING_LEVEL=
+      - LOGGING_LEVEL=20
 
-      # YES or NO
-      - LOG_FILE=
+      # True or False
+      - LOG_FILE=False
       
       # rigged ships
       # RIGGED_{id0} = {id1}
