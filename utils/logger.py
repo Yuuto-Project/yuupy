@@ -5,7 +5,9 @@ import os
 if os.path.exists('.env'):
     dotenv.load_dotenv('.env')
 
-LEVEL = int(os.getenv('LOGGING_LEVEL'))
+# Get logging level. If not defined, use 20 (INFO)
+log_level = os.getenv('LOGGING_LEVEL') or 20
+LEVEL = int(log_level)
 
 # Set up the logger
 logger = logging.getLogger()
