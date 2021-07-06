@@ -28,7 +28,7 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 # File handler
-if os.getenv('LOG_FILE') == 'YES':
+if os.getenv('LOG_FILE') == 'True':
     fh = logging.FileHandler('yuuto.log', "w", encoding="UTF-8")
     fh.setLevel(LEVEL)
     fh.setFormatter(formatter)
