@@ -166,7 +166,7 @@ class Info(commands.Cog):
               f"You can also join our [Discord server](https://discord.gg/fPFbV8G). \n" \
               f"[Click here]({inv}) to invite the bot to your own server! \n\n" \
               "Yuuto was developed by: \n" \
-              "**Arch#0226**, **dunste123#0129**, **Tetsuki Syu#1250**, **zsotroav#8941**"
+              "**dunste123#0129**, **Tetsuki Syu#1250**, **zsotroav#8941**"
         embed = discord.Embed(title="About Yuuto!", description=desc, color=discord.Colour(0xFDBBE4)) \
             .set_author(
             name="Yuuto from Camp Buddy",
