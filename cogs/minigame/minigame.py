@@ -114,7 +114,7 @@ class Minigame(object):
             current_question = self.questions.pop()
         except IndexError:
             await ctx.send('Oh no! I messed up the questions! Game over.')
-            logging.error("Minigame failed due to index error")
+            logging.error('Minigame failed due to index error')
             await self.destroy(ctx, True)
             return
 
