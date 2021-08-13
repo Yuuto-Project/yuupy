@@ -26,7 +26,6 @@ class Minigame(object):
         self.max_rounds = rounds
         self.current_round = 1
         self.timer = time.perf_counter()
-        # self.state = GameState.STARTING
         self.channel_id = channel_id
         self.message_id = 0
         self.players: List[discord.User] = list()
@@ -42,7 +41,7 @@ class Minigame(object):
             for pair in list(enumerate(pairs)):
                 for player in self.players:
                     if player.id == pair[1][0]:
-                        mapped_scores.append('{}) {} with {} points'.format(pair[0] + 1, player.mention, pair[1][1]))
+                        mapped_scores.append(f'{pair[0]+1}) {player.mention} with {pair[1][1]} points')
                         break
             embed = discord.Embed(color=self.yuuto_pink,
                                   title='Minigame ended!', 
@@ -85,16 +84,17 @@ class Minigame(object):
             embed.description = 'The game has begun!'
             await message.edit(embed=embed)
             Minigame.standby_messages.remove(self.message_id)
-            # self.state = GameState(self.state.value + 1)
             for player in self.players:
                 self.score_board[player.id] = 0
             return True
 
     async def ask(self, ctx, question):
+        # Verify if user is playing in the game
         def check_participation(m: discord.Message) -> bool:
             return m.author in self.players
 
         while True:
+            # Wait for a message from a participating player
             message = await ctx.bot.wait_for('message', check=check_participation, timeout=30)
             if message.content.lower() in question['answers']:
                 self.score_board[message.author.id] += 1
@@ -105,6 +105,7 @@ class Minigame(object):
                 await ctx.send('Skipping question...')
                 break
             else:
+                # Reset timeout
                 self.timer = time.perf_counter()
         
     async def prog(self, ctx): 
@@ -114,21 +115,23 @@ class Minigame(object):
         except IndexError:
             await ctx.send('Oh no! I messed up the questions! Game over.')
             logging.error("Minigame failed due to index error")
-            # self.state = 3
             await self.destroy(ctx, True)
             return
 
+        # Fill in the gap style questions
         if current_question['type'] == 'FILL':
             current_question['answers'] = list(map(lambda x: x.lower(), current_question['answers']))
             await ctx.send(current_question['question'])
             
+        # Multiple choice type questions
         elif current_question['type'] == 'MULTIPLE':
             current_question['wrong'].append(current_question['answers'][0])
             random.shuffle(current_question['wrong'])
 
+            # Generate one sendable string
             def map_multiple_answers(answer: Tuple[int, str]) -> str:
                 ordinal = answer[0] + 1
-                option = '{}) {}'.format(ordinal, answer[1])
+                option = f'{ordinal}) {answer[1]}'
                 if answer[1] in current_question['answers']:
                     current_question['answers'].append(str(ordinal))
                 return option
