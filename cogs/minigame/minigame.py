@@ -1,4 +1,4 @@
-from cogs.minigame.question import Question
+import cogs.minigame.questions as miniq
 from discord.ext import commands
 from enum import Enum
 from typing import Dict, List, Tuple
@@ -7,6 +7,8 @@ import discord
 import marshmallow_dataclass
 import random
 import time
+import datetime
+import logging
 
 
 class GameState(Enum):
@@ -17,9 +19,6 @@ class GameState(Enum):
 
 
 class Minigame(object):
-    questions_schema = marshmallow_dataclass.class_schema(Question)
-    with open('assets/minigame.json') as file:
-        questions: List[Question] = questions_schema().loads(json_data=file.read(), many=True)
     ongoing_games = dict()
     standby_messages: List[int] = list()
 
@@ -27,12 +26,12 @@ class Minigame(object):
         self.max_rounds = rounds
         self.current_round = 1
         self.timer = time.perf_counter()
-        self.state = GameState.STARTING
         self.channel_id = channel_id
         self.message_id = 0
         self.players: List[discord.User] = list()
         self.score_board: Dict[int, int] = dict()
-        self.questions = Minigame.questions
+        self.questions = miniq.get_questions()
+        self.yuuto_pink = 0xFF93CE
         random.shuffle(self.questions)
 
     async def destroy(self, ctx: commands.Context, show_scoreboard: bool = False):
@@ -42,30 +41,25 @@ class Minigame(object):
             for pair in list(enumerate(pairs)):
                 for player in self.players:
                     if player.id == pair[1][0]:
-                        mapped_scores.append('{}) {} with {} points'.format(pair[0] + 1, player.mention, pair[1][1]))
+                        mapped_scores.append(f'{pair[0]+1}) {player.mention} with {pair[1][1]} points')
                         break
-            embed = discord.Embed(color=0xFF93CE,
+            embed = discord.Embed(color=self.yuuto_pink,
                                   title='Minigame ended!', 
                                   description='Total points:\n{}'.format('\n'.join(mapped_scores)))
             await ctx.send(embed=embed)
         Minigame.ongoing_games.pop(self.channel_id)
 
-    async def progress(self, ctx: commands.Context):
-        client: discord.Client = ctx.bot
-        color = discord.Color.from_rgb(255, 147, 206)
-
-        def check_participation(m: discord.Message) -> bool:
-            return m.author in self.players
-
-        if self.state == GameState.STARTING:
+    async def start(self, ctx: commands.Context):
             embed = discord.Embed(title='Minigame Starting!', 
                                   description='React below to join the game! \n'\
                                               'This game may contain spoilers or NSFW themes.\n'\
-                                              'Please run `skip` in order to skip a question.', 
-                                  color=color)
+                                              'Please type `skip` in order to skip a question.', 
+                                  color=self.yuuto_pink)
             message = await ctx.send(embed=embed)
+
             await message.add_reaction('🎲')
             Minigame.standby_messages.append(message.id)
+
             self.message_id = message.id
             for i in range(10, -1, -2):
                 players = list(map(lambda x: x.mention, self.players))
@@ -84,90 +78,94 @@ class Minigame(object):
                 await message.edit(embed=embed)
                 Minigame.standby_messages.remove(self.message_id)
                 await self.destroy(ctx)
-                return
+                return False
 
             embed.title = 'Minigame started!'
             embed.description = 'The game has begun!'
             await message.edit(embed=embed)
             Minigame.standby_messages.remove(self.message_id)
-            self.state = GameState(self.state.value + 1)
             for player in self.players:
                 self.score_board[player.id] = 0
-            await self.progress(ctx)
+            return True
 
-        elif self.state == GameState.IN_PROGRESS:
-            if self.current_round > self.max_rounds:
-                self.state = GameState(self.state.value + 1)
-                await self.progress(ctx)
-                return
+    async def ask(self, ctx, question):
+        # Verify if user is playing in the game
+        def check_participation(m: discord.Message) -> bool:
+            return m.author in self.players
 
-            current_question: Question
-            try:
-                current_question = self.questions.pop(0)
-            except IndexError:
-                self.state = GameState(self.state.value + 1)
-                await self.progress(ctx)
-                return
-
-            if current_question.type == 'FILL':
-                current_question.answers = list(map(lambda x: x.lower(), current_question.answers))
-                await ctx.send(current_question.question)
-                try:
-                    while True:
-                        message = await ctx.bot.wait_for('message', check=check_participation, timeout=30)
-                        if message.content.lower() in current_question.answers:
-                            self.score_board[message.author.id] += 1
-                            await ctx.send(f'{message.author.mention} got the point!')
-                            self.current_round += 1
-                            break
-                        elif message.content.lower() == 'skip':
-                            await ctx.send('Skipping question...')
-                            break
-                        else:
-                            self.timer = time.perf_counter()
-                except asyncio.TimeoutError:
-                    await ctx.send('Cancelling stale game...')
-                    await self.destroy(ctx)
-                    return
-
-            elif current_question.type == 'MULTIPLE':
-                current_question.wrong.append(current_question.answers[0])
-                random.shuffle(current_question.wrong)
-
-                def map_multiple_answers(answer: Tuple[int, str]) -> str:
-                    ordinal = answer[0] + 1
-                    option = '{}) {}'.format(ordinal, answer[1])
-                    if answer[1] in current_question.answers:
-                        current_question.answers.append(str(ordinal))
-                    return option
-
-                answers = list(map(map_multiple_answers, list(enumerate(current_question.wrong))))
-                message = '{}\n{}'.format(current_question.question, '\n'.join(answers))
-                await ctx.send(message)
-                try:
-                    while True:
-                        message = await ctx.bot.wait_for('message', check=check_participation, timeout=30)
-                        if message.content in current_question.answers:
-                            self.score_board[message.author.id] += 1
-                            await ctx.send(f'{message.author.mention} got the point!')
-                            self.current_round += 1
-                            break
-                        elif message.content.lower() == 'skip':
-                            await ctx.send('Skipping question...')
-                            break
-                        else:
-                            self.timer = time.perf_counter()
-                except asyncio.TimeoutError:
-                    await ctx.send('Cancelling stale game...')
-                    await self.destroy(ctx)
-                    return
-
-            self.timer = time.perf_counter()
-            await self.progress(ctx)
-
-        elif self.state == GameState.END:
+        while True:
+            # Wait for a message from a participating player
+            message = await ctx.bot.wait_for('message', check=check_participation, timeout=30)
+            if message.content.lower() in question['answers']:
+                self.score_board[message.author.id] += 1
+                await ctx.send(f'{message.author.mention} got the point!')
+                self.current_round += 1
+                break
+            elif message.content.lower() == 'skip':
+                await ctx.send('Skipping question...')
+                break
+            else:
+                # Reset timeout
+                self.timer = time.perf_counter()
+        
+    async def prog(self, ctx): 
+        current_question: Question
+        try:
+            current_question = self.questions.pop()
+        except IndexError:
+            await ctx.send('Oh no! I messed up the questions! Game over.')
+            logging.error('Minigame failed due to index error')
             await self.destroy(ctx, True)
+            return
 
+        # Fill in the gap style questions
+        if current_question['type'] == 'FILL':
+            current_question['answers'] = list(map(lambda x: x.lower(), current_question['answers']))
+            await ctx.send(current_question['question'])
+            
+        # Multiple choice type questions
+        elif current_question['type'] == 'MULTIPLE':
+            current_question['wrong'].append(current_question['answers'][0])
+            random.shuffle(current_question['wrong'])
+
+            # Generate one sendable string
+            def map_multiple_answers(answer: Tuple[int, str]) -> str:
+                ordinal = answer[0] + 1
+                option = f'{ordinal}) {answer[1]}'
+                if answer[1] in current_question['answers']:
+                    current_question['answers'].append(str(ordinal))
+                return option
+
+            answers = list(map(map_multiple_answers, list(enumerate(current_question['wrong']))))
+            message = '{}\n{}'.format(current_question['question'], '\n'.join(answers))
+            await ctx.send(message)
+
+        # Get answer
+        try:
+            await self.ask(ctx, current_question)
+        except asyncio.TimeoutError:
+            await ctx.send('Cancelling stale game...')
+            await self.destroy(ctx)
+            return False
+
+        self.timer = time.perf_counter()
+        return True
+
+    async def game(self, ctx: commands.Context):
+        # Attempt start
+        # Returns false if nobody joins/errors occure
+        if await self.start(ctx) == False:
+            return
+
+        # Ask the questions
+        for i in range(self.max_rounds):
+            if await self.prog(ctx) == False:
+                return
+
+        # End and destory session
+        await self.destroy(ctx, True)
+        return
+                        
     @classmethod
     def register_player(cls, channel_id: int, user: discord.User):
         game: Minigame = cls.ongoing_games.get(channel_id)
