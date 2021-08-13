@@ -26,7 +26,7 @@ class Minigame(object):
         self.max_rounds = rounds
         self.current_round = 1
         self.timer = time.perf_counter()
-        self.state = GameState.STARTING
+        # self.state = GameState.STARTING
         self.channel_id = channel_id
         self.message_id = 0
         self.players: List[discord.User] = list()
@@ -79,16 +79,16 @@ class Minigame(object):
                 await message.edit(embed=embed)
                 Minigame.standby_messages.remove(self.message_id)
                 await self.destroy(ctx)
-                return
+                return False
 
             embed.title = 'Minigame started!'
             embed.description = 'The game has begun!'
             await message.edit(embed=embed)
             Minigame.standby_messages.remove(self.message_id)
-            self.state = GameState(self.state.value + 1)
+            # self.state = GameState(self.state.value + 1)
             for player in self.players:
                 self.score_board[player.id] = 0
-            await self.game(ctx)
+            return True
 
     async def ask(self, ctx, question):
         def check_participation(m: discord.Message) -> bool:
@@ -114,7 +114,7 @@ class Minigame(object):
         except IndexError:
             await ctx.send('Oh no! I messed up the questions! Game over.')
             logging.error("Minigame failed due to index error")
-            self.state = 3
+            # self.state = 3
             await self.destroy(ctx, True)
             return
 
@@ -143,21 +143,25 @@ class Minigame(object):
         except asyncio.TimeoutError:
             await ctx.send('Cancelling stale game...')
             await self.destroy(ctx)
-            return
+            return False
 
         self.timer = time.perf_counter()
-        await self.game(ctx)
+        return True
 
     async def game(self, ctx: commands.Context):
-        if self.current_round > self.max_rounds:
-            await self.destroy(ctx, True)
+        # Attempt start
+        # Returns false if nobody joins/errors occure
+        if await self.start(ctx) == False:
             return
 
-        elif self.state == GameState.STARTING:
-            await self.start(ctx)
+        # Ask the questions
+        for i in range(self.max_rounds):
+            if await self.prog(ctx) == False:
+                return
 
-        elif self.state == GameState.IN_PROGRESS:
-            await self.prog(ctx)
+        # End and destory session
+        await self.destroy(ctx, True)
+        return
                         
     @classmethod
     def register_player(cls, channel_id: int, user: discord.User):
