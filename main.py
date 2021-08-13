@@ -1,11 +1,12 @@
-import os
 import discord
 import dotenv
-from discord.ext.commands import DisabledCommand
-
+import os
 import help
+import logging
+import utils.logger
 from cogs.minigame.minigame import Minigame
 from discord.ext import commands
+from discord.ext.commands import DisabledCommand
 from typing import Union
 
 
@@ -35,7 +36,7 @@ bot = commands.Bot(command_prefix=prefix, help_command=help.Help(HELP_TEXTS), in
 
 @bot.event
 async def on_ready():
-    print('Logged on as', bot.user)
+    logging.info(f'Logged in as {bot.user}')
     game = discord.Game('Volleyball')
     await bot.change_presence(activity=game, status=discord.Status.online)
 

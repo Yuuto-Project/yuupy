@@ -8,10 +8,11 @@ import random
 import os
 import re
 import asyncio
+import logging
 
 # suggest_enabled = bool(os.getenv('SUGGESTIONS_CHANNEL'))
 # if not suggest_enabled:
-#     print('Suggestions channel not set, disabling command.')
+#     logging.warn('Suggestions channel not set, disabling command.')
 
 class Info(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -165,7 +166,7 @@ class Info(commands.Cog):
               f"You can also join our [Discord server](https://discord.gg/fPFbV8G). \n" \
               f"[Click here]({inv}) to invite the bot to your own server! \n\n" \
               "Yuuto was developed by: \n" \
-              "**Arch#0226**, **dunste123#0129**, **Tetsuki Syu#1250**, **zsotroav#8941**"
+              "**dunste123#0129**, **Tetsuki Syu#1250**, **zsotroav#8941**"
         embed = discord.Embed(title="About Yuuto!", description=desc, color=discord.Colour(0xFDBBE4)) \
             .set_author(
             name="Yuuto from Camp Buddy",
@@ -192,7 +193,7 @@ class Info(commands.Cog):
             suggestchannel: discord.TextChannel = await ctx.bot.fetch_channel(os.getenv('SUGGESTIONS_CHANNEL'))
         except:
             await ctx.send("An error occured: I can't find the suggestions channel")
-            print("Couldn't find suggestions channel!")
+            logging.error("Couldn't find suggestions channel!")
             return
 
         author: discord.User = ctx.author
