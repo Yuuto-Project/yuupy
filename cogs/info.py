@@ -192,7 +192,7 @@ class Info(commands.Cog):
         try:
             suggestchannel: discord.TextChannel = await ctx.bot.fetch_channel(os.getenv('SUGGESTIONS_CHANNEL'))
         except:
-            await ctx.send("An error occured: I can't find the suggestions channel")
+            await ctx.send("An error occurred: I can't find the suggestions channel")
             logging.error("Couldn't find suggestions channel!")
             return
 
@@ -202,8 +202,7 @@ class Info(commands.Cog):
             await ctx.send(embed=status_embed("Message cannot be empty!", False))
             return
         
-        # Show a confirmation message befor submitting
-        # await ctx.message.delete()
+        # Show a confirmation message before submitting
         embed = discord.Embed(title="Suggestion", 
                               description=args, 
                               color=discord.Color.blurple())\
