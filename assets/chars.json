@@ -492,5 +492,31 @@
     "blood_type": "A",
     "emoteId": "957014101480079471",
     "cuteEmoteId": "957014101480079471"
+  },
+  {    
+    "name": "Vera Nomoru",
+    "age": 38,
+    "description": "",
+    "birthday": "November 14",
+    "animal": "None",
+    "color": "#d52aa5",
+    "height": "170 cm (5'7\")",
+    "weight": "68 kg (149 lbs)",
+    "blood_type": "A",
+    "emoteId": "833333254634602496",
+    "cuteEmoteId": "833333254634602496"
+  },
+  {    
+    "name": "Andre Flynn",
+    "age": 36,
+    "description": "",
+    "birthday": "February 29",
+    "animal": "Chameleon",
+    "color": "#386e30",
+    "height": "183 cm (6'0\")",
+    "weight": "85 kg (187 lbs)",
+    "blood_type": "AB",
+    "emoteId": "833333254634602496",
+    "cuteEmoteId": "833333254634602496"
   }
 ]
