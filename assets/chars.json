@@ -469,7 +469,7 @@
   },
   {    
     "name": "Justin",
-    "age": 29,
+    "age": 21,
     "description": "As the lead singer of a pop-punk band, Justin loves to perform for others! A chaotic tease with confidence, and he wants his songs to shine bright, for those who need a light to guide their way.",
     "birthday": "July 31",
     "animal": "Beaver",
@@ -491,5 +491,6 @@
     "weight": "60 kg (132 lbs)",
     "blood_type": "A",
     "emoteId": "957014101480079471",
-    "cuteEmoteId": "957014101480079471"}
+    "cuteEmoteId": "957014101480079471"
+  }
 ]
