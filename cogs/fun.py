@@ -14,6 +14,11 @@ import random
 from utils.CampBuddyMakov import CampBuddyMakov
 import logging
 
+dialog_char_aliasses = {
+    'jin': 'hyunjin',
+    'yoshi': 'yoshinori',
+}
+
 
 def find_next_user(first: discord.Member, seconds: List[discord.Member]) -> Optional[discord.Member]:
     if len(seconds) == 0:
@@ -84,6 +89,10 @@ class Fun(commands.Cog):
 
         if character:
             char = character.lower()
+
+            if char in dialog_char_aliasses:
+                char = dialog_char_aliasses[char]
+
             if char not in self.charNames:
                 await ctx.send(f'I don\'t know who "{character}" is')
                 return
