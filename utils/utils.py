@@ -17,7 +17,6 @@ font = ImageFont.truetype('./assets/fonts/YuuPy_combined.ttf', 56)
 flag = Image.open('./assets/images/dialog/flag_overlay.png')
 textbox = Image.open('./assets/images/dialog/text_box.png')
 
-
 def color_hex_to_0x(hex_str):
     return '0x' + hex_str.replace('#', '')
 
@@ -94,28 +93,15 @@ def get_first_name(full_name: str) -> str:
     return full_name.split(' ')[0]
 
 
-def render_dialog(text: str, character: str, background: str = 'camp') -> BytesIO:
+def render_dialog(text: str, charactername: str, background: str = 'camp') -> BytesIO:
     background = Image.open('./assets/images/dialog/backgrounds/' + background + '.png')
-    ribbon = Image.open('./assets/images/dialog/ribbons/' + character + '.png')
-    character = Image.open('./assets/images/dialog/characters/' + character + '.png')
+    ribbon = Image.open('./assets/images/dialog/ribbons/' + charactername + '.png')
+    character = Image.open('./assets/images/dialog/characters/' + charactername + '.png')
 
     background.paste(character, (0, 0), character)
-
-    # todo move resizing part so it doesn't get executed every iteration
-    # although we might also no need to change it since it might be vary between images?
-    # idk
-
-    new_width = background.size[0]
-    new_height = int(new_width * textbox.size[1] / textbox.size[0])
-    resized = textbox.resize((new_width, new_height), Image.NEAREST)
-
-    background.paste(resized, (0, background.size[1] - resized.size[1]), resized)
-
-    new_width = int(ribbon.size[0] * 0.8)
-    new_height = int(new_width * ribbon.size[1] / ribbon.size[0])
-    ribbonresized = ribbon.resize((new_width, new_height), Image.NEAREST)
-
-    background.paste(ribbonresized, (0, 653), ribbonresized)
+    
+    background.paste(textbox, (0, 682), textbox)
+    background.paste(ribbon, (0, 653), ribbon)
     background.paste(flag, (background.size[0] - flag.size[0], 10), flag)
 
     draw = ImageDraw.Draw(background)
