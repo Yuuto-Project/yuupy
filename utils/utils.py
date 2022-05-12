@@ -16,17 +16,6 @@ DISCORD_ID = re.compile(r'\d{17,20}')
 font = ImageFont.truetype('./assets/fonts/YuuPy_combined.ttf', 56)
 flag = Image.open('./assets/images/dialog/flag_overlay.png')
 textbox = Image.open('./assets/images/dialog/text_box.png')
-char_ribbon_alias = {
-    "jin": "hyunjin",
-    "yoshi": "yhoshinori",
-    "young_aiden": "aiden",
-    "young_darius": "darius",
-    "young_goro": "goro",
-    "young_lloyd": "lloyd",
-    "young_yoshi": "yoshinori",
-    "young_yoshinori": "yoshinori",
-    "young_yuri": "yuri"
-}
 
 
 def color_hex_to_0x(hex_str):
@@ -108,8 +97,7 @@ def get_first_name(full_name: str) -> str:
 def render_dialog(text: str, charactername: str, background: str = 'camp') -> BytesIO:
     background = Image.open('./assets/images/dialog/backgrounds/' + background + '.png')
     character = Image.open('./assets/images/dialog/characters/' + charactername + '.png')
-    if charactername in char_ribbon_alias:
-        charactername = char_ribbon_alias[charactername]
+    charactername = charactername.replace('young_', '')
     ribbon = Image.open('./assets/images/dialog/ribbons/' + charactername + '.png')
 
     background.paste(character, (0, 0), character)

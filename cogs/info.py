@@ -13,7 +13,7 @@ import logging
 char_sprite_alias = {
     "jin": "hyunjin",
     "yoshi": "yoshinori",
-    "young_yoshi": "young_yoshinory"
+    "young_yoshi": "young_yoshinori"
 }
 
 # suggest_enabled = bool(os.getenv('SUGGESTIONS_CHANNEL'))
