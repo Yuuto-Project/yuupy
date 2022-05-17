@@ -10,6 +10,12 @@ import re
 import asyncio
 import logging
 
+char_sprite_alias = {
+    "jin": "hyunjin",
+    "yoshi": "yoshinori",
+    "young_yoshi": "young_yoshinori"
+}
+
 # suggest_enabled = bool(os.getenv('SUGGESTIONS_CHANNEL'))
 # if not suggest_enabled:
 #     logging.warn('Suggestions channel not set, disabling command.')
@@ -108,6 +114,8 @@ class Info(commands.Cog):
             return
 
         character = split.pop(0).lower()
+        if character in char_sprite_alias:
+            character = char_sprite_alias[character]
 
         await ctx.trigger_typing()
 
@@ -118,6 +126,8 @@ class Info(commands.Cog):
         else:
             background = character
             character = split.pop(0).lower()
+            if character in char_sprite_alias:
+                character = char_sprite_alias[character]
 
         if background not in self.dialog.backgrounds:
             await ctx.send(f"Sorry, but I couldn't find {background} as a location\nAvailable backgrounds are: {self.dialog.backgrounds_string}")

@@ -94,38 +94,30 @@ def get_first_name(full_name: str) -> str:
     return full_name.split(' ')[0]
 
 
-def render_dialog(text: str, character: str, background: str = 'camp') -> BytesIO:
+def render_dialog(text: str, character_name: str, background: str = 'camp') -> BytesIO:
     background = Image.open('./assets/images/dialog/backgrounds/' + background + '.png')
-    ribbon = Image.open('./assets/images/dialog/ribbons/' + character + '.png')
-    character = Image.open('./assets/images/dialog/characters/' + character + '.png')
+    character = Image.open('./assets/images/dialog/characters/' + character_name + '.png')
+    # Remove "young_" prefix only here to find a ribbon, but still use the young sprite
+    character_name = character_name.replace('young_', '')
+    ribbon = Image.open('./assets/images/dialog/ribbons/' + character_name + '.png')
 
+    # Start pasting onto the background image
     background.paste(character, (0, 0), character)
-
-    # todo move resizing part so it doesn't get executed every iteration
-    # although we might also no need to change it since it might be vary between images?
-    # idk
-
-    new_width = background.size[0]
-    new_height = int(new_width * textbox.size[1] / textbox.size[0])
-    resized = textbox.resize((new_width, new_height), Image.NEAREST)
-
-    background.paste(resized, (0, background.size[1] - resized.size[1]), resized)
-
-    new_width = int(ribbon.size[0] * 0.8)
-    new_height = int(new_width * ribbon.size[1] / ribbon.size[0])
-    ribbonresized = ribbon.resize((new_width, new_height), Image.NEAREST)
-
-    background.paste(ribbonresized, (0, 653), ribbonresized)
+    background.paste(textbox, (0, 682), textbox)
+    background.paste(ribbon, (0, 653), ribbon)
+    # Paste flag in the top-right corner
     background.paste(flag, (background.size[0] - flag.size[0], 10), flag)
 
     draw = ImageDraw.Draw(background)
-    text = "\n".join(textwrap.wrap(text, width=26))
-
+    # Wrap text
+    text = "\n".join(textwrap.wrap(text, width=20))
+    # Text box
     wrapper = TextWrapper(text, font, 940)
     wrapped_text = wrapper.wrapped_text()
-
+    # Render text
     draw.multiline_text((80, 750), wrapped_text, font=font, fill="#FFF")
 
+    # Generate the actual image
     result = BytesIO()
     background.save(result, "png")
     result.seek(0)
